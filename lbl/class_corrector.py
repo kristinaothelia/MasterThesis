@@ -54,7 +54,8 @@ class ClassCorrector(object):
                     img = entry.open()
                     plt.title('Label: {0}, image: {1}/{2}'.format(str(entry.label), counter, tot))
 
-                    plt.imshow(img, cmap='gray')
+                    #plt.imshow(img, cmap='gray')
+                    plt.imshow(img)
                     # Add image count?
                     print("Filename: ", Path(entry.image_path).stem)
 
