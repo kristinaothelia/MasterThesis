@@ -82,7 +82,7 @@ class DatasetInfo(object):
 
     @dataset_description.setter
     def dataset_description(self, value):
-        self._dataset_type = value
+        self._dataset_description = value
 
     def keys(self):
         return self.to_dict().keys()
