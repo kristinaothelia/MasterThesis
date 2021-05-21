@@ -1,17 +1,7 @@
-from typing import Callable, Dict, Union
-from collections import defaultdict
-
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
 
-# from torchvision.utils import make_grid
-# from base import BaseTrainer
-# from utils import inf_loop, MetricTracker
-
-from ..base import BaseTrainer
-from ..config import ConfigReader
-from ..models import MultiMetric, MultiLoss
+from .base_trainer import BaseTrainer
 
 
 class Trainer(BaseTrainer):
@@ -20,36 +10,34 @@ class Trainer(BaseTrainer):
     """
     def __init__(self,
                  model: torch.nn.Module,
-                 loss_function: Union[MultiLoss, Callable],
-                 metric_ftns: Union[MultiMetric, Dict[str, Callable]],
+                 loss_function: torch.nn,
                  optimizer: torch.optim,
-                 config: dict,
                  data_loader: torch.utils.data.dataloader,
-                 valid_data_loader: torch.utils.data.dataloader = None,
-                 lr_scheduler: torch.optim.lr_scheduler = None,
-                 seed: int = None,
+                 valid_data_loader: torch.utils.data.dataloader,
+                 lr_scheduler: torch.optim.lr_scheduler,
+                 epochs: int,
+                 save_period: int,
+                 savedir: str,
                  device: str = None,
                  log_step: int = None,
                  ):
 
         super().__init__(model=model,
                          loss_function=loss_function,
-                         metric_ftns=metric_ftns,
                          optimizer=optimizer,
-                         config=config,
                          lr_scheduler=lr_scheduler,
-                         seed=seed,
-                         device=device)
+                         device=device,
+                         epochs=epochs,
+                         save_period=save_period,
+                         savedir=savedir,
+                         )
 
         self.data_loader = data_loader
         self.valid_data_loader = valid_data_loader
 
-        self.images_pr_iteration = int(config['trainer']['images_pr_iteration'])
-        self.val_images_pr_iteration = int(config['trainer']['val_images_pr_iteration'])
-
-        self.len_epoch = len(data_loader) if not self.iterative else self.images_pr_iteration
         self.batch_size = data_loader.batch_size
-        self.log_step = int(self.len_epoch/(4*self.batch_size)) if not isinstance(log_step, int) else log_step
+        self.len_epoch = len(data_loader)*self.batch_size
+        self.log_step = int(self.len_epoch/(4)) if not isinstance(log_step, int) else log_step
 
     def _train_epoch(self, epoch):
         """
@@ -59,7 +47,7 @@ class Trainer(BaseTrainer):
         :return: A log that contains average loss and metric in this epoch.
         """
         self.model.train()
-        losses = defaultdict(list)
+        losses = list()
 
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -67,26 +55,22 @@ class Trainer(BaseTrainer):
             self.optimizer.zero_grad()
 
             output = self.model(data)
-            loss = self.loss_function(output, target)
+
+            loss = self.loss_function(output, target.argmax(dim=1))
             loss.backward()
             self.optimizer.step()
 
             loss = loss.item()  # Detach loss from comp graph and moves it to the cpu
-            losses['loss'].append(loss)
+            losses.append(loss)
 
             if batch_idx % self.log_step == 0:
-                self.logger.info('Train {}: {} {} Loss: {:.6f}'.format(
-                    'Epoch' if not self.iterative else 'Iteration',
+                print('Train {}: {} {} Loss: {:.6f}'.format(
+                    'Epoch',
                     epoch,
                     self._progress(batch_idx),
                     loss))
 
-            if batch_idx*self.batch_size >= self.images_pr_iteration and self.iterative:
-                break
-
-        losses['loss_func'] = str(self.loss_function)
-
-        return losses
+        return np.mean(np.array(losses))
 
     def _valid_epoch(self, epoch):
         """
@@ -95,46 +79,28 @@ class Trainer(BaseTrainer):
         :param epoch: Integer, current training epoch.
         :return: A log that contains information about validation
         """
-        if self.valid_data_loader is None:
-            return None
-
         self.model.eval()
-        metrics = defaultdict(list)
+        metrics = list()
+        losses = list()
 
         with torch.no_grad():
-            for batch_idx, (data, target) in enumerate(self.valid_data_loader):
+            for data, target in self.valid_data_loader:
                 data, target = data.to(self.device), target.to(self.device)
 
                 output = self.model(data)
-                metrics['loss'].append(self.loss_function(output, target).item())
 
-                for key, metric in self.metric_ftns.items():
-                    if self.metrics_is_dict:
-                        metrics[key].append(metric(output.cpu(), target.cpu()).item())
-                    else:
-                        metrics[key].append(metric(output, target).item())
+                loss = self.loss_function(output, target.argmax(dim=1)).item()
+                losses.append(loss)
 
-                if batch_idx*self.batch_size >= self.val_images_pr_iteration and self.iterative:
-                    break
+                out = torch.argmax(output, dim=1)
+                ground_truths = torch.argmax(target, dim=1)
 
-        return metrics
+                a = torch.mean((out == ground_truths).type(torch.float32)).item()
 
-    def _train_iteration(self, iteration):
-        """
-        Training logic after an iteration, for large datasets
+                metrics.append(a)
 
-        :param epoch: Integer, current training epoch.
-        :return: A log that contains average loss and metric in this epoch.
-        """
-        return self._train_epoch(epoch=iteration)
+        return np.mean(np.array(metrics)), np.mean(np.array(loss))
 
-    def _valid_iteration(self, iteration):
-        """
-        Validation logic after an iteration, for large datasets
-
-        :param epoch: Current iteration number
-        """
-        return self._valid_epoch(epoch=iteration)
 
     def _progress(self, batch_idx):
         base = '[{}/{} ({:.0f}%)]'
