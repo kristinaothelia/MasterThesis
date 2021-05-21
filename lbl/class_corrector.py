@@ -4,9 +4,13 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .dataset import DatasetContainer
-
 import matplotlib
+import sys
+
+sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl\dataset")
+from datasetcontainer import DatasetContainer
+
+#from .dataset import DatasetContainer
 
 
 class ClassCorrector(object):
@@ -37,6 +41,7 @@ class ClassCorrector(object):
         pred_level = [False, None, True][prediction_level]
         plt.ion()
         plt.show(block=False)
+
         for entry in self.container:
             if entry.label == label:
                 if entry.human_prediction == pred_level:
@@ -46,8 +51,10 @@ class ClassCorrector(object):
                         plt.title(entry.label)
 
                     plt.imshow(img, cmap='gray')
+                    # Add image count?
                     print("Filename: ", Path(entry.image_path).stem)
-                    text = input("Correct class [hit enter], if not type in correct class integer:")
+
+                    text = input("Correct class [hit enter], if not type in correct class integer [0,1,2,3]:")
 
                     if text == "":
                         if text == "" and entry.label is None:
@@ -66,4 +73,3 @@ class ClassCorrector(object):
                 self.container.to_json(save_path)
 
         plt.close()
-

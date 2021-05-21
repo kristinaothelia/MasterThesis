@@ -4,7 +4,10 @@ import imageio
 import matplotlib.image as mpimg
 
 from pathlib import Path
-from ..logger import get_logger
+#from ..logger import get_logger
+import sys
+sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl")
+from logger import get_logger
 
 
 class DatasetEntry(object):

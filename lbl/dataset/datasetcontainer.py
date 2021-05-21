@@ -10,9 +10,12 @@ from copy import deepcopy
 
 from tqdm import tqdm
 
-from .datasetentry import DatasetEntry
-from .datasetinfo import DatasetInfo
-from ..logger import get_logger
+from datasetentry import DatasetEntry
+from datasetinfo import DatasetInfo
+import sys
+sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl")
+from logger import get_logger
+#from ..logger import get_logger
 
 
 @contextlib.contextmanager
