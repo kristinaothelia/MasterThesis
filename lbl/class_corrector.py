@@ -7,10 +7,7 @@ import numpy as np
 import matplotlib
 import sys
 
-sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl\dataset")
-from datasetcontainer import DatasetContainer
-
-#from .dataset import DatasetContainer
+from .dataset import DatasetContainer
 
 
 class ClassCorrector(object):

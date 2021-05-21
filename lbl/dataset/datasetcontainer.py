@@ -10,12 +10,10 @@ from copy import deepcopy
 
 from tqdm import tqdm
 
-from datasetentry import DatasetEntry
-from datasetinfo import DatasetInfo
+from .datasetentry import DatasetEntry
+from .datasetinfo import DatasetInfo
+
 import sys
-sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl")
-from logger import get_logger
-#from ..logger import get_logger
 
 
 @contextlib.contextmanager
@@ -51,7 +49,6 @@ class DatasetContainer(object):
             entries (list(DatasetEntries)): list of the entries, i.e., the files of the dataset
         """
 
-        self.logger = get_logger(name=__name__)
         self.info = info if info is not None else list()
         self.entries = entries if entries is not None else list()
 

@@ -4,10 +4,8 @@ import imageio
 import matplotlib.image as mpimg
 
 from pathlib import Path
-#from ..logger import get_logger
+
 import sys
-sys.path.insert(0, r"C:\Users\Krist\Documents\MasterThesis\lbl")
-from logger import get_logger
 
 
 class DatasetEntry(object):
@@ -32,14 +30,11 @@ class DatasetEntry(object):
             dataset_type (str): What kind of data the data is
             shape (tuple): The shape of the data
         """
-
-        self.logger = get_logger(name=__name__)
-
         if isinstance(image_path, (Path, str)):
             self.image_path = str(image_path)
             if not Path(image_path).is_file():
-                self.logger.info('The path: ' + str(image_path))
-                self.logger.info('Is not an existing file, are you sure this is the correct path?')
+                print('The path: ' + str(image_path))
+                print('Is not an existing file, are you sure this is the correct path?')
         else:
             self.image_path = image_path
 
