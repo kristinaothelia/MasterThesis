@@ -39,13 +39,20 @@ class ClassCorrector(object):
         plt.ion()
         plt.show(block=False)
 
+        tot = 0
+        counter = 0
+        for entry in self.container:
+            if entry.label == label:
+                if entry.human_prediction == pred_level:
+                    tot += 1
+
         for entry in self.container:
             if entry.label == label:
                 if entry.human_prediction == pred_level:
 
+                    counter += 1
                     img = entry.open()
-                    if entry.label is not None:
-                        plt.title(entry.label)
+                    plt.title('Label: {0}, image: {1}/{2}'.format(str(entry.label), counter, tot))
 
                     plt.imshow(img, cmap='gray')
                     # Add image count?
@@ -67,6 +74,6 @@ class ClassCorrector(object):
                     print('----------------------------------')
                     plt.gca().clear()
 
-                self.container.to_json(save_path)
+                    self.container.to_json(save_path)
 
         plt.close()
