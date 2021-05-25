@@ -15,29 +15,28 @@ class Trainer(BaseTrainer):
                  data_loader: torch.utils.data.dataloader,
                  valid_data_loader: torch.utils.data.dataloader,
                  lr_scheduler: torch.optim.lr_scheduler,
-                 epochs: int,
-                 save_period: int,
-                 savedir: str,
-                 device: str = None,
-                 log_step: int = None,
+                 epochs:        int,
+                 save_period:   int,
+                 savedir:       str,
+                 device:        str = None,
+                 log_step:      int = None,
                  ):
 
-        super().__init__(model=model,
-                         loss_function=loss_function,
-                         optimizer=optimizer,
-                         lr_scheduler=lr_scheduler,
-                         device=device,
-                         epochs=epochs,
-                         save_period=save_period,
-                         savedir=savedir,
+        super().__init__(model          = model,
+                         loss_function  = loss_function,
+                         optimizer      = optimizer,
+                         lr_scheduler   = lr_scheduler,
+                         device         = device,
+                         epochs         = epochs,
+                         save_period    = save_period,
+                         savedir        = savedir,
                          )
 
-        self.data_loader = data_loader
-        self.valid_data_loader = valid_data_loader
-
-        self.batch_size = data_loader.batch_size
-        self.len_epoch = len(data_loader)*self.batch_size
-        self.log_step = int(self.len_epoch/(4)) if not isinstance(log_step, int) else log_step
+        self.data_loader        = data_loader
+        self.valid_data_loader  = valid_data_loader
+        self.batch_size         = data_loader.batch_size
+        self.len_epoch          = len(data_loader)*self.batch_size
+        self.log_step           = int(self.len_epoch/(4)) if not isinstance(log_step, int) else log_step
 
     def _train_epoch(self, epoch):
         """
@@ -99,7 +98,7 @@ class Trainer(BaseTrainer):
 
                 metrics.append(a)
 
-        return np.mean(np.array(metrics)), np.mean(np.array(loss))
+        return np.mean(np.array(metrics)), np.mean(np.array(losses))
 
 
     def _progress(self, batch_idx):

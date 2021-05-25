@@ -27,7 +27,17 @@ class RotateCircle(object):
 
         """
         shape = tensor.shape
+
+
+
+
+
         # https://stackoverflow.com/questions/39188198/only-rotate-part-of-image-python
+
+
+
+
+
 
         return tensor
 
@@ -37,6 +47,7 @@ class RotateCircle(object):
 
 if __name__=='__main__':
     import matplotlib.pyplot as plt
+
     x = np.zeros(shape=(2, 469, 469))
 
     x[:, :200] = 1
@@ -51,7 +62,3 @@ if __name__=='__main__':
 
     plt.imshow(y[1])
     plt.show()
-
-
-
-

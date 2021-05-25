@@ -1,25 +1,25 @@
 from pathlib import Path
 import datetime
 from tqdm import tqdm
+import sys
 
 import matplotlib.pyplot as plt
 
 from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 
-
+# Dataset containing all data
 #folder = '/home/jon/Documents/LBL/all/dataset/6300'
 folder = r'C:\Users\Krist\Documents\dataset\5577'
 
 container = DatasetContainer()
 container.from_folder(path=folder,
-                      datasetname='red',
+                      datasetname='green',
                       dataset_type='png',
                       source='UiO',
                       location='Svaalbard',
                       dataset_description='ASI')
 
 # container.to_json('files.json')
-
 # container = DatasetContainer.from_json('files.json')
 
 
@@ -34,8 +34,6 @@ for entry in container:
 
     entry.timepoint = str(tiime)
 
-# container.to_json('files.json')
-
 '''
 arcs = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Arc')
 clear = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Clear')
@@ -43,10 +41,11 @@ cloud = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Cloud')
 diffuse = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Diffuse')
 discrete = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Discrete')
 '''
-arcs = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Arc')
-noaurora = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\No_aurora')
-diffuse = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Diffuse')
-discrete = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Discrete')
+# Labled data
+arcs        = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Arc')
+noaurora    = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\No_aurora')
+diffuse     = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Diffuse')
+discrete    = Path(r'C:\Users\Krist\Documents\5577_add\Transf_jpeg\Data_4classes\Discrete')
 
 arcs = arcs.absolute()
 arc_files = list(arcs.glob('*'))
@@ -97,4 +96,4 @@ for entry in tqdm(container):
             entry.label = 'aurora-less'
             break
 
-container.to_json('5577.json')
+container.to_json('datasets/5577_k_aurora.json')

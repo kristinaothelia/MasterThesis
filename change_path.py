@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from lbl.dataset import DatasetContainer
 
-container = DatasetContainer.from_json('5577.json')
+container = DatasetContainer.from_json('5577_k.json')
 
 #path = "/home/jon/Documents/LBL/all/dataset/6300/teeest"
 #path = r"C:\Users\Krist\Documents\dataset\6300"
@@ -14,7 +14,7 @@ for entry in container:
     filename = Path(Path(entry.image_path).name)
     entry.image_path = str(Path(path) / filename)
 
-container.to_json(path='5577_k.json')
+container.to_json(path='5577_k_new.json')
 
 
 Test = False

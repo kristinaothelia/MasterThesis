@@ -7,18 +7,18 @@ import matplotlib.pyplot as plt
 from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 
 
-folder = '/home/jon/Documents/LBL/all/dataset/6300'
+#folder = '/home/jon/Documents/LBL/all/dataset/6300'
+folder = r'C:\Users\Krist\Documents\dataset\6300'
 
 container = DatasetContainer()
 container.from_folder(path=folder,
-                      datasetname='green',
+                      datasetname='red',
                       dataset_type='png',
                       source='UiO',
                       location='Svaalbard',
                       dataset_description='ASI')
 
 # container.to_json('files.json')
-
 # container = DatasetContainer.from_json('files.json')
 
 
@@ -34,12 +34,18 @@ for entry in container:
     entry.timepoint = str(tiime)
 
 # container.to_json('files.json')
-
+'''
 arcs = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Arc')
 clear = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Clear')
 cloud = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Cloud')
 diffuse = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Diffuse')
 discrete = Path('/home/jon/Documents/LBL/6300_original/Data_5classes/Discrete')
+'''
+arcs        = Path(r'C:\Users\Krist\Documents\6300_ori_5classes\Arc')
+clear       = Path(r'C:\Users\Krist\Documents\6300_ori_5classes\Clear')
+cloud       = Path(r'C:\Users\Krist\Documents\6300_ori_5classes\Cloud')
+diffuse     = Path(r'C:\Users\Krist\Documents\6300_ori_5classes\Diffuse')
+discrete    = Path(r'C:\Users\Krist\Documents\6300_ori_5classes\Discrete')
 
 
 arcs = arcs.absolute()
@@ -88,4 +94,4 @@ for entry in tqdm(container):
             entry.label = 'aurora-less'
             break
 
-container.to_json('6300.json')
+container.to_json('datasets/6300_k.json')
