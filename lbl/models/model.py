@@ -40,19 +40,24 @@ class DoubleConv(nn.Module):
 
 
 class Model(nn.Module):
+    """
+    Model description...
+    """
 
     def __init__(self,
                  n_channels: int = 1,
                  n_classes: int = 4,
                  n: int = 64,
                  ):
+
         super(Model, self).__init__()
+
         self.n_channels = n_channels
-        self.n_classes = n_classes
+        self.n_classes  = n_classes
 
         self.conv1 = nn.Conv2d(in_channels=n_channels, out_channels=n, kernel_size=3, padding=1, bias=False)
         self.norm1 = nn.BatchNorm2d(n)
-        self.act = nn.ReLU(inplace=True)
+        self.act   = nn.ReLU(inplace=True)
 
         self.double1 = DoubleConv(in_channels=n, out_channels=n)
 

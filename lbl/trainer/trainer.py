@@ -45,17 +45,19 @@ class Trainer(BaseTrainer):
         :param epoch: Integer, current training epoch.
         :return: A log that contains average loss and metric in this epoch.
         """
+
         self.model.train()
         losses = list()
 
         for batch_idx, (data, target) in enumerate(self.data_loader):
+
             data, target = data.to(self.device), target.to(self.device)
 
             self.optimizer.zero_grad()
 
-            output = self.model(data)
+            output  = self.model(data)
+            loss    = self.loss_function(output, target.argmax(dim=1))
 
-            loss = self.loss_function(output, target.argmax(dim=1))
             loss.backward()
             self.optimizer.step()
 
@@ -80,10 +82,11 @@ class Trainer(BaseTrainer):
         """
         self.model.eval()
         metrics = list()
-        losses = list()
+        losses  = list()
 
         with torch.no_grad():
             for data, target in self.valid_data_loader:
+
                 data, target = data.to(self.device), target.to(self.device)
 
                 output = self.model(data)
@@ -103,6 +106,7 @@ class Trainer(BaseTrainer):
 
     def _progress(self, batch_idx):
         base = '[{}/{} ({:.0f}%)]'
+        
         if hasattr(self.data_loader, 'n_samples'):
             current = batch_idx * self.data_loader.batch_size
             total = self.data_loader.n_samples

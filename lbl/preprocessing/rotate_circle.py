@@ -1,6 +1,9 @@
-from typing import Union, List
+from typing      import Union, List
+from lbl.dataset import DatasetContainer
+from lbl.dataset import DatasetLoader
 
 import numpy as np
+import imageio
 
 class RotateCircle(object):
     """
@@ -46,6 +49,8 @@ class RotateCircle(object):
 
 
 if __name__=='__main__':
+
+    '''
     import matplotlib.pyplot as plt
 
     x = np.zeros(shape=(2, 469, 469))
@@ -61,4 +66,13 @@ if __name__=='__main__':
     plt.show()
 
     plt.imshow(y[1])
+    plt.show()
+    '''
+
+    container = DatasetContainer.from_json('datasets/Full_aurora.json')
+    print(container[0])
+
+    im = imageio.imread(container[0].image_path)
+    print(im.shape)
+    plt.imshow(im)
     plt.show()

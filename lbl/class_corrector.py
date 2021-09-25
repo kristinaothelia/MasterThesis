@@ -12,8 +12,6 @@ from .dataset import DatasetContainer
 
 class ClassCorrector(object):
 
-    # ADD "label": null ?? for labeling images without a label?
-
     LABELS = {
         "0": "aurora-less",
         "1": "arc",

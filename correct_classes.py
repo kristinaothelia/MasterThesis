@@ -64,6 +64,3 @@ def correct_5577():
 # Correct 557.7nm, red aurora
 #correct_5577()
 '''
-
-# nya6_20150126_000907_5577_cal arc?
-# nya6_20171116_011208_5577_cal

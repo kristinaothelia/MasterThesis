@@ -38,19 +38,25 @@ class BaseTrainer:
         # Model to device
         self.device = torch.device(device)
 
-        self.model = model.to(self.device)
-        self.lr_scheduler = lr_scheduler
+        '''
+        # setup GPU device if available, move model into configured device
+        if device is None:
+            self.device, device_ids = self.prepare_device(config['n_gpu'])
+        else:
+            self.device = torch.device(device)
+            device_ids = list()
+        '''
 
-        self.loss_function = loss_function.to(self.device)
+        self.model              = model.to(self.device)
+        self.lr_scheduler       = lr_scheduler
+        self.loss_function      = loss_function.to(self.device)
+        self.optimizer          = optimizer
 
-        self.optimizer = optimizer
+        self.epochs             = epochs
+        self.save_period        = save_period
+        self.start_epoch        = 1
 
-        self.epochs = epochs
-        self.save_period = save_period
-
-        self.start_epoch = 1
-
-        self.checkpoint_dir = Path(savedir) / Path(datetime.today().strftime('%Y-%m-%d'))
+        self.checkpoint_dir     = Path(savedir) / Path(datetime.today().strftime('%Y-%m-%d'))
 
         self.min_validation_loss = sys.float_info.max  # Minimum validation loss achieved, starting with the larges possible number
 
@@ -84,11 +90,14 @@ class BaseTrainer:
 
             if epoch % self.save_period == 0:
                 self.save_checkpoint(epoch, best=False)
+
+            #if val_loss < self.min_validation_loss:
             if 1 - valid_acc < self.min_validation_loss:
                 self.min_validation_loss = valid_loss
                 self.save_checkpoint(epoch, best=True)
 
             print('-----------------------------------')
+
         self.save_checkpoint(epoch, best=False)
 
 
@@ -144,11 +153,9 @@ class BaseTrainer:
 
         self.model.load_state_dict(checkpoint['state_dict'])
         self.model = self.model.to(self.device)
-
         self.start_epoch = checkpoint['epoch'] + 1
 
         self.optimizer.load_state_dict(checkpoint['optimizer'])
-
         self.lr_scheduler.load_state_dict(checkpoint['scheduler'])
 
         print('Checkpoint loaded. Resume training from epoch {}'.format(self.start_epoch))
