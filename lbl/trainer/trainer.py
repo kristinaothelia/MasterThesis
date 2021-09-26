@@ -96,6 +96,8 @@ class Trainer(BaseTrainer):
 
                 out = torch.argmax(output, dim=1)
                 ground_truths = torch.argmax(target, dim=1)
+                if epoch > 10:
+                    print(out)
 
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
 
