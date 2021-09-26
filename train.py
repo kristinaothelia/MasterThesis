@@ -37,7 +37,13 @@ train_transforms = torchvision.transforms.Compose([
     lambda x: x.unsqueeze(0),
     RotateCircle,
     StandardizeNonZero(),
-    PadImage(size=480),
+    lambda x: torch.nn.functional.interpolate(
+            input=x,
+            size=240,
+            mode='bicubic',
+            align_corners=True,
+            ),
+    # PadImage(size=480),
     ])
 
 valid_transforms = torchvision.transforms.Compose([
@@ -45,7 +51,13 @@ valid_transforms = torchvision.transforms.Compose([
     lambda x: torch.from_numpy(x),
     lambda x: x.unsqueeze(0),
     StandardizeNonZero(),
-    PadImage(size=480),
+    lambda x: torch.nn.functional.interpolate(
+            input=x,
+            size=240,
+            mode='bicubic',
+            align_corners=True,
+            ),
+    # PadImage(size=480),
     ])
 
 
@@ -64,7 +76,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            )
 
 
-model = Model(1, 4, 96)
+model = Model(1, 4, 128)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
