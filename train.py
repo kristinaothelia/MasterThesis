@@ -51,7 +51,7 @@ valid_transforms = torchvision.transforms.Compose([
     lambda x: torch.from_numpy(x),
     lambda x: x.unsqueeze(0),
     lambda x: torch.nn.functional.interpolate(
-            input=xx.unsqueeze(0),
+            input=x.unsqueeze(0),
             size=240,
             mode='bicubic',
             align_corners=True,
