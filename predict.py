@@ -77,7 +77,7 @@ with torch.no_grad():
             prediction = torch.argmax(pred, dim=-1)
 
             for i, label_pred in enumerate(pred[0]):
-                score[LABELS[i]] = label_pred
+                score[LABELS[i]] = float(label_pred)
 
             entry.label = LABELS[int(prediction[0])]
             entry.human_prediction = False
