@@ -79,8 +79,9 @@ with torch.no_grad():
             for i, label_pred in enumerate(pred[0]):
                 score[LABELS[i]] = label_pred
 
-            entry.lable = LABELS[int(prediction[0])]
+            entry.label = LABELS[int(prediction[0])]
             entry.human_prediction = False
+            entry.add_score(score)
 
 container.to_json(path='./datasets/Full_aurora_predicted.json')
 
