@@ -36,13 +36,13 @@ train_transforms = torchvision.transforms.Compose([
     lambda x: torch.from_numpy(x),
     lambda x: x.unsqueeze(0),
     RotateCircle,
-    StandardizeNonZero(),
     lambda x: torch.nn.functional.interpolate(
-            input=x,
+            input=x.unsqueeze(0),
             size=240,
             mode='bicubic',
             align_corners=True,
-            ),
+            ).squeeze(0),
+    StandardizeNonZero(),
     # PadImage(size=480),
     ])
 
@@ -50,13 +50,13 @@ valid_transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
     lambda x: torch.from_numpy(x),
     lambda x: x.unsqueeze(0),
-    StandardizeNonZero(),
     lambda x: torch.nn.functional.interpolate(
-            input=x,
+            input=xx.unsqueeze(0),
             size=240,
             mode='bicubic',
             align_corners=True,
-            ),
+            ).squeeze(0),
+    StandardizeNonZero(),
     # PadImage(size=480),
     ])
 
