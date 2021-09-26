@@ -93,7 +93,7 @@ class BaseTrainer:
 
             #if val_loss < self.min_validation_loss:
             if 1 - valid_acc < self.min_validation_loss:
-                self.min_validation_loss = valid_loss
+                self.min_validation_loss = 1 - valid_acc
                 self.save_checkpoint(epoch, best=True)
 
             print('-----------------------------------')
