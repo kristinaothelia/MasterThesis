@@ -17,7 +17,6 @@ from lbl.preprocessing import (
 
 import matplotlib.pyplot as plt
 
-from skimage import exposure
 
 from tqdm import tqdm
 
