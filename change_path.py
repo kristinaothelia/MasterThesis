@@ -4,17 +4,24 @@ import matplotlib.pyplot as plt
 
 from lbl.dataset import DatasetContainer
 
-container = DatasetContainer.from_json('5577_k.json')
+container = DatasetContainer.from_json('datasets/Full_aurora.json')
 
-#path = "/home/jon/Documents/LBL/all/dataset/6300/teeest"
-#path = r"C:\Users\Krist\Documents\dataset\6300"
-path = r"C:\Users\Krist\Documents\dataset\5577"
+path_red = "/home/jon/Documents/LBL/dataset/6300"
+path_green = "/home/jon/Documents/LBL/dataset/5577"
+
+
+# path = r"C:\Users\Krist\Documents\dataset\6300"
+# path = r"C:\Users\Krist\Documents\dataset\5577"
 
 for entry in container:
-    filename = Path(Path(entry.image_path).name)
-    entry.image_path = str(Path(path) / filename)
+    if entry.datasetname == "green":
+        filename = Path(Path(entry.image_path).name)
+        entry.image_path = str(Path(path_green) / filename)
+    else:
+        filename = Path(Path(entry.image_path).name)
+        entry.image_path = str(Path(path_red) / filename)
 
-container.to_json(path='5577_k_new.json')
+container.to_json(path='datasets/Full_aurora_jon.json')
 
 
 Test = False

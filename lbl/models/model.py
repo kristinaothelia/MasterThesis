@@ -88,8 +88,8 @@ class Model(nn.Module):
         self.pool6 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.double6 = DoubleConv(in_channels=n, out_channels=n)  # Double conv layer
 
-        self.linear1 = nn.Linear(in_features=n*7*7, out_features=100)
-        self.linear2 = nn.Linear(in_features=100, out_features=n_classes)
+        self.linear1 = nn.Linear(in_features=n*7*7, out_features=128)
+        self.linear2 = nn.Linear(in_features=128, out_features=n_classes)
 
 
     def forward(self, x):

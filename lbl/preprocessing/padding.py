@@ -2,6 +2,8 @@ from typing import Union, Tuple, List
 import numpy as np
 import torch, sys
 
+import torch.nn.functional as F
+
 # https://numpy.org/doc/stable/reference/generated/numpy.pad.html
 # Padding class: pytorch tensors
 
@@ -14,55 +16,19 @@ class PadImage(object):
     """
 
 
-    def __init__(self):
-        pass
-
-    '''
-    def __init__(self, size: Union[int, tuple, list, torch.Tensor]=(480, 480)):
-
-        if isinstance(size, int):
-            self.size = (size, size)
-        elif isinstance(size, torch.Tensor):
-            self.size = size.shape
-        else:
-            self.size = size
-    '''
+    def __init__(self, size: Union[Tuple[int], int]):
+        self.size = size if isinstance(size, tuple) else (size, size)
 
     def __call__(self, tensor: torch.Tensor):
 
-        shape = tensor.shape
+        h, w = tensor.shape[-2:]
 
-        if shape != (469, 469) and shape != (471, 471):
-            print("Wrong input shape")
-            sys.exit()
+        target_h, target_w = self.size
+        assert target_h > h or target_w > w, "image must be smaller than desired size"
 
-        if shape == (469, 469):
+        pad_h = target_h - h
+        pad_w = target_w - w
 
-            padded = np.pad(tensor, ((6, 5), (5, 6)), 'constant', constant_values=0)
+        tensor = F.pad(tensor, pad=((pad_w + 1) // 2, pad_w // 2, (pad_h + 1) // 2, pad_h // 2))
 
-        elif shape == (471, 471):
-
-            padded = np.pad(tensor, ((5, 4), (4, 5)), 'constant', constant_values=0)
-
-        '''
-        if self.size == (469, 469):
-
-            padded = np.pad(tensor, ((6, 5), (5, 6)), 'constant', constant_values=0)
-
-        elif self.size == (471, 471):
-
-            padded = np.pad(tensor, ((5, 4), (4, 5)), 'constant', constant_values=0)
-        '''
-
-        #return padded
-        return torch.from_numpy(padded)
-
-
-if __name__=='__main__':
-
-    input = torch.Tensor(469,469)
-    input = torch.Tensor(471,471)
-
-    #padded = PadImage(input)
-    padded = PadImage()
-    print(padded(input).shape)
+        return tensor
