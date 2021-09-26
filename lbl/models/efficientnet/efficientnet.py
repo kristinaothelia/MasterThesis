@@ -5,14 +5,14 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from ..blocks.utils.conv_pad import Conv2dDynamicSamePadding
+from .utils.conv_pad import Conv2dDynamicSamePadding
 
-from crainets.models.efficientnet.utils import (
+from .utils import (
     round_filters,
     round_repeats,
 )
 
-from ..blocks import (
+from .mbconvblock import (
     MBConvBlock,
     )
 
