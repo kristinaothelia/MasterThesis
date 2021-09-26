@@ -7,7 +7,7 @@ from torch.nn import functional as F
 
 from .utils.conv_pad import Conv2dDynamicSamePadding
 
-from .utils import (
+from .utils_2 import (
     round_filters,
     round_repeats,
 )
