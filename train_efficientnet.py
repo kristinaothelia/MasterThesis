@@ -76,7 +76,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            )
 
 
-model = EfficientNet.from_name(model_name='efficientnet-b0', num_classes=4)
+model = EfficientNet.from_name(model_name='efficientnet-b0', num_classes=4, in_channels=1)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
