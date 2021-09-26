@@ -64,7 +64,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            )
 
 
-model = Model(1, 4, 128)
+model = Model(1, 4, 96)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
