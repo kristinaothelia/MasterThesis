@@ -8,6 +8,7 @@ from lbl.dataset import DatasetContainer
 from lbl.dataset import DatasetLoader
 
 from lbl.models.model import Model
+from lbl.models.efficientnet.efficientnet import EfficientNet
 
 from lbl.preprocessing import (
     PadImage,
@@ -53,7 +54,8 @@ transforms = torchvision.transforms.Compose([
 
 # Load a saved model
 path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
-model = Model(1, 4, 128)
+#model = Model(1, 4, 128)
+model = EfficientNet.from_name(model_name='efficientnet-b0', num_classes=4, in_channels=1)
 
 checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])
@@ -84,6 +86,3 @@ with torch.no_grad():
             entry.add_score(score)
 
 container.to_json(path='./datasets/Full_aurora_predicted.json')
-
-
-
