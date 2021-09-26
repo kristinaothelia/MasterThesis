@@ -52,7 +52,7 @@ transforms = torchvision.transforms.Compose([
 
 
 # Load a saved model
-path  = "/home/jon/Documents/LBL/MasterThesis/models/2021-09-26/best_validation/checkpoint-best.pth"
+path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
 model = Model(1, 4, 128)
 
 checkpoint = torch.load(path, map_location='cpu')
