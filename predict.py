@@ -17,6 +17,14 @@ from lbl.preprocessing import (
 
 import matplotlib.pyplot as plt
 
+from skimage import exposure
+
+from tqdm import tqdm
+
+
+import warnings
+warnings.filterwarnings("ignore")
+
 
 LABELS = {
     0: "aurora-less",
@@ -25,69 +33,57 @@ LABELS = {
     3: "discrete",
 }
 
-container = DatasetContainer.from_json('datasets/Full_aurora_jon.json')
-padder = PadImage(size=480)
+container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 
-for entry in container:
-    print(entry.label)
-    img_og = entry.open()
-    img = torch.from_numpy(np.float32(img_og))
-    rotate = RotateCircle(img.unsqueeze(0))
-    rotate = padder(rotate)
-
-    plt.subplot(1, 2, 1)
-    plt.imshow(img_og, cmap='gray')
-
-    plt.subplot(1, 2, 2)
-    plt.imshow(rotate.squeeze(0).numpy(), cmap='gray')
-    plt.show()
-
-
-
-
-
-exit()
 
 transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
     lambda x: torch.from_numpy(x),
     lambda x: x.unsqueeze(0),
-    #PadImage(torch.Tensor(input))
-    #torchvision.transforms.Pad(padding=[5, 5, 4, 4], fill=0),
-    lambda tensor: F.normalize(tensor=tensor,
-                           mean=tensor.mean(axis=(1, 2)),
-                           std=tensor.std(axis=(1, 2)),
-                           ),
+    lambda x: torch.nn.functional.interpolate(
+            input=x.unsqueeze(0),
+            size=240,
+            mode='bicubic',
+            align_corners=True,
+            ).squeeze(0),
+    StandardizeNonZero(),
+    # PadImage(size=480),
     ])
 
 
 
 # Load a saved model
-path  = r"C:\Users\Krist\Documents\MasterThesis\checkpoint-best.pth"
-model = Model(1, 4, 96)
+path  = "/home/jon/Documents/LBL/MasterThesis/models/2021-09-26/best_validation/checkpoint-best.pth"
+model = Model(1, 4, 128)
 
-checkpoint = torch.load(model, map_location='cpu')
+checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])
+
+model = model.to('cuda:0')
 
 model.eval()
 
 with torch.no_grad():
-    for entry in container:
+    for entry in tqdm(container):
 
         if entry.label is None:
             score = dict()
             img = entry.open()
             x = transforms(img)  # pad an stuff
-            pred = model(x)
+            x = x.unsqueeze(0)
+            x = x.to('cuda:0')
 
+            pred = model(x).to('cpu')
             pred = torch.softmax(pred, dim=-1)
             prediction = torch.argmax(pred, dim=-1)
 
-            for i, label_pred in enumerate(prediction[0]):
+            for i, label_pred in enumerate(pred[0]):
                 score[LABELS[i]] = label_pred
 
-            entry.lable = LABELS[prediction]
+            entry.lable = LABELS[int(prediction[0])]
             entry.human_prediction = False
+
+container.to_json(path='./datasets/Full_aurora_predicted.json')
 
 
 
