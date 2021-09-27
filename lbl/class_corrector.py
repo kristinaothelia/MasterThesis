@@ -58,6 +58,7 @@ class ClassCorrector(object):
                     plt.imshow(img)
                     # Add image count?
                     print("Filename: ", Path(entry.image_path).stem)
+                    print("Score: ", entry.score)
 
                     text = input("Correct class [hit enter], if not type in correct class integer [0,1,2,3]:")
 
