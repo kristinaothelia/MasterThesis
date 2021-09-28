@@ -29,6 +29,7 @@ for i in range(length):
 
 train, valid = container.split(seed=42, split=0.8)
 
+img_size = 260
 
 # rotation class: numpy arrays. Padding class: pytorch tensors
 train_transforms = torchvision.transforms.Compose([
@@ -38,7 +39,7 @@ train_transforms = torchvision.transforms.Compose([
     RotateCircle,
     lambda x: torch.nn.functional.interpolate(
             input=x.unsqueeze(0),
-            size=240,
+            size=img_size,
             mode='bicubic',
             align_corners=True,
             ).squeeze(0),
@@ -52,7 +53,7 @@ valid_transforms = torchvision.transforms.Compose([
     lambda x: x.unsqueeze(0),
     lambda x: torch.nn.functional.interpolate(
             input=x.unsqueeze(0),
-            size=240,
+            size=img_size,
             mode='bicubic',
             align_corners=True,
             ).squeeze(0),
@@ -76,7 +77,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            )
 
 
-model = EfficientNet.from_name(model_name='efficientnet-b0', num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name='efficientnet-b2', num_classes=4, in_channels=1)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
@@ -95,6 +96,7 @@ trainer = Trainer(model             = model,
                   lr_scheduler      = lr_scheduler,
                   epochs            = 100,
                   save_period       = 25,
+                  #savedir           = './models',
                   savedir           = './models',
                   device            = 'cuda:0',
                   )

@@ -9,6 +9,8 @@ import sys
 
 from .dataset import DatasetContainer
 
+import pandas as pd
+
 
 class ClassCorrector(object):
 
@@ -41,6 +43,13 @@ class ClassCorrector(object):
 
         tot = 0
         counter = 0
+        correct = 0
+        correct_from = []
+        correct_to = []
+        #df1 = pd.DataFrame([['a', 'b'], ['c', 'd']],
+        #           index=['row 1', 'row 2'],
+        #           columns=['Predicted', 'Corrected'])
+
         for entry in self.container:
             if entry.label == label:
                 if entry.human_prediction == pred_level:
@@ -54,11 +63,13 @@ class ClassCorrector(object):
                     img = entry.open()
                     plt.title('Label: {0}, image: {1}/{2}'.format(str(entry.label), counter, tot))
 
-                    #plt.imshow(img, cmap='gray')
-                    plt.imshow(img)
+                    plt.imshow(img, cmap='gray')
+                    #plt.imshow(img)
                     # Add image count?
                     print("Filename: ", Path(entry.image_path).stem)
-                    print("Score: ", entry.score)
+                    #print("Score: ", entry.score)
+                    for key, value in entry.score.items():
+                        print("%11s : %.4f" %(key, value))
 
                     text = input("Correct class [hit enter], if not type in correct class integer [0,1,2,3]:")
 
@@ -68,14 +79,27 @@ class ClassCorrector(object):
                             print('----------------------------------')
                             continue
                         entry.human_prediction = True
+                        correct += 1
                     else:
                         correct_label = self.LABELS[text]
+                        correct_from.append(entry.label)
+                        correct_to.append(correct_label)
                         entry.label = correct_label
                         entry.human_prediction = True
+
+                    print("Current accuracy: ", correct/counter)
 
                     print('----------------------------------')
                     plt.gca().clear()
 
                     self.container.to_json(save_path)
 
+
         plt.close()
+
+        print("Correct predicted: ", correct)
+        print("Counter:           ", counter)
+        print("Accuracy:          ", correct/counter)
+        data = {'Predicted from b0': correct_from, 'Corrected to': correct_to}
+        df = pd.DataFrame(data, columns = ["Predicted with b0", "Corrected to"])
+        df.to_excel("test.xlsx", index = False)

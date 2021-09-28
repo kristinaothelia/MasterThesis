@@ -1,6 +1,6 @@
 from lbl.class_corrector import ClassCorrector
 from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
-
+import numpy as np
 """
 Description ...
 
@@ -68,9 +68,17 @@ def correct_5577():
 # Correct 557.7nm, red aurora
 #correct_5577()
 
+'''
+Eks: Lage en tabell med predicted vs observed (images needs to have a label)
+OR
+when correcting 'Full_aurora_predicted_local.json', make a table over correct/corrected
+
+'''
+
 
 # Correct 'Full_aurora_predicted' used with b0
-predicted_file = 'datasets/Full_aurora_predicted.json'  # json_from
+#predicted_file = 'datasets/Full_aurora_predicted.json'  # json_from
+predicted_file = 'datasets/Full_aurora_predicted_local.json'  # json_from
 corrected_file = 'datasets/Full_aurora_predicted_b0_correct_arc.json' # json_to
 
 container = DatasetContainer.from_json(predicted_file)
@@ -99,4 +107,5 @@ print("Discrete    ", n_disc)
 
 corrector = ClassCorrector(container=container)
 
-corrector.correct_class('arc', prediction_level=0, save_path=corrected_file)
+#corrector.correct_class('arc', prediction_level=0, save_path=corrected_file)
+corrector.correct_class('diffuse', prediction_level=0, save_path=corrected_file)
