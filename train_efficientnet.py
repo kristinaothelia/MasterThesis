@@ -15,17 +15,19 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 
-container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-
+#container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
+container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
 
 # Remove images with no label
 length = len(container)
+print(length)
 counter = 0
 for i in range(length):
     i -= counter
     if container[i].label == None:
         del container[i]
         counter += 1
+print(counter)
 
 train, valid = container.split(seed=42, split=0.8)
 
@@ -47,6 +49,7 @@ train_transforms = torchvision.transforms.Compose([
     # PadImage(size=480),
     ])
 
+# No need to rotate validation images
 valid_transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
     lambda x: torch.from_numpy(x),
