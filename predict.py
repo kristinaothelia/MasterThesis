@@ -36,8 +36,8 @@ LABELS = {
 container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 
 #img_size = 224  # EfficientNet-b0
-#img_size = 240  # EfficientNet-b1
-img_size = 260  # EfficientNet-b2
+img_size = 240  # EfficientNet-b1
+#img_size = 260  # EfficientNet-b2
 
 transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
@@ -56,9 +56,10 @@ transforms = torchvision.transforms.Compose([
 
 
 # Load a saved model
-path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
+#path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
+path  = "models/2021-09-29/best_validation/checkpoint-best.pth"
 #model = Model(1, 4, 128)
-model = EfficientNet.from_name(model_name='efficientnet-b2', num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name='efficientnet-b1', num_classes=4, in_channels=1)
 
 checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])
