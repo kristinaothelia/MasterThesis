@@ -8,6 +8,7 @@ from datetime import datetime
 import torch
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class BaseTrainer:
@@ -65,6 +66,10 @@ class BaseTrainer:
         """
         Full training logic
         """
+        t_loss = []
+        v_loss = []
+        v_acc  = []
+
         for epoch in range(self.start_epoch, self.epochs + 1):
 
             epoch_start_time = time.time()
@@ -87,6 +92,9 @@ class BaseTrainer:
             print('Mean validation loss: {}'.format(np.mean(valid_loss)))
             print('Mean validation accuracy: {}'.format(valid_acc))
 
+            t_loss.append(np.mean(loss))
+            v_loss.append(np.mean(valid_loss))
+            v_acc.append(valid_acc)
 
             if epoch % self.save_period == 0:
                 self.save_checkpoint(epoch, best=False)
@@ -99,6 +107,18 @@ class BaseTrainer:
             print('-----------------------------------')
 
         self.save_checkpoint(epoch, best=False)
+
+        if epoch == self.epochs:
+            print(epoch)
+            ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
+            plt.title("Loss vs Accuracy")
+            plt.plot(ep, t_loss, label="Training loss")
+            plt.plot(ep, v_loss, label="validation loss")
+            plt.plot(ep, v_acc, label="Validation accuracy")
+            plt.xlabel("Epochs")
+            plt.ylabel("Loss/Accuracy")
+            plt.legend()
+            plt.savefig("acc_vs_loss.png")
 
 
     def save_checkpoint(self, epoch, best: bool = False):

@@ -31,7 +31,9 @@ print(counter)
 
 train, valid = container.split(seed=42, split=0.8)
 
-img_size = 260
+#img_size = 224  # EfficientNet-b0
+img_size = 240  # EfficientNet-b1
+#img_size = 260  # EfficientNet-b2
 
 # rotation class: numpy arrays. Padding class: pytorch tensors
 train_transforms = torchvision.transforms.Compose([
@@ -80,7 +82,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            )
 
 
-model = EfficientNet.from_name(model_name='efficientnet-b2', num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name='efficientnet-b1', num_classes=4, in_channels=1)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
@@ -98,9 +100,9 @@ trainer = Trainer(model             = model,
                   valid_data_loader = valid_loader,
                   lr_scheduler      = lr_scheduler,
                   epochs            = 100,
-                  save_period       = 25,
+                  save_period       = 50,
                   #savedir           = './models',
-                  savedir           = './models',
+                  savedir           = '/itf-fi-ml/home/koolsen/Master/',
                   device            = 'cuda:0',
                   )
 
