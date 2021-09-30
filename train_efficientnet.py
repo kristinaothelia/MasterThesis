@@ -15,8 +15,8 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 
-#container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
+container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
+#container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
 
 # Remove images with no label
 length = len(container)
@@ -102,8 +102,8 @@ trainer = Trainer(model             = model,
                   lr_scheduler      = lr_scheduler,
                   epochs            = 150,
                   save_period       = 50,
-                  #savedir           = './models',
-                  savedir           = '/itf-fi-ml/home/koolsen/Master/',
+                  savedir           = './models',
+                  #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                   device            = 'cuda:0',
                   )
 

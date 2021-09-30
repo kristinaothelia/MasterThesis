@@ -116,7 +116,7 @@ class BaseTrainer:
         print("ep: ", best_ep, " acc: ", best_acc)
 
         train_end_time = time.time() - train_time
-        print("Training time: ", train_end_time)
+        print("Training time [h]: ", train_end_time/(60*60))
 
         if epoch == self.epochs:
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
@@ -145,7 +145,7 @@ class BaseTrainer:
             }
 
         if best:  # Save best case with different naming convention
-            save_path = Path(self.checkpoint_dir) / Path('best_validation_' + str(epoch))
+            save_path = Path(self.checkpoint_dir) / Path('best_validation')
             filename = str(save_path / 'checkpoint-best.pth')
         else:
             save_path = Path(self.checkpoint_dir) / Path('epoch_' + str(epoch))
