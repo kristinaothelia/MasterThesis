@@ -70,6 +70,10 @@ class BaseTrainer:
         v_loss = []
         v_acc  = []
 
+        train_time = time.time()
+        best_ep = 1
+        best_acc = 0
+
         for epoch in range(self.start_epoch, self.epochs + 1):
 
             epoch_start_time = time.time()
@@ -103,10 +107,16 @@ class BaseTrainer:
             if 1 - valid_acc < self.min_validation_loss:
                 self.min_validation_loss = 1 - valid_acc
                 self.save_checkpoint(epoch, best=True)
+                best_ep = epoch
+                best_acc = valid_acc
 
             print('-----------------------------------')
 
         self.save_checkpoint(epoch, best=False)
+        print("ep: ", best_ep, " acc: ", best_acc)
+
+        train_end_time = time.time() - train_time
+        print("Training time: ", train_end_time)
 
         if epoch == self.epochs:
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
