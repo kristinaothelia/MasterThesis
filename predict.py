@@ -2,7 +2,10 @@ import torch
 import torchvision
 import torchvision.transforms.functional as F
 import numpy as np
+import matplotlib.pyplot as plt
 import sys
+
+from tqdm import tqdm
 
 from lbl.dataset import DatasetContainer
 from lbl.dataset import DatasetLoader
@@ -16,15 +19,9 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 
-import matplotlib.pyplot as plt
-
-
-from tqdm import tqdm
-
-
 import warnings
 warnings.filterwarnings("ignore")
-
+# -----------------------------------------------------------------------------
 
 LABELS = {
     0: "aurora-less",
@@ -35,10 +32,12 @@ LABELS = {
 
 container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 
-#img_size = 224  # EfficientNet-b0
-#img_size = 240  # EfficientNet-b1
-img_size = 260  # EfficientNet-b2
-img_size = 300  # EfficientNet-b3
+#model_name = 'efficientnet-b0'
+#model_name = 'efficientnet-b1'
+#model_name = 'efficientnet-b2'
+model_name = 'efficientnet-b3'
+
+img_size = efficientnet_params(model_name)['resolution']
 
 transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
@@ -55,14 +54,13 @@ transforms = torchvision.transforms.Compose([
     ])
 
 
-
 # Load a saved model
 #path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
 #path  = "models/2021-09-29/best_validation/checkpoint-best.pth"
 path  = "models/2021-09-30_b3/best_validation_122/checkpoint-best.pth"
 
 #model = Model(1, 4, 128)
-model = EfficientNet.from_name(model_name='efficientnet-b3', num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
 
 checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])

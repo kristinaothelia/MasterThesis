@@ -14,9 +14,10 @@ from lbl.preprocessing import (
     RotateCircle,
     StandardizeNonZero,
     )
+# -----------------------------------------------------------------------------
 
 container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-
+img_size = 240
 
 # Remove images with no label
 length = len(container)
@@ -29,7 +30,6 @@ for i in range(length):
 
 train, valid = container.split(seed=42, split=0.8)
 
-
 # rotation class: numpy arrays. Padding class: pytorch tensors
 train_transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),
@@ -38,7 +38,7 @@ train_transforms = torchvision.transforms.Compose([
     RotateCircle,
     lambda x: torch.nn.functional.interpolate(
             input=x.unsqueeze(0),
-            size=240,
+            size=img_size,
             mode='bicubic',
             align_corners=True,
             ).squeeze(0),
@@ -52,7 +52,7 @@ valid_transforms = torchvision.transforms.Compose([
     lambda x: x.unsqueeze(0),
     lambda x: torch.nn.functional.interpolate(
             input=x.unsqueeze(0),
-            size=240,
+            size=img_size,
             mode='bicubic',
             align_corners=True,
             ).squeeze(0),

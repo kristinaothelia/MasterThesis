@@ -8,13 +8,14 @@ from lbl.dataset import DatasetContainer
 from lbl.dataset import DatasetLoader
 
 from lbl.models.efficientnet.efficientnet import EfficientNet
+from lbl.models.efficientnet.config import efficientnet_params
 from lbl.trainer.trainer import Trainer
 from lbl.preprocessing import (
     PadImage,
     RotateCircle,
     StandardizeNonZero,
     )
-
+# -----------------------------------------------------------------------------
 container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 #container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
 
@@ -31,10 +32,12 @@ print(counter)
 
 train, valid = container.split(seed=42, split=0.8)
 
-#img_size = 224  # EfficientNet-b0
-#img_size = 240  # EfficientNet-b1
-img_size = 260  # EfficientNet-b2
-img_size = 300  # EfficientNet-b3
+#model_name = 'efficientnet-b0'
+#model_name = 'efficientnet-b1'
+model_name = 'efficientnet-b2'
+#model_name = 'efficientnet-b3'
+
+img_size = efficientnet_params(model_name)['resolution']
 
 # rotation class: numpy arrays. Padding class: pytorch tensors
 train_transforms = torchvision.transforms.Compose([
@@ -82,8 +85,7 @@ valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                            shuffle      = False,
                                            )
 
-
-model = EfficientNet.from_name(model_name='efficientnet-b2', num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
@@ -102,7 +104,7 @@ trainer = Trainer(model             = model,
                   lr_scheduler      = lr_scheduler,
                   epochs            = 150,
                   save_period       = 50,
-                  savedir           = './models/b2',
+                  savedir           = './models/{}'.format(model_name[-2:]),
                   #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                   device            = 'cuda:0',
                   )
