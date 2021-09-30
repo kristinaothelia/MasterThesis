@@ -14,7 +14,8 @@ Prediction level 0: checks human_prediction = False
 Prediction level 1: checks human_prediction = None
 Prediction level 2: checks human_prediction = True
 """
-
+LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
+'''
 def class_correction(pred_level, json_from='', json_to='', arc=False, diff=False, disc=False, noa=False):
     if pred_level < 0 or pred_level > 2:
         print("Unvalid prediction level. Use 0 for false, 1 for none/null, 2 for true.]")
@@ -41,7 +42,7 @@ def class_correction(pred_level, json_from='', json_to='', arc=False, diff=False
 #predicted_file = 'datasets/5577_k_aurora.json'
 #corrected_file = 'datasets/5577_k_aurora_correct.json'
 #class_correction(pred_level=0, json_from=predicted_file, json_to=corrected_file, arc=True, diff=False, disc=False, noa=False)
-
+'''
 
 
 def correct_6300():
@@ -78,8 +79,28 @@ when correcting 'Full_aurora_predicted_local.json', make a table over correct/co
 
 # Correct 'Full_aurora_predicted' used with b0
 #predicted_file = 'datasets/Full_aurora_predicted.json'  # json_from
-predicted_file = 'datasets/Full_aurora_predicted_local.json'  # json_from
-corrected_file = 'datasets/Full_aurora_predicted_b0_correct_arc.json' # json_to
+#predicted_file = 'datasets/Full_aurora_predicted_local.json'  # json_from
+predicted_file = 'datasets/Full_aurora_predicted_b3.json'
+#corrected_file = 'datasets/Full_aurora_predicted_b0_correct_arc.json' # json_to
+corrected_file = 'datasets/Full_aurora_predicted_b3_corrected.json' # json_to
+
+''' Result for (b3 acc: 88%): datasets/Full_aurora_predicted_b3.json
+entry.human_prediction == True (manual label)
+tot:         3362
+Aurora-less  1548 (46%)
+Arc          307  (9%)
+Diffuse      500  (15%)
+Discrete     1007 (30%)
+
+entry.human_prediction == False (predicted with b3)
+tot:         4618
+Aurora-less  2260 (49%)
+Arc          533  (12%)
+Diffuse      759  (16%)
+Discrete     1066 (23%)
+
+4618+3362=7980 (len(container))
+'''
 
 container = DatasetContainer.from_json(predicted_file)
 
@@ -89,22 +110,22 @@ for entry in container:
 
     if entry.human_prediction == False:
         tot += 1
-        if entry.label == 'arc':
+        if entry.label == LABELS[1]:
             n_arc += 1
-        elif entry.label == 'diffuse':
+        elif entry.label == LABELS[2]:
             n_diff += 1
-        elif entry.label == 'discrete':
+        elif entry.label == LABELS[3]:
             n_disc += 1
         else:
             n_less += 1
 
-print('tot:        ', tot, 'added: ', (n_arc + n_less + n_diff + n_disc))
-print("Aurora-less ", n_less)
-print("Arc         ", n_arc)
-print("Diffuse     ", n_diff)
-print("Discrete    ", n_disc)
+print("%23s: %g" %('Total classified images', tot))
+print("%23s: %4g (%3.1f%%)" %(LABELS[0], n_less, (n_less/tot)*100))
+print("%23s: %4g (%3.1f%%)" %(LABELS[1], n_arc, (n_arc/tot)*100))
+print("%23s: %4g (%3.1f%%)" %(LABELS[2], n_diff, (n_diff/tot)*100))
+print("%23s: %4g (%3.1f%%)" %(LABELS[3], n_disc, (n_disc/tot)*100))
 
-
+exit()
 corrector = ClassCorrector(container=container)
 
 #corrector.correct_class('arc', prediction_level=0, save_path=corrected_file)
