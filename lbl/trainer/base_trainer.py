@@ -109,7 +109,6 @@ class BaseTrainer:
         self.save_checkpoint(epoch, best=False)
 
         if epoch == self.epochs:
-            print(epoch)
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
             plt.title("Loss vs Accuracy")
             plt.plot(ep, t_loss, label="Training loss")
@@ -118,7 +117,7 @@ class BaseTrainer:
             plt.xlabel("Epochs")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-            plt.savefig("acc_vs_loss.png")
+            plt.savefig("plots/acc_vs_loss.png")
 
 
     def save_checkpoint(self, epoch, best: bool = False):
@@ -131,8 +130,8 @@ class BaseTrainer:
         state = {
             'epoch': epoch,
             'state_dict': self.model.state_dict(),
-            'optimizer': self.optimizer.state_dict(),
-            'scheduler': self.lr_scheduler.state_dict(),
+            #'optimizer': self.optimizer.state_dict(),
+            #'scheduler': self.lr_scheduler.state_dict(),
             }
 
         if best:  # Save best case with different naming convention
@@ -147,6 +146,7 @@ class BaseTrainer:
         torch.save(state, filename)
         print("Saving checkpoint: {} ...".format(filename))
 
+    '''
     def resume_checkpoint(self,
                           resume_model: Union[str, Path],
                           ):
@@ -186,3 +186,4 @@ class BaseTrainer:
         # for key, value in self.metric[self.metric.VALIDATION_KEY].items():
         #     loss = np.mean(np.array(value['loss']))
         #     self.min_validation_loss = min(self.min_validation_loss, loss)
+        '''
