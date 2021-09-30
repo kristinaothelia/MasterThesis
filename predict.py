@@ -59,7 +59,7 @@ transforms = torchvision.transforms.Compose([
 # Load a saved model
 #path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
 #path  = "models/2021-09-29/best_validation/checkpoint-best.pth"
-path  = "./2021-09-30_b3/best_validation_122/checkpoint-best.pth"
+path  = "models/2021-09-30_b3/best_validation_122/checkpoint-best.pth"
 
 #model = Model(1, 4, 128)
 model = EfficientNet.from_name(model_name='efficientnet-b3', num_classes=4, in_channels=1)
