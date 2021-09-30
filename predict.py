@@ -36,8 +36,8 @@ LABELS = {
 container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 
 #img_size = 224  # EfficientNet-b0
-img_size = 240  # EfficientNet-b1
-#img_size = 260  # EfficientNet-b2
+#img_size = 240  # EfficientNet-b1
+img_size = 260  # EfficientNet-b2
 
 transforms = torchvision.transforms.Compose([
     lambda x: np.float32(x),

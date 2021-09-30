@@ -32,8 +32,8 @@ print(counter)
 train, valid = container.split(seed=42, split=0.8)
 
 #img_size = 224  # EfficientNet-b0
-img_size = 240  # EfficientNet-b1
-#img_size = 260  # EfficientNet-b2
+#img_size = 240  # EfficientNet-b1
+img_size = 260  # EfficientNet-b2
 
 # rotation class: numpy arrays. Padding class: pytorch tensors
 train_transforms = torchvision.transforms.Compose([
