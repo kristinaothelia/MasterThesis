@@ -37,6 +37,7 @@ container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 #model_name = 'efficientnet-b1'
 model_name = 'efficientnet-b2'
 #model_name = 'efficientnet-b3'
+model_name = 'efficientnet-b4'
 
 img_size = efficientnet_params(model_name)['resolution']
 
@@ -60,6 +61,7 @@ transforms = torchvision.transforms.Compose([
 #path  = "models/2021-09-29/best_validation/checkpoint-best.pth"
 #path  = "models/2021-09-30_b3/best_validation_122/checkpoint-best.pth"
 path  = "models/b2/2021-09-30/best_validation/checkpoint-best.pth"
+path  = "models/b4/2021-10-02/best_validation/checkpoint-best.pth"
 
 #model = Model(1, 4, 128)
 model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
@@ -93,4 +95,4 @@ with torch.no_grad():
             entry.add_score(score)
 
 #container.to_json(path='./datasets/Full_aurora_predicted.json')
-container.to_json(path='./datasets/Full_aurora_predicted_b2.json')
+container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
