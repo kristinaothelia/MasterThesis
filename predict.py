@@ -12,6 +12,7 @@ from lbl.dataset import DatasetLoader
 
 from lbl.models.model import Model
 from lbl.models.efficientnet.efficientnet import EfficientNet
+from lbl.models.efficientnet.config import efficientnet_params
 
 from lbl.preprocessing import (
     PadImage,
