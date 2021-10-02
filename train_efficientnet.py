@@ -34,9 +34,9 @@ train, valid = container.split(seed=42, split=0.8)
 
 #model_name = 'efficientnet-b0'
 #model_name = 'efficientnet-b1'
-#model_name = 'efficientnet-b2'
-model_name = 'efficientnet-b3'
-model_name = 'efficientnet-b4'
+model_name = 'efficientnet-b2'
+#model_name = 'efficientnet-b3'
+#model_name = 'efficientnet-b4'
 
 img_size = efficientnet_params(model_name)['resolution']
 
@@ -77,7 +77,7 @@ valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
 
 train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                            num_workers  = 4,
-                                           batch_size   = 8,
+                                           batch_size   = 16,
                                            shuffle      = True,
                                            )
 valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
