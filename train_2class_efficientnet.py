@@ -5,7 +5,7 @@ import numpy as np
 import sys
 
 from lbl.dataset import DatasetContainer
-from lbl.dataset import DatasetLoader
+from lbl.dataset import DatasetLoader_2class
 
 from lbl.models.efficientnet.efficientnet import EfficientNet
 from lbl.models.efficientnet.config import efficientnet_params
@@ -71,8 +71,8 @@ valid_transforms = torchvision.transforms.Compose([
     ])
 
 
-train_loader = DatasetLoader(container=train, transforms=train_transforms)
-valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
+train_loader = DatasetLoader_2class(container=train, transforms=train_transforms)
+valid_loader = DatasetLoader_2class(container=valid, transforms=valid_transforms)
 
 train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                            num_workers  = 4,
