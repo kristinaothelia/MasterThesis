@@ -4,7 +4,7 @@ import torchvision
 from .datasetcontainer import DatasetContainer
 
 
-class DatasetLoader(torch.utils.data.Dataset):
+class DatasetLoader_2class(torch.utils.data.Dataset):
     """
     An iterable datasetloader for the dataset container to make my life easier
     """
