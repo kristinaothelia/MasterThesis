@@ -1,0 +1,573 @@
+{
+    "info": [
+        {
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "source": "UiO",
+            "location": "Svaalbard",
+            "dataset_description": "ASI"
+        }
+    ],
+    "entries": [
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_224300_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 22:22:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_224330_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 22:22:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_224400_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 22:22:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_224430_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 22:22:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_224500_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 22:22:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_234500_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 23:23:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200101_234530_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-01 23:23:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_022430_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 02:02:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_022800_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 02:02:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_035730_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 03:03:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_040100_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 04:04:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_040430_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 04:04:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_040800_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 04:04:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_103300_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 10:10:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_103630_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 10:10:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_204700_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_204730_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_204800_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_205030_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_205100_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200102_205130_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-02 20:20:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_010630_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 01:01:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_010700_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 01:01:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_014500_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 01:01:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_014530_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 01:01:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_093100_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 09:09:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_093430_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 09:09:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_093800_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 09:09:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200103_104800_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-03 10:10:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_024200_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 02:02:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_024230_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 02:02:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064330_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064400_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064430_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064500_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064700_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064730_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_064830_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 06:06:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_091700_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 09:09:00",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        },
+        {
+            "image_path": "/itf-fi-ml/home/koolsen/Master/MasterThesis/JSON_TEST/nya6_20200104_092030_6300_cal.png",
+            "datasetname": "New data for testing on cnn model",
+            "dataset_type": "png",
+            "wavelength": "6300",
+            "timepoint": "2020-01-04 09:09:30",
+            "shape": [
+                471,
+                471
+            ],
+            "label": null,
+            "human_prediction": null,
+            "score": {}
+        }
+    ]
+}

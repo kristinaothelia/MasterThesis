@@ -23,21 +23,27 @@ from lbl.preprocessing import (
 import warnings
 warnings.filterwarnings("ignore")
 # -----------------------------------------------------------------------------
-
+'''
 LABELS = {
     0: "aurora-less",
     1: "arc",
     2: "diffuse",
     3: "discrete",
 }
+'''
+LABELS = {
+    0: "aurora-less",
+    1: "aurora"
+}
 
-container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
+#container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
+container = DatasetContainer.from_json('files_new.json')
 
 #model_name = 'efficientnet-b0'
 #model_name = 'efficientnet-b1'
 model_name = 'efficientnet-b2'
 #model_name = 'efficientnet-b3'
-model_name = 'efficientnet-b4'
+#model_name = 'efficientnet-b4'
 
 img_size = efficientnet_params(model_name)['resolution']
 
@@ -63,14 +69,16 @@ transforms = torchvision.transforms.Compose([
 path  = "models/b2/2021-09-30/best_validation/checkpoint-best.pth"
 path  = "models/b4/2021-10-02/best_validation/checkpoint-best.pth"
 
+path = "models/2class/b2/2021-10-05/best_validation/checkpoint-best.pth"
+
 #model = Model(1, 4, 128)
-model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
+#model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name, num_classes=2, in_channels=1)
 
 checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])
 
 model = model.to('cuda:0')
-
 model.eval()
 
 with torch.no_grad():
@@ -95,4 +103,5 @@ with torch.no_grad():
             entry.add_score(score)
 
 #container.to_json(path='./datasets/Full_aurora_predicted.json')
-container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
+#container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
+container.to_json(path='./files_new_predicted_b2_2class.json')
