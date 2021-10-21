@@ -1,4 +1,3 @@
-#from bs4 import *
 import requests
 import os
 import glob
@@ -38,8 +37,8 @@ def Dates(start_date='20200101', end_date='20201231'):
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
-#dates = Dates(start_date='20140101', end_date='20141231') # 2014
-dates = Dates(start_date='20200101', end_date='20201231') # 2020
+dates = Dates(start_date='20140101', end_date='20141231') # 2014
+#dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
 #station = 'nya6' # Ny Aalesund
 #wavelength = ['5577', '6300']
@@ -49,11 +48,11 @@ base_url = 'http://tid.uio.no/plasma/aurora/nya6/6300/'
 urls = []
 filenames = []
 
-folder_name= "../TEST"
-out_path = "../TESTTEST"
+folder_name= "../DATA"
+out_path = "../T_DATA"
 total_img_on_website = 0    # Not all images are ASI images
 
-dates = dates[:14]
+#dates = dates[:14]
 
 for i in range(len(dates)):
 
@@ -155,3 +154,9 @@ for imfile in glob.iglob(folder_name+'/*.png'):
 
     # Save the scaled image:
     io.imsave(out_path+'/'+f'{tail}', nimg)
+
+for imfile2 in glob.iglob(out_path+'/*.png'):
+
+    head, tail = os.path.split(imfile2)
+    io.open(imfile, as_gray=True).show()
+    sys.exit()

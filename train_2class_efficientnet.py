@@ -31,9 +31,9 @@ print(counter)
 
 train, valid = container.split(seed=42, split=0.8)
 
-#model_name = 'efficientnet-b0'
+model_name = 'efficientnet-b0'
 #model_name = 'efficientnet-b1'
-model_name = 'efficientnet-b2'
+#model_name = 'efficientnet-b2'
 #model_name = 'efficientnet-b3'
 #model_name = 'efficientnet-b4'
 
