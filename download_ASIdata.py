@@ -1,6 +1,7 @@
 import requests
 import os
 import glob
+import time
 import numpy as np
 
 from skimage import io
@@ -8,7 +9,6 @@ from bs4 import BeautifulSoup
 
 from dateutil import rrule
 from datetime import datetime
-
 
 def Times():
     # Make times
@@ -37,8 +37,8 @@ def Dates(start_date='20200101', end_date='20201231'):
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
-dates = Dates(start_date='20140101', end_date='20141231') # 2014
-#dates = Dates(start_date='20200101', end_date='20201231') # 2020
+#dates = Dates(start_date='20140101', end_date='20141231') # 2014
+dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
 #station = 'nya6' # Ny Aalesund
 #wavelength = ['5577', '6300']
@@ -53,7 +53,7 @@ out_path = "../T_DATA"
 total_img_on_website = 0    # Not all images are ASI images
 
 #dates = dates[:14]
-
+start = time.time()
 for i in range(len(dates)):
 
     new_base_url = base_url+dates[i][:4]+'/'+dates[i]+'/'
@@ -137,8 +137,13 @@ def download_images(urls, names, folder_name):
 
 download_images(urls=urls, names=filenames, folder_name=folder_name)
 
+stop = time.time() - start
+print("Download time [h]: ", stop/(60*60))
+
 # Code from Anna/Lasse:
 print("Transform downloaded images")
+start_t = time.time()
+
 for imfile in glob.iglob(folder_name+'/*.png'):
 
     # Get image filename (tail):
@@ -155,8 +160,14 @@ for imfile in glob.iglob(folder_name+'/*.png'):
     # Save the scaled image:
     io.imsave(out_path+'/'+f'{tail}', nimg)
 
+stop_t = time.time() - start_t
+print("Image transform time [h]: ", stop_t/(60*60))
+
+# Test image
 for imfile2 in glob.iglob(out_path+'/*.png'):
 
     head, tail = os.path.split(imfile2)
-    io.open(imfile, as_gray=True).show()
+    img = io.imread(imfile2, as_gray=True)
+    io.imshow(img)
+    io.show()
     sys.exit()
