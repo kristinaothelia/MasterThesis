@@ -12,7 +12,7 @@ from dateutil import rrule
 from datetime import datetime
 
 # Test image
-for imfile2 in glob.iglob('T_DATA/MasterThesis'+'/*.png'):
+for imfile2 in glob.iglob('../T_DATA'+'/*.png'):
 
     head, tail = os.path.split(imfile2)
     img = io.imread(imfile2, as_gray=True)
