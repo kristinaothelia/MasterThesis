@@ -8,18 +8,22 @@ import matplotlib.pyplot as plt
 from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 
 # Dataset containing data
-folder = r'C:\Users\Krist\Documents\MasterThesis\JSON_TEST'
+#folder = r'C:\Users\Krist\Documents\MasterThesis\JSON_TEST'
+#folder = r'C:\Users\Krist\Documents\TESTTEST'
+#folder = '../T_DATA'
+folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
+json_file = 'datasets/t_data.json'
 
 container = DatasetContainer()
 container.from_folder(path=folder,
-                      datasetname='New data for testing on cnn model',
+                      datasetname='New data to be classified',
                       dataset_type='png',
                       source='UiO',
-                      location='Svaalbard',
+                      location='Svaalbard, nya',
                       dataset_description='ASI')
 
-container.to_json('files_new.json')
-container = DatasetContainer.from_json('files_new.json')
+container.to_json(json_file)
+container = DatasetContainer.from_json(json_file)
 
 for entry in container:
     path = Path(entry.image_path).stem
@@ -33,4 +37,4 @@ for entry in container:
 
     entry.timepoint = str(tiime)
 
-container.to_json('files_new.json')
+container.to_json(json_file)
