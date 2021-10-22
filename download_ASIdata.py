@@ -2,6 +2,7 @@ import requests
 import os
 import glob
 import time
+import sys
 import numpy as np
 
 from skimage import io
@@ -18,7 +19,7 @@ for imfile2 in glob.iglob('T_DATA'+'/*.png'):
     io.imsave('t_test.png', img)
     io.imshow(img)
     io.show()
-    exit()
+    sys.exit()
 
 def Times():
     # Make times
