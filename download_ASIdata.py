@@ -12,7 +12,7 @@ from dateutil import rrule
 from datetime import datetime
 
 # Test image
-for imfile2 in glob.iglob('T_DATA'+'/*.png'):
+for imfile2 in glob.iglob('T_DATA/MasterThesis'+'/*.png'):
 
     head, tail = os.path.split(imfile2)
     img = io.imread(imfile2, as_gray=True)
@@ -20,7 +20,7 @@ for imfile2 in glob.iglob('T_DATA'+'/*.png'):
     io.imshow(img)
     io.show()
     sys.exit()
-
+sys.exit()
 def Times():
     # Make times
     times = []
