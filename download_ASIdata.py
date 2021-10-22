@@ -10,6 +10,16 @@ from bs4 import BeautifulSoup
 from dateutil import rrule
 from datetime import datetime
 
+# Test image
+for imfile2 in glob.iglob('T_DATA'+'/*.png'):
+
+    head, tail = os.path.split(imfile2)
+    img = io.imread(imfile2, as_gray=True)
+    io.imsave('t_test.png', img)
+    io.imshow(img)
+    io.show()
+    exit()
+
 def Times():
     # Make times
     times = []
@@ -168,6 +178,7 @@ for imfile2 in glob.iglob(out_path+'/*.png'):
 
     head, tail = os.path.split(imfile2)
     img = io.imread(imfile2, as_gray=True)
+    io.imsave('t_test.png', img)
     io.imshow(img)
     io.show()
-    sys.exit()
+    exit()
