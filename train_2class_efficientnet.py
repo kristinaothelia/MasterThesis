@@ -76,7 +76,7 @@ valid_loader = DatasetLoader_2class(container=valid, transforms=valid_transforms
 
 train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                            num_workers  = 4,
-                                           batch_size   = 16,
+                                           batch_size   = 12,
                                            shuffle      = True,
                                            )
 valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
