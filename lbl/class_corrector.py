@@ -40,6 +40,7 @@ class ClassCorrector(object):
         pred_level = [False, None, True][prediction_level]
         plt.ion()
         plt.show(block=False)
+        #plt.show() # If Linux
 
         tot = 0
         counter = 0
@@ -64,7 +65,8 @@ class ClassCorrector(object):
                     plt.title('Label: {0}, image: {1}/{2}'.format(str(entry.label), counter, tot))
 
                     plt.imshow(img, cmap='gray')
-                    #plt.imshow(img)
+                    #plt.pause(0.001) # If Linux
+
                     # Add image count?
                     print("Filename: ", Path(entry.image_path).stem)
                     #print("Score: ", entry.score)
