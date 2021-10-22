@@ -4,12 +4,14 @@ import glob
 import time
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 
 from skimage import io
 from bs4 import BeautifulSoup
 
 from dateutil import rrule
 from datetime import datetime
+
 
 def Times():
     # Make times
@@ -34,15 +36,16 @@ def Dates(start_date='20200101', end_date='20201231'):
                           dtstart=datetime.strptime(start_date, '%Y%m%d'),
                           until=datetime.strptime(end_date, '%Y%m%d')):
 
-        #print(dt.strftime('%Y%m%d'))
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
 #dates = Dates(start_date='20140101', end_date='20141231') # 2014
 dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
+
 #station = 'nya6' # Ny Aalesund
 #wavelength = ['5577', '6300']
+
 #base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
 base_url = 'http://tid.uio.no/plasma/aurora/nya6/6300/'
 
@@ -170,6 +173,6 @@ for imfile2 in glob.iglob(out_path+'/*.png'):
     head, tail = os.path.split(imfile2)
     img = io.imread(imfile2, as_gray=True)
     io.imsave('t_test.png', img)
-    io.imshow(img)
-    io.show()
+    plt.imshow(img, as_gray=True)
+    plt.show()
     exit()
