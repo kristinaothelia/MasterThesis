@@ -23,21 +23,22 @@ from lbl.preprocessing import (
 import warnings
 warnings.filterwarnings("ignore")
 # -----------------------------------------------------------------------------
-'''
+
+# Make a main program with inputs:
+# - Nr. of classes
+# - path to load trained model
+# - dataset
+
 LABELS = {
     0: "aurora-less",
     1: "arc",
     2: "diffuse",
     3: "discrete",
 }
-'''
-LABELS = {
-    0: "aurora-less",
-    1: "aurora"
-}
 
 #container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-container = DatasetContainer.from_json('files_new.json')
+container = DatasetContainer.from_json('datasets/t_data.json')
+#container = DatasetContainer.from_json('files_new.json')
 
 #model_name = 'efficientnet-b0'
 #model_name = 'efficientnet-b1'
@@ -66,14 +67,23 @@ transforms = torchvision.transforms.Compose([
 #path  = "models/2021-09-26/best_validation/checkpoint-best.pth"
 #path  = "models/2021-09-29/best_validation/checkpoint-best.pth"
 #path  = "models/2021-09-30_b3/best_validation_122/checkpoint-best.pth"
-path  = "models/b2/2021-09-30/best_validation/checkpoint-best.pth"
-path  = "models/b4/2021-10-02/best_validation/checkpoint-best.pth"
+#path  = "models/b2/2021-09-30/best_validation/checkpoint-best.pth"
+path  = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
+#path  = "models/b4/2021-10-02/best_validation/checkpoint-best.pth"
 
+# 2 classes:
+'''
 path = "models/2class/b2/2021-10-05/best_validation/checkpoint-best.pth"
+model = EfficientNet.from_name(model_name=model_name, num_classes=2, in_channels=1)
+
+LABELS = {
+    0: "aurora-less",
+    1: "aurora"
+}
+'''
 
 #model = Model(1, 4, 128)
-#model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
-model = EfficientNet.from_name(model_name=model_name, num_classes=2, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
 
 checkpoint = torch.load(path, map_location='cpu')
 model.load_state_dict(checkpoint['state_dict'])
@@ -87,7 +97,7 @@ with torch.no_grad():
         if entry.label is None:
             score = dict()
             img = entry.open()
-            x = transforms(img)  # pad an stuff
+            x = transforms(img)
             x = x.unsqueeze(0)
             x = x.to('cuda:0')
 
@@ -104,4 +114,4 @@ with torch.no_grad():
 
 #container.to_json(path='./datasets/Full_aurora_predicted.json')
 #container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
-container.to_json(path='./files_new_predicted_b2_2class.json')
+container.to_json(path='./t_data_predicted_b2.json')
