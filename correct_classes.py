@@ -62,60 +62,6 @@ container = DatasetContainer.from_json(predicted_file)
 "score": {}
 '''
 
-
-def stats(label='arc'):
-
-    def autolabel(n):
-        """
-        Attach a text label above each bar displaying its height
-        autolabel() from: https://stackoverflow.com/a/42498711
-        """
-        for i in n:
-            height = i.get_height()
-            ax.text(i.get_x() + i.get_width()/2., 1.01*height,
-                    '%d' % int(height), ha='center', va='bottom')
-
-    Month = []
-    Years = []
-
-    for entry in container:
-
-        #if entry.human_prediction == True:
-        if entry.label == label:
-
-            Month.append(entry.timepoint[5:7])  # month
-            Years.append(entry.timepoint[:4])
-
-    M_label = ['Jan', 'Feb', 'Mar', 'Oct', 'Nov', 'Dec']
-    M_ = ['01', '02', '03', '10', '11', '12']
-    M = [Month.count(M_[0]), Month.count(M_[1]), Month.count(M_[2]),
-         Month.count(M_[3]), Month.count(M_[4]), Month.count(M_[5])]
-
-    fig, ax = plt.subplots()
-    n = ax.bar(M_label, M)
-    autolabel(n)
-    plt.title("%s: for Jan, Feb, Mar, Oct, Nov, Dec (2014-2019)" %label)
-    #plt.xticks(rotation='vertical')
-    plt.xlabel("Month"); plt.ylabel("Count")
-
-
-    Y_ = ['2014', '2015', '2016', '2017', '2018', '2019']
-    Y = [Years.count(Y_[0]), Years.count(Y_[1]), Years.count(Y_[2]),
-         Years.count(Y_[3]), Years.count(Y_[4]), Years.count(Y_[5])]
-
-    fig, ax = plt.subplots()
-    ny = ax.bar(Y_, Y)
-    autolabel(ny)
-    plt.title("%s: 2014-2019" %label)
-    #plt.xticks(rotation=70)
-    plt.xlabel("Year"); plt.ylabel("Count")
-
-
-#stats(label='arc')
-#stats(label='discrete')
-#plt.show()
-
-
 n_less = 0; n_arc = 0; n_diff = 0; n_disc = 0; tot = 0
 
 for entry in container:
