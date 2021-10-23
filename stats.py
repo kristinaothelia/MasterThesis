@@ -201,8 +201,9 @@ def stats(label=False, year=False, plot_year=True):
 
 #stats(label='arc', year="2014")
 #stats(label='arc', year="2020")
-stats(label="discrete", year="2014", plot_year=False)
-stats(label="discrete", year="2020", plot_year=False)
+#stats(label="discrete", year="2014", plot_year=False)
+#stats(label="discrete", year="2020", plot_year=False)
+stats(year="2014")
 plt.show()
 
 
