@@ -16,8 +16,9 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 # -----------------------------------------------------------------------------
-container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
+#container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
 #container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
+container = DatasetContainer.from_json('datasets/Full_aurora_new_runthrough.json')
 
 # Remove images with no label
 length = len(container)
