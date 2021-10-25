@@ -43,11 +43,12 @@ def Dates(start_date='20200101', end_date='20201231'):
 dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
 
+station = 'nya4' # Ny Aalesund
 #station = 'nya6' # Ny Aalesund
 #wavelength = ['5577', '6300']
 
 #base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
-base_url = 'http://tid.uio.no/plasma/aurora/nya6/6300/'
+base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/6300/'
 
 urls = []
 filenames = []

@@ -16,7 +16,7 @@ eks fra json fil:
 
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
-predicted_file = 't_data_predicted_b2.json'
+predicted_file = 't_data_with_2014nya4_predicted_b2.json'
 #predicted_file = 'datasets/Full_aurora_predicted_b2.json'
 #corrected_file = 'datasets/t_data_predicted_b2_corr.json'
 

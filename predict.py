@@ -37,7 +37,7 @@ LABELS = {
 }
 
 #container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-container = DatasetContainer.from_json('datasets/t_data.json')
+container = DatasetContainer.from_json('datasets/t_data_with_2014nya4.json')
 #container = DatasetContainer.from_json('files_new.json')
 
 #model_name = 'efficientnet-b0'
@@ -114,4 +114,4 @@ with torch.no_grad():
 
 #container.to_json(path='./datasets/Full_aurora_predicted.json')
 #container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
-container.to_json(path='./t_data_predicted_b2.json')
+container.to_json(path='./t_data_with_2014nya4_predicted_b2.json')
