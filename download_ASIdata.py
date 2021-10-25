@@ -39,8 +39,8 @@ def Dates(start_date='20200101', end_date='20201231'):
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
-#dates = Dates(start_date='20140101', end_date='20141231') # 2014
-dates = Dates(start_date='20200101', end_date='20201231') # 2020
+dates = Dates(start_date='20140101', end_date='20141231') # 2014
+#dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
 
 station = 'nya4' # Ny Aalesund
