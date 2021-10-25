@@ -45,7 +45,7 @@ def distribution(container, labels):
     print("%23s: %4g (%3.1f%%)" %(labels[2], n_diff, (n_diff/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[3], n_disc, (n_disc/tot)*100))
 
-#distribution(container, LABELS)
+distribution(container, LABELS)
 
 def Get_hours():
     # Make times
@@ -204,6 +204,7 @@ def stats(label=False, year=False, plot_year=True):
 #stats(label="discrete", year="2014", plot_year=False)
 #stats(label="discrete", year="2020", plot_year=False)
 stats(year="2014")
+stats(year="2020")
 plt.show()
 
 

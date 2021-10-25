@@ -24,6 +24,7 @@ container.from_folder(path=folder,
 
 container.to_json(json_file)
 container = DatasetContainer.from_json(json_file)
+print("length container: ", len(container))
 
 for entry in container:
     path = Path(entry.image_path).stem

@@ -172,7 +172,7 @@ print("Image transform time [h]: ", stop_t/(60*60))
 for imfile2 in glob.iglob(out_path+'/*.png'):
 
     head, tail = os.path.split(imfile2)
-    img = io.imread(imfile2, as_gray=True)
+    img = io.imread(imfile2)
     io.imsave('t_test.png', img)
     plt.imshow(img, as_gray=True)
     plt.show()
