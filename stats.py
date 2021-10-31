@@ -195,6 +195,7 @@ def stats(label=False, year=False, plot_year=True):
         plt.title("%s %s: for Jan, Feb, Mar, Oct, Nov, Dec" %(label_plot, year))
         #plt.xticks(rotation='vertical')
         plt.xlabel("Month"); plt.ylabel("Count")
+        #plt.savefig("stats/b2/t_data/month_plot_%s.png" %year)
 
 
         hours = Get_hours()
@@ -248,8 +249,8 @@ def stats(label=False, year=False, plot_year=True):
 #stats(label='arc', year="2020")
 #stats(label="discrete", year="2014", plot_year=False)
 #stats(label="discrete", year="2020", plot_year=False)
-#stats(year="2014")
-#stats(year="2020")
+stats(label="aurora", year="2014")
+stats(label="aurora", year="2020")
 
 # Lage automatisk lagring
 # Lage to soyler, aurora, ikke aurora.
@@ -257,7 +258,7 @@ def stats(label=False, year=False, plot_year=True):
 
 #stats(label="aurora", year="2020")
 
-#plt.show()
+plt.show()
 
 def stats_aurora(label, year=False):
     """
@@ -507,8 +508,8 @@ def Hour_subplot(year, month=False):
     plt.savefig("stats/b2/t_data/hour_plot_%s.png" %year)
 
 
-Hour_subplot(year="2014", month=True)
-Hour_subplot(year="2020", month=True)
+#Hour_subplot(year="2014", month=True)
+#Hour_subplot(year="2020", month=True)
 
 #plt.show()
 
