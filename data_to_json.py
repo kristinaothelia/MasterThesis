@@ -12,7 +12,7 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 #folder = r'C:\Users\Krist\Documents\TESTTEST'
 #folder = '../T_DATA'
 folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-json_file = 'datasets/t_data_green_with_2014nya4.json'
+json_file = 't_data_green_with_2014nya4.json'
 
 container = DatasetContainer()
 container.from_folder(path=folder,

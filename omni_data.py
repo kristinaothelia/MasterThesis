@@ -5,13 +5,17 @@ import os
 import time
 import datetime
 
+from numba import cuda  # , jit
+# conda/pip install numba
+
 from tqdm import tqdm
 
 #json_file = 'datasets/Full_aurora_predicted_b2.json'
-json_file = 'datasets/t_data_with_2014nya4.json'
+#json_file = 'datasets/t_data_with_2014nya4.json'
+json_file = 't_data_green_with_2014nya4.json'
 #json_file = 't_data_with_2014nya4_predicted_b2.json'
-xlsx_file = 'datasets/json_to_xls.xlsx'
-csv_file  = 'datasets/xls_to_csv.csv'
+xlsx_file = 't_data_green_with_2014nya4.xlsx'
+csv_file  = 'csv_t_data_green_with_2014nya4.csv'
 file14 = "..\omni\omni_min2014.xlsx"
 file20 = "..\omni\omni_min2020.xlsx"
 
@@ -156,7 +160,8 @@ print(omni_data14.loc[omni_data14.index[index]])
 
 
 # DataFrames:
-aurora_csv_file = read_csv("datasets/xls_to_csv.csv") # red aurora data, 2014 and 2020, not predicted
+#aurora_csv_file = read_csv("datasets/xls_to_csv.csv") # red aurora data, 2014 and 2020, not predicted
+aurora_csv_file = read_csv("csv_t_data_green_with_2014nya4.csv")
 omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
 omni20 = 'datasets\omni\omni_min_2014_withDate.csv'
 
@@ -167,7 +172,9 @@ else:
     omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2014_withDate.csv')
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
-
+# function optimized to run on gpu
+#@jit(target ="cuda:0")
+@cuda.jit
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #print("current time: ", time)
@@ -249,6 +256,8 @@ df_TEST.insert(10,'Bz, nT (GSM)', Bz_GSM_list)
 
 print(df_TEST)
 
-df_TEST.to_csv("datasets/t_data_with_2014nya4_and_Bz.csv", index=False)
-df_TEST.to_excel("datasets/t_data_with_2014nya4_and_Bz.xls", index=False)
+df_TEST.to_csv("t_data_green_with_2014nya4_and_Bz.csv", index=False)
+df_TEST.to_excel("t_data_green_with_2014nya4_and_Bz.xls", index=False)
+#df_TEST.to_csv("datasets/t_data_with_2014nya4_and_Bz.csv", index=False)
+#df_TEST.to_excel("datasets/t_data_with_2014nya4_and_Bz.xls", index=False)
 print("saved")
