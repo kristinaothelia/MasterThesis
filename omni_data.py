@@ -182,7 +182,7 @@ else:
 #@cuda.jit
 
 
-
+'''
 @jit(nopython=True)
 def test(omni_data):
     for i in range(len(omni_data['Date'])):
@@ -194,6 +194,15 @@ def test(omni_data):
             #index.append(i)
             #print(omni_data.iloc[[i]])    # index
             #count += 1
+'''
+@jit(nopython=True)
+def test_new(omni):
+    for i in range(len(omni)):
+        #print(omni_data['Date'][i])
+        if time in omni[i]:
+            #print('TRUE')
+            #print(omni_data['Date'][i])
+            return i
 
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
@@ -214,7 +223,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #count = 0
     index = []
-    ii = test(omni_data)
+    ii = test_new(omni_data)
     index.append(ii)
     '''
     for i in range(len(omni_data['Date'])):
@@ -266,13 +275,14 @@ for i in tqdm(range(len(df_TEST))):
         print("Wrong year input in aurora data")
         #exit()
 
-    omni_data = omni_data.values
+    omni_data_dates = omni_data['Date']
+    print(omni_data_dates)
+    omni_data = omni_data_dates.values
     print(omni_data)
-    print(omni_data['Date'])
 
     #threadsperblock = len(omni_data)
     #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
-    #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
+    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
     #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
     Bz_GSE_list.append(Bz_GSE)
     Bz_GSM_list.append(Bz_GSM)
