@@ -227,7 +227,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
 
     #print(index)
     #print(omni_data.iloc[[index]])
-    print(omni_data.loc[omni_data.index[index]])
+    #print(omni_data.loc[omni_data.index[index]])
     #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
     #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
 
