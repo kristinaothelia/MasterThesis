@@ -243,17 +243,17 @@ print(df_TEST)
 
 Bz_GSE_list = []
 Bz_GSM_list = []
-start = time.time()
+#start = time.time()
 for i in tqdm(range(len(df_TEST))):
 
-    time = df_TEST["timepoint"][i]
-    if time[-2:] != "00":
-        time = time[:-2] + "00"
+    timepoint = df_TEST["timepoint"][i]
+    if timepoint[-2:] != "00":
+        timepoint = timepoint[:-2] + "00"
         #print("30 sec mark, need editing. New time: ", time)
 
-    if time[:4] == "2014":
+    if timepoint[:4] == "2014":
         omni_data = omni_data14_csv
-    elif time[:4] == "2020":
+    elif timepoint[:4] == "2020":
         omni_data = omni_data20_csv
     else:
         print("Wrong year input in aurora data")
@@ -264,14 +264,14 @@ for i in tqdm(range(len(df_TEST))):
 
     #threadsperblock = len(omni_data)
     #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
-    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_csv_file, time)
+    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_csv_file, timepoint)
     #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
     Bz_GSE_list.append(Bz_GSE)
     Bz_GSM_list.append(Bz_GSM)
 
 
-stop = time.time()
-print("Time: %.2f min" %(end-start)/60)
+#stop = time.time()
+#print("Time: %.2f min" %(end-start)/60)
 
 df_TEST.insert(9, 'Bz, nT (GSE)', Bz_GSE_list)
 df_TEST.insert(10,'Bz, nT (GSM)', Bz_GSM_list)
@@ -283,4 +283,4 @@ print(df_TEST)
 #
 df_TEST.to_csv("t_data_with_2014nya4_and_Bz.csv", index=False)
 df_TEST.to_excel("t_data_with_2014nya4_and_Bz.xls", index=False)
-print("saved")
+print("saved files with Bz values")
