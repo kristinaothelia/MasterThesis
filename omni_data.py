@@ -5,6 +5,8 @@ import os
 import time
 import datetime
 
+from tqdm import tqdm
+
 #json_file = 'datasets/Full_aurora_predicted_b2.json'
 json_file = 'datasets/t_data_with_2014nya4.json'
 #json_file = 't_data_with_2014nya4_predicted_b2.json'
@@ -90,30 +92,30 @@ def edit_omni_dates_to_correct_form(omni_data):
 
 def omni_to_csv():
 
-    omni_data = read_excel(file=file14)
+    omni_data = read_excel(file='datasets\omni\omni_min_2014.xlsx')
     print(omni_data[:3])
-    xls_to_csv(data=omni_data, name='..\omni\csv_omni_min2014.csv')
+    xls_to_csv(data=omni_data, name='datasets\omni\omni_min_2014.csv')
 
-    omni_data = read_excel(file=file20)
+    omni_data = read_excel(file='datasets\omni\omni_min_2020.xlsx')
     print(omni_data[:3])
-    xls_to_csv(data=omni_data, name='..\omni\csv_omni_min2020.csv')
+    xls_to_csv(data=omni_data, name='datasets\omni\omni_min_2020.csv')
 
 def correct_omni_data():
     # Make dataframe with final date values
     print("2014")
-    omni_data14 = read_csv(file='..\omni\csv_omni_min2014.csv')
+    omni_data14 = read_csv(file='datasets\omni\omni_min_2014.csv')
     omni_new14 = edit_omni_dates_to_correct_form(omni_data14)
-    omni_new14.to_csv('..\omni\omni_min2014_withDate.csv', index=False)
+    omni_new14.to_csv('datasets\omni\omni_min_2014_withDate.csv', index=False)
     print("2020")
-    omni_data20 = read_csv(file='..\omni\csv_omni_min2020.csv')
+    omni_data20 = read_csv(file='datasets\omni\omni_min_2020.csv')
     omni_new20 = edit_omni_dates_to_correct_form(omni_data20)
-    omni_new20.to_csv('..\omni\omni_min2020_withDate.csv', index=False)
+    omni_new20.to_csv('datasets\omni\omni_min_2020_withDate.csv', index=False)
 
 #omni_to_csv()
 #correct_omni_data()
 
 '''
-omni_data14 = read_csv(file='..\omni\omni_min2014_withDate.csv')
+omni_data14 = read_csv(file='\omni\omni_min2014_withDate.csv')
 #print(omni_data14.loc[:, 'Date'])
 #print(len(omni_data14['Date']))
 
@@ -141,8 +143,8 @@ print(omni_data14.loc[omni_data14.index[index]])
 #print(omni_data14.iloc[[index]])
 
 #omni_data20 = read_csv(file='..\omni\omni_min2020_withDate.csv')
-
 '''
+
 
 
 # Test:
@@ -152,26 +154,22 @@ print(omni_data14.loc[omni_data14.index[index]])
 # https://stackoverflow.com/questions/56113592/convert-csv-to-json-file-in-python
 # https://pythonexamples.org/python-csv-to-json/
 
-# Goal:
-
-# aurora json file to csv (or excel) - Dataframe: df_aurora
-# import omni data as csv (or excel) - Dataframe: df_omni
-# match aurora dates with omni data
-# (NB! only full minutes for omni data, while aurora data have 30 sec intervals)
-# Make new dataframe: df_data. Will include aurora and chosen omni data
-# Convert dataframe to json file..?
 
 # DataFrames:
-aurora_csv_file = read_csv("datasets/xls_to_csv.csv")
-omni14 = '..\omni\omni_min2014_withDate.csv'
-omni20 = '..\omni\omni_min2014_withDate.csv'
+aurora_csv_file = read_csv("datasets/xls_to_csv.csv") # red aurora data, 2014 and 2020, not predicted
+omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
+omni20 = 'datasets\omni\omni_min_2014_withDate.csv'
+
+omni_data14_csv = read_csv(file=omni14)
+omni_data20_csv = read_csv(file=omni20)
+'''
 if os.path.isfile(omni14):
     omni_data14_csv = read_csv(file=omni14)
     omni_data20_csv = read_csv(file=omni20)
 else:
     omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/omni/omni_min2014_withDate.csv')
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/omni/omni_min2020_withDate.csv')
-
+'''
 
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
@@ -204,7 +202,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
     if count > 1:
         print("something wrong. Only want 1 matching time")
         print("index count: ", count)
-        exit()
+        #exit()
     '''
     print(index)
     #print(omni_data.iloc[[index]])
@@ -225,7 +223,7 @@ print(df_TEST)
 Bz_GSE_list = []
 Bz_GSM_list = []
 start = time.time()
-for i in range(len(df_TEST)):
+for i in tqdm(range(len(df_TEST))):
 
     time = df_TEST["timepoint"][i]
     if time[-2:] != "00":
@@ -238,16 +236,13 @@ for i in range(len(df_TEST)):
         omni_data = omni_data20_csv
     else:
         print("Wrong year input in aurora data")
-        exit()
+        #exit()
 
 
     Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
     Bz_GSE_list.append(Bz_GSE)
     Bz_GSM_list.append(Bz_GSM)
 
-    ii = [10000, 50000, 100000]
-    if i in ii:
-        print("i = ", ii[i])
 
 stop = time.time()
 print("Time: %.2f min" %(end-start)/60)
