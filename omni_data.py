@@ -198,7 +198,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
             print("True ! ", aurora_data["timepoint"][i], " Cropped time: ", cropped_time)
     '''
 
-    count = 0
+    #count = 0
     index = []
     for i in range(len(omni_data['Date'])):
         #print(omni_data['Date'][i])
@@ -209,9 +209,9 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
             #print(omni_data.iloc[[i]])    # index
             count += 1
 
-    if count > 1:
-        print("something wrong. Only want 1 matching time")
-        print("index count: ", count)
+    #if count > 1:
+    #    print("something wrong. Only want 1 matching time")
+    #    print("index count: ", count)
         #exit()
     '''
     print(index)
@@ -247,6 +247,8 @@ for i in tqdm(range(len(df_TEST))):
     else:
         print("Wrong year input in aurora data")
         #exit()
+
+    print(omni_data.values)
 
     #threadsperblock = len(omni_data)
     #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
