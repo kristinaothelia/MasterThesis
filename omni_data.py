@@ -164,8 +164,8 @@ if os.path.isfile(omni14):
     omni_data14_csv = read_csv(file=omni14)
     omni_data20_csv = read_csv(file=omni20)
 else:
-    omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min2014_withDate.csv')
-    omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min2020_withDate.csv')
+    omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2014_withDate.csv')
+    omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
