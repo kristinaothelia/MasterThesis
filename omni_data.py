@@ -4,6 +4,7 @@ import json
 import os
 import time
 import datetime
+import math
 
 from numba import cuda, jit
 print(cuda.gpus)
