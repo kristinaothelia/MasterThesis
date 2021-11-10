@@ -7,8 +7,7 @@ import datetime
 import math
 
 from numba import cuda, jit
-print(cuda.gpus)
-# conda/pip install numba
+#print(cuda.gpus)
 
 from tqdm import tqdm
 
@@ -249,6 +248,9 @@ for i in tqdm(range(len(df_TEST))):
         #exit()
 
     threadsperblock = len(omni_data)
+    print(threadsperblock)
+    print(omni_data.shape)
+    print(omni_data.shape[0])
     blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
 
     Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
