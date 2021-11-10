@@ -180,6 +180,9 @@ else:
 #@cuda.jit
 #@njit
 #@cuda.jit
+
+
+
 @jit(nopython=True)
 def test(omni_data):
     for i in range(len(omni_data['Date'])):
@@ -263,11 +266,13 @@ for i in tqdm(range(len(df_TEST))):
         print("Wrong year input in aurora data")
         #exit()
 
-    print(omni_data.values)
+    omni_data = omni_data.values
+    print(omni_data)
+    print(omni_data['Date'])
 
     #threadsperblock = len(omni_data)
     #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
-    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
+    #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
     #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
     Bz_GSE_list.append(Bz_GSE)
     Bz_GSM_list.append(Bz_GSM)
