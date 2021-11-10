@@ -39,74 +39,64 @@ def Dates(start_date='20200101', end_date='20201231'):
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
-dates = Dates(start_date='20140101', end_date='20141231') # 2014
-#dates = Dates(start_date='20150101', end_date='20151231') # 2015
-#dates = Dates(start_date='20200101', end_date='20201231') # 2020
-times = Times()
 
-station = 'nya4' # Ny Aalesund
-#station = 'nya6' # Ny Aalesund
-wavelength = ['5577', '6300']
+def download_info(dates, base_url, times):
 
-#base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
-base_url = 'http://tid.uio.no/plasma/aurora/'+station+wavelength[1]
+    total_img_on_website = 0    # Not all images are ASI images
 
-urls = []
-filenames = []
+    urls = []
+    filenames = []
 
-folder_name= "../DATA_green"
-out_path = "../T_DATA_green"
-total_img_on_website = 0    # Not all images are ASI images
+    #dates = dates[:14]
+    for i in range(len(dates)):
 
-#dates = dates[:14]
-start = time.time()
-for i in range(len(dates)):
+        new_base_url = base_url+dates[i][:4]+'/'+dates[i]+'/'
+        date_print = "%s-%s-%s" %(dates[i][:4], dates[i][5:7], dates[i][-2:])
+        print("*"*20); print("Day: ", date_print); print("*"*20)
 
-    new_base_url = base_url+dates[i][:4]+'/'+dates[i]+'/'
-    date_print = "%s-%s-%s" %(dates[i][:4], dates[i][5:7], dates[i][-2:])
-    print("*"*20); print("Day: ", date_print); print("*"*20)
+        for i in range(len(times)):
 
-    for i in range(len(times)):
+            # content of URL
+            r = requests.get(new_base_url+times[i])
+            new_url = new_base_url+times[i]
 
-        # content of URL
-        r = requests.get(new_base_url+times[i])
-        new_url = new_base_url+times[i]
+            # Parse HTML Code
+            soup = BeautifulSoup(r.text, features="lxml")#, features="lxml", 'html.parser'
+            # find all images in URL
+            images = soup.findAll('a')
+            total_img_on_website += len(images)
 
-        # Parse HTML Code
-        soup = BeautifulSoup(r.text, features="lxml")#, features="lxml", 'html.parser'
-        # find all images in URL
-        images = soup.findAll('a')
-        total_img_on_website += len(images)
+            for img in images:
+                names = img.contents[0]
+                fullLink = img.get('href')
 
-        for img in images:
-            names = img.contents[0]
-            fullLink = img.get('href')
+                # Only want .png images
+                if fullLink.find(".png") != -1:
+                    url = new_url+fullLink
+                    urls.append(url)
+                    name = fullLink
+                    filenames.append(name)
 
-            # Only want .png images
-            if fullLink.find(".png") != -1:
-                url = new_url+fullLink
-                urls.append(url)
-                name = fullLink
-                filenames.append(name)
+            # Find Keogram images that we dont want to download
+            remove = []
+            for j in range(len(filenames)):
+                if "-" in filenames[j]: # Keogram image have 2200-2300 syntax
+                    remove.append(filenames[j])
+                    print("removes: ", filenames[j])
 
-        # Find Keogram images that we dont want to download
-        remove = []
-        for j in range(len(filenames)):
-            if "-" in filenames[j]: # Keogram image have 2200-2300 syntax
-                remove.append(filenames[j])
-                print("removes: ", filenames[j])
+            # Remove Keogram images from urls and filenames lists
+            for k in range(len(remove)):
+                urls.remove(new_url+remove[k])
+                filenames.remove(remove[k])
 
-        # Remove Keogram images from urls and filenames lists
-        for k in range(len(remove)):
-            urls.remove(new_url+remove[k])
-            filenames.remove(remove[k])
+            print("New images for %s %s: " %(date_print, times[i][:-1]), len(images))
+            print("Total image count: ", len(urls))
+            print("----------------------------------------------")
 
-        print("New images for %s %s: " %(date_print, times[i][:-1]), len(images))
-        print("Total image count: ", len(urls))
-        print("----------------------------------------------")
+    return urls, filenames, total_img_on_website
 
 # Download images from urls list
-def download_images(urls, names, folder_name):
+def download_images(urls, names, folder_name, total_img_on_website):
 
     count = 0
 
@@ -141,40 +131,73 @@ def download_images(urls, names, folder_name):
             print(f"Total {count} Images Downloaded Out of {total_img_on_website}")
 
 
-download_images(urls=urls, names=filenames, folder_name=folder_name)
+dates14 = Dates(start_date='20140101', end_date='20141231') # 2014
+dates20 = Dates(start_date='20200101', end_date='20201231') # 2020
+times = Times()
+
+station_nya4 = 'nya4' # Ny Aalesund
+station_nya6 = 'nya6' # Ny Aalesund
+wavelength = ['5577', '6300']
+
+#base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
+#base_url = 'http://tid.uio.no/plasma/aurora/'+station+wavelength[1]
+
+folder_name= "../DATA_green"
+out_path = "../T_DATA_green"
+
+start = time.time()
+
+urls20, filenames20, total_img_on_website20 = download_info(dates=dates20, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+wavelength[1], times=times)
+download_images(urls=urls20, names=filenames20, folder_name=folder_name, total_img_on_website20)
+
+urls14, filenames14, total_img_on_website14 = download_info(dates=dates14, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+wavelength[1], times=times)
+download_images(urls=urls14, names=filenames14, folder_name=folder_name, total_img_on_website14)
+
+urls14_nya4, filenames14_nya4, total_img_on_website14_nya4 = download_info(dates=dates14, base_url='http://tid.uio.no/plasma/aurora/'+station_nya4+wavelength[1], times=times)
+download_images(urls=urls14_nya4, names=filenames14_nya4, folder_name=folder_name, total_img_on_website14_nya4)
+#download_images(urls=urls, names=filenames, folder_name=folder_name)
 
 stop = time.time() - start
-print("Download time [h]: ", stop/(60*60))
+print("Download time for all images [h]: ", stop/(60*60))
 
-# Code from Anna/Lasse:
-print("Transform downloaded images")
-start_t = time.time()
 
-for imfile in glob.iglob(folder_name+'/*.png'):
 
-    # Get image filename (tail):
-    head, tail = os.path.split(imfile)
+def transform(folder_name, out_path, test=False):
 
-    # Read image:
-    img = io.imread(imfile, as_gray=True)
+    # Code from Anna/Lasse:
+    print("Transform downloaded images")
+    start_t = time.time()
 
-    # Scaling image:
-    nimg = img/np.percentile(img, 99)
-    nimg[nimg > 1] = 1
-    nimg = (nimg*(2**16-1)).astype(np.uint16)
+    for imfile in glob.iglob(folder_name+'/*.png'):
 
-    # Save the scaled image:
-    io.imsave(out_path+'/'+f'{tail}', nimg)
+        # Get image filename (tail):
+        head, tail = os.path.split(imfile)
 
-stop_t = time.time() - start_t
-print("Image transform time [h]: ", stop_t/(60*60))
+        # Read image:
+        img = io.imread(imfile, as_gray=True)
 
-# Test image
-for imfile2 in glob.iglob(out_path+'/*.png'):
+        # Scaling image:
+        nimg = img/np.percentile(img, 99)
+        nimg[nimg > 1] = 1
+        nimg = (nimg*(2**16-1)).astype(np.uint16)
 
-    head, tail = os.path.split(imfile2)
-    img = io.imread(imfile2)
-    io.imsave('t_test.png', img)
-    plt.imshow(img, as_gray=True)
-    plt.show()
-    exit()
+        # Save the scaled image:
+        io.imsave(out_path+'/'+f'{tail}', nimg)
+
+    stop_t = time.time() - start_t
+    print("Image transform time [h]: ", stop_t/(60*60))
+
+    # Test image
+    if test:
+        for imfile2 in glob.iglob(out_path+'/*.png'):
+
+            head, tail = os.path.split(imfile2)
+            img = io.imread(imfile2)
+            io.imsave('t_test.png', img)
+            plt.imshow(img, as_gray=True)
+            plt.show()
+            exit()
+
+
+# Transform full image folder
+transform(folder_name, out_path)
