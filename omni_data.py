@@ -207,7 +207,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
             #print(omni_data['Date'][i])
             index.append(i)
             #print(omni_data.iloc[[i]])    # index
-            count += 1
+            #count += 1
 
     #if count > 1:
     #    print("something wrong. Only want 1 matching time")
