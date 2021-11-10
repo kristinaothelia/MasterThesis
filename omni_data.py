@@ -181,6 +181,17 @@ else:
 #@njit
 #@cuda.jit
 @jit(nopython=True)
+def test(omni_data):
+    for i in range(len(omni_data['Date'])):
+        #print(omni_data['Date'][i])
+        if time in omni_data['Date'][i]:
+            #print('TRUE')
+            #print(omni_data['Date'][i])
+            return i
+            #index.append(i)
+            #print(omni_data.iloc[[i]])    # index
+            #count += 1
+
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #print("current time: ", time)
@@ -200,6 +211,9 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #count = 0
     index = []
+    ii = test(omni_data)
+    index.append(ii)
+    '''
     for i in range(len(omni_data['Date'])):
         #print(omni_data['Date'][i])
         if time in omni_data['Date'][i]:
@@ -208,6 +222,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
             index.append(i)
             #print(omni_data.iloc[[i]])    # index
             #count += 1
+    '''
 
     #if count > 1:
     #    print("something wrong. Only want 1 matching time")
