@@ -182,26 +182,10 @@ else:
 #@cuda.jit
 
 
-'''
-@jit(nopython=True)
-def test(omni_data):
-    for i in range(len(omni_data['Date'])):
-        #print(omni_data['Date'][i])
-        if time in omni_data['Date'][i]:
-            #print('TRUE')
-            #print(omni_data['Date'][i])
-            return i
-            #index.append(i)
-            #print(omni_data.iloc[[i]])    # index
-            #count += 1
-'''
 @jit()
 def test_new(omni):
     for i in range(len(omni)):
-        #print(omni_data['Date'][i])
         if time in omni[i]:
-            #print('TRUE')
-            #print(omni_data['Date'][i])
             return i
 
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
@@ -241,12 +225,12 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
     #    print("index count: ", count)
         #exit()
 
-    print(index)
+    #print(index)
     #print(omni_data.iloc[[index]])
     print(omni_data.loc[omni_data.index[index]])
-    print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
-    print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
-    
+    #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
+    #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
+
     Bz_GSE = omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"]
     Bz_GSM = omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"]
 
