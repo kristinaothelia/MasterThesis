@@ -183,12 +183,12 @@ else:
 
 
 @jit()
-def test_new(omni):
+def test_new(omni, timepoint):
     for i in range(len(omni)):
-        if time in omni[i]:
+        if timepoint in omni[i]:
             return i
 
-def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
+def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepoint):
 
     #print("current time: ", time)
 
@@ -207,7 +207,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
 
     #count = 0
     index = []
-    ii = test_new(omni_data_dates)
+    ii = test_new(omni_data_dates, timepoint)
     index.append(ii)
     '''
     for i in range(len(omni_data['Date'])):
