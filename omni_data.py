@@ -6,6 +6,7 @@ import time
 import datetime
 
 from numba import cuda, jit
+print(cuda.gpus)
 # conda/pip install numba
 
 from tqdm import tqdm
@@ -175,8 +176,10 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # function optimized to run on gpu
-@jit(target ="cuda")
+#@jit(target ="cuda")
 #@cuda.jit
+#@njit
+@cuda.jit
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #print("current time: ", time)
