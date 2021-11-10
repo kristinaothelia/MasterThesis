@@ -175,7 +175,7 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # function optimized to run on gpu
-@jit(target ="cuda:0")
+@jit(target ="cuda")
 #@cuda.jit
 def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
