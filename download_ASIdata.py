@@ -148,13 +148,13 @@ out_path = "../T_DATA_green"
 start = time.time()
 
 urls20, filenames20, total_img_on_website20 = download_info(dates=dates20, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+wavelength[1], times=times)
-download_images(urls=urls20, names=filenames20, folder_name=folder_name, total_img_on_website20)
+download_images(urls=urls20, names=filenames20, folder_name=folder_name, total_img_on_website=total_img_on_website20)
 
 urls14, filenames14, total_img_on_website14 = download_info(dates=dates14, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+wavelength[1], times=times)
-download_images(urls=urls14, names=filenames14, folder_name=folder_name, total_img_on_website14)
+download_images(urls=urls14, names=filenames14, folder_name=folder_name, total_img_on_website=total_img_on_website14)
 
 urls14_nya4, filenames14_nya4, total_img_on_website14_nya4 = download_info(dates=dates14, base_url='http://tid.uio.no/plasma/aurora/'+station_nya4+wavelength[1], times=times)
-download_images(urls=urls14_nya4, names=filenames14_nya4, folder_name=folder_name, total_img_on_website14_nya4)
+download_images(urls=urls14_nya4, names=filenames14_nya4, folder_name=folder_name, total_img_on_website=total_img_on_website14_nya4)
 #download_images(urls=urls, names=filenames, folder_name=folder_name)
 
 stop = time.time() - start
