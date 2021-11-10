@@ -39,23 +39,23 @@ def Dates(start_date='20200101', end_date='20201231'):
         dates.append(dt.strftime('%Y%m%d'))
     return dates
 
-#dates = Dates(start_date='20140101', end_date='20141231') # 2014
-dates = Dates(start_date='20150101', end_date='20151231') # 2015
+dates = Dates(start_date='20140101', end_date='20141231') # 2014
+#dates = Dates(start_date='20150101', end_date='20151231') # 2015
 #dates = Dates(start_date='20200101', end_date='20201231') # 2020
 times = Times()
 
-#station = 'nya4' # Ny Aalesund
-station = 'nya6' # Ny Aalesund
-#wavelength = ['5577', '6300']
+station = 'nya4' # Ny Aalesund
+#station = 'nya6' # Ny Aalesund
+wavelength = ['5577', '6300']
 
 #base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
-base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/6300/'
+base_url = 'http://tid.uio.no/plasma/aurora/'+station+wavelength[1]
 
 urls = []
 filenames = []
 
-folder_name= "../DATA15"
-out_path = "../T_DATA15"
+folder_name= "../DATA_green"
+out_path = "../T_DATA_green"
 total_img_on_website = 0    # Not all images are ASI images
 
 #dates = dates[:14]
