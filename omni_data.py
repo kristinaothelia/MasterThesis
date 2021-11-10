@@ -195,7 +195,7 @@ def test(omni_data):
             #print(omni_data.iloc[[i]])    # index
             #count += 1
 '''
-@jit(nopython=True)
+@jit()
 def test_new(omni):
     for i in range(len(omni)):
         #print(omni_data['Date'][i])
@@ -204,7 +204,7 @@ def test_new(omni):
             #print(omni_data['Date'][i])
             return i
 
-def match_dates_omni_aurora_data(omni_data, aurora_data, time):
+def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, time):
 
     #print("current time: ", time)
 
@@ -223,7 +223,7 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
 
     #count = 0
     index = []
-    ii = test_new(omni_data)
+    ii = test_new(omni_data_dates)
     index.append(ii)
     '''
     for i in range(len(omni_data['Date'])):
@@ -240,13 +240,13 @@ def match_dates_omni_aurora_data(omni_data, aurora_data, time):
     #    print("something wrong. Only want 1 matching time")
     #    print("index count: ", count)
         #exit()
-    '''
+
     print(index)
     #print(omni_data.iloc[[index]])
     print(omni_data.loc[omni_data.index[index]])
     print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
     print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
-    '''
+    
     Bz_GSE = omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"]
     Bz_GSM = omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"]
 
@@ -276,13 +276,11 @@ for i in tqdm(range(len(df_TEST))):
         #exit()
 
     omni_data_dates = omni_data['Date']
-    print(omni_data_dates)
-    omni_data = omni_data_dates.values
-    print(omni_data)
+    omni_data_dates = omni_data_dates.values
 
     #threadsperblock = len(omni_data)
     #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
-    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, aurora_csv_file, time)
+    Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_csv_file, time)
     #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
     Bz_GSE_list.append(Bz_GSE)
     Bz_GSM_list.append(Bz_GSM)
