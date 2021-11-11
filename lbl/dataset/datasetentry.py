@@ -19,7 +19,7 @@ class DatasetEntry(object):
                  datasetname: str = None,
                  dataset_type: str = None,
                  label: str = None,
-                 wavelength: int = None,
+                 wavelength: str = None,
                  timepoint: str = None,
                  human_prediction: bool = None,
                  shape: tuple = None):
