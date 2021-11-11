@@ -12,13 +12,13 @@ from numba import cuda, jit
 from tqdm import tqdm
 
 #json_file = 'datasets/Full_aurora_predicted_b2.json'
-json_file = 'datasets/t_data_with_2014nya4.json'
-#json_file = 't_data_green_with_2014nya4.json'
+#json_file = 'datasets/t_data_with_2014nya4.json'
+json_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.json'
 #json_file = 't_data_with_2014nya4_predicted_b2.json'
-#xlsx_file = 't_data_green_with_2014nya4.xlsx'
-xlsx_file = 'datasets/json_to_xls.xlsx'
-#csv_file  = 'csv_t_data_green_with_2014nya4.csv'
-csv_file  = 'datasets/xls_to_csv.csv'
+xlsx_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.xlsx'
+#xlsx_file = 'datasets/json_to_xls.xlsx'
+csv_file  = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.csv'
+#csv_file  = 'datasets/xls_to_csv.csv'
 file14 = "..\omni\omni_min2014.xlsx"
 file20 = "..\omni\omni_min2020.xlsx"
 

@@ -12,7 +12,8 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 #folder = r'C:\Users\Krist\Documents\TESTTEST'
 #folder = '../T_DATA'
 folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-json_file = 't_data_green_with_2014nya4.json'
+json_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.json'
+csv_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.csv'
 
 container = DatasetContainer()
 container.from_folder(path=folder,
@@ -29,7 +30,7 @@ print("length container: ", len(container))
 
 for entry in container:
     path = Path(entry.image_path).stem
-    entry.wavelength = container[0]['image_path'][-12:-8]
+    #entry.wavelength = container[0]['image_path'][-12:-8]
     date = path.split('_')[1]
     timestamp = path.split('_')[2]
     date = datetime.date(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:]))
@@ -39,4 +40,6 @@ for entry in container:
 
     entry.timepoint = str(tiime)
 
+container = DatasetContainer.from_json(json_file)
+container.to_csv(csv_file, index=False)
 container.to_json(json_file)
