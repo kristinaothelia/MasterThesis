@@ -15,7 +15,7 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 #folder = r'C:\Users\Krist\Documents\TESTTEST'
 #folder = '../T_DATA'
 
-def files(green=True):
+def files(green=False):
 
     if green:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
@@ -78,5 +78,5 @@ def make_files(folder, json_file, csv_file):
 folder, json_file, csv_file = files()
 make_files(folder, json_file, csv_file)
 
-folder, json_file, csv_file = files(green=False)
+folder, json_file, csv_file = files(green=True)
 make_files(folder, json_file, csv_file)
