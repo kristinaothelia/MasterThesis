@@ -83,7 +83,7 @@ def make_files(folder, json_file, csv_file, wl):
 
 
 folder, json_file, csv_file, wl = files()
-make_files(folder, json_file, csv_file)
+make_files(folder, json_file, csv_file, wl)
 
 folder, json_file, csv_file, wl = files(green=True)
-make_files(folder, json_file, csv_file)
+make_files(folder, json_file, csv_file, wl)
