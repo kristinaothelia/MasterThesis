@@ -211,7 +211,7 @@ class DatasetContainer(object):
                     path: Union[str, Path],
                     datasetname: str,
                     dataset_type: str,
-                    wavelength: str,
+                    #wavelength: str,
                     source: str = 'Some source',
                     location: str = None,
                     dataset_description: str = 'Some description',
