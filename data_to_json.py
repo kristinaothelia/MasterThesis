@@ -24,7 +24,7 @@ def files(green=False):
         csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
         wl = '6300'
 
-    return folder, json_file, json_slett, csv_file, wl
+    return folder, json_file, csv_file, wl
 
 def formats(json_file, csv_file):
 
@@ -37,7 +37,7 @@ def formats(json_file, csv_file):
     df.to_csv(csv_file, index=False)
     print("json ['entries'] saved as csv file")
 
-def make_files(folder, json_file, csv_file, wl):   
+def make_files(folder, json_file, csv_file, wl):
 
     container = DatasetContainer()
     container.from_folder(path=folder,
