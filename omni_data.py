@@ -10,6 +10,7 @@ from numba import cuda, jit
 #print(cuda.gpus)
 
 from tqdm import tqdm
+from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 
 #json_file = 'datasets/Full_aurora_predicted_b2.json'
 #json_file = 'datasets/t_data_with_2014nya4.json'
@@ -236,10 +237,10 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepo
 
     return Bz_GSE.iloc[0], Bz_GSM.iloc[0]
 
-
+'''
 # New DataFrame to aurora and omni data
 df_TEST = aurora_csv_file#.iloc[:3]
-print(df_TEST)
+#print(df_TEST); print(df_TEST['timepoint'])
 
 Bz_GSE_list = []
 Bz_GSM_list = []
@@ -273,8 +274,10 @@ for i in tqdm(range(len(df_TEST))):
 #stop = time.time()
 #print("Time: %.2f min" %(end-start)/60)
 
-df_TEST.insert(9, 'Bz, nT (GSE)', Bz_GSE_list)
-df_TEST.insert(10,'Bz, nT (GSM)', Bz_GSM_list)
+n = len(df_TEST.columns)
+
+df_TEST.insert(n+1, 'Bz, nT (GSE)', Bz_GSE_list)
+df_TEST.insert(n+2,'Bz, nT (GSM)', Bz_GSM_list)
 
 print(df_TEST)
 
@@ -282,3 +285,57 @@ print(df_TEST)
 df_TEST.to_csv("Aurora_R_Bz.csv", index=False)
 #df_TEST.to_excel("Aurora_R_Bz.xls", index=False)
 print("saved files with Bz values")
+'''
+
+json_file = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R.json'
+aurora_file = DatasetContainer.from_json(json_file)
+
+def TESTwithJSON(container):
+
+    Bz_GSE_list = []
+    Bz_GSM_list = []
+    #start = time.time()
+    #for i in tqdm(range(len(df_TEST))):
+    for entry in tqdm(container):
+
+        solarwind = dict()
+
+        #timepoint = df_TEST["timepoint"][i]
+        #print(timepoint)
+        timepoint = entry.timepoint
+        print(timepoint)
+        exit()
+        if timepoint[-2:] != "00":
+            timepoint = timepoint[:-2] + "00"
+            #print("30 sec mark, need editing. New time: ", time)
+
+        if timepoint[:4] == "2014":
+            omni_data = omni_data14_csv
+        elif timepoint[:4] == "2020":
+            omni_data = omni_data20_csv
+        else:
+            print("Wrong year input in aurora data")
+            #exit()
+
+        omni_data_dates = omni_data['Date']
+        omni_data_dates = omni_data_dates.values
+
+        #threadsperblock = len(omni_data)
+        #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
+        Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_csv_file, timepoint)
+        #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
+        Bz_GSE_list.append(Bz_GSE)
+        Bz_GSM_list.append(Bz_GSM)
+
+
+
+        for i, label_pred in enumerate(pred[0]):
+            score[LABELS[i]] = float(label_pred)
+
+        entry.add_solarwind(solarwind)
+
+
+
+    container.to_json('test_json_with_solarwind.json')
+
+TESTwithJSON(aurora_file)

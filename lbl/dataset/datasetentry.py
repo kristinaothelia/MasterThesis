@@ -46,6 +46,7 @@ class DatasetEntry(object):
         self.human_prediction = human_prediction
         self.shape = shape
         self.score = dict()
+        self.solarwind = dict()
 
     def __getitem__(self, key):
         return self.to_dict()[key]
@@ -92,6 +93,14 @@ class DatasetEntry(object):
         """
         self.score = score
 
+    def add_solarwind(self, solarwind: Dict[str, float]):
+        """
+        ?
+        Args:
+            ?
+        """
+        self.solarwind = solarwind
+
     def add_shape(self, open_func=None, shape=None):
         """
         Add shape to entry
@@ -125,7 +134,8 @@ class DatasetEntry(object):
                 'shape': self.shape,
                 'label': self.label,
                 'human_prediction': self.human_prediction,
-                'score': self.score}
+                'score': self.score,
+                'solarwind': self.solarwind}
 
     def from_dict(self, in_dict: dict):
         """
@@ -143,5 +153,6 @@ class DatasetEntry(object):
             self.human_prediction = in_dict['human_prediction']
             self.shape = in_dict['shape']
             self.score = in_dict['score']
+            self.solarwind = in_dict['solarwind']
 
         return self
