@@ -20,11 +20,11 @@ def files(green=False):
     if green:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
         json_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.json'
-        csv_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.csv'
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/t_data_green_with_2014nya4.csv'
     else:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
         json_file = '/itf-fi-ml/home/koolsen/Master/t_data_with_2014nya4.json'
-        csv_file = '/itf-fi-ml/home/koolsen/Master/t_data_with_2014nya4.csv'
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/t_data_with_2014nya4.csv'
 
     return folder, json_file, csv_file
 
@@ -34,7 +34,8 @@ def formats(json_file, csv_file):
         data = json.load(json_file)
 
     df = pd.DataFrame.from_dict(data['entries'])
-    print(df['score'])
+    #print(df['score'])
+    print(df['image_path'])
 
     df.to_csv(csv_file, index=False)
     print("json saved as csv file")
