@@ -11,12 +11,14 @@ class DatasetInfo(object):
                  datasetname: str = None,
                  dataset_type: str = None,
                  source: str = None,
+                 wavelength: str = None,
                  location: str = None,
                  dataset_description: str = None):
 
         self._datasetname = datasetname
         self._dataset_type = dataset_type
         self._source = source
+        self.wavelength = wavelength
         self._location = location
         self._dataset_description = dataset_description
 
@@ -95,6 +97,7 @@ class DatasetInfo(object):
         return {'datasetname': self.datasetname,
                 'dataset_type': self.dataset_type,
                 'source': self.source,
+                'wavelength': self.wavelength,
                 'location': self.location,
                 'dataset_description': self.dataset_description}
 
@@ -108,6 +111,7 @@ class DatasetInfo(object):
             self.datasetname = in_dict['datasetname']
             self.dataset_type = in_dict['dataset_type']
             self.source = in_dict['source']
+            self.wavelength = in_dict['wavelength']
             self.location = in_dict['location']
             self.dataset_description = in_dict['dataset_description']
 

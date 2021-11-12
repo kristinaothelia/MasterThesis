@@ -19,6 +19,7 @@ class DatasetEntry(object):
                  datasetname: str = None,
                  dataset_type: str = None,
                  label: str = None,
+                 wavelength: str = None,
                  timepoint: str = None,
                  human_prediction: bool = None,
                  shape: tuple = None):
@@ -40,6 +41,7 @@ class DatasetEntry(object):
         self.datasetname = datasetname
         self.dataset_type = dataset_type
         self.label = label
+        self.wavelength = wavelength
         self.timepoint = timepoint
         self.human_prediction = human_prediction
         self.shape = shape
@@ -116,8 +118,9 @@ class DatasetEntry(object):
             dict format of this class
         """
         return {'image_path': self.image_path,
-                'datasetname': self.datasetname,
-                'dataset_type': self.dataset_type,
+                #'datasetname': self.datasetname,
+                #'dataset_type': self.dataset_type,
+                'wavelength': self.wavelength,
                 'timepoint': self.timepoint,
                 'shape': self.shape,
                 'label': self.label,
@@ -132,8 +135,9 @@ class DatasetEntry(object):
         """
         if isinstance(in_dict, dict):
             self.image_path = in_dict['image_path']
-            self.datasetname = in_dict['datasetname']
-            self.dataset_type = in_dict['dataset_type']
+            #self.datasetname = in_dict['datasetname']
+            #self.dataset_type = in_dict['dataset_type']
+            self.wavelength = in_dict['wavelength']
             self.timepoint = in_dict['timepoint']
             self.label = in_dict['label']
             self.human_prediction = in_dict['human_prediction']
