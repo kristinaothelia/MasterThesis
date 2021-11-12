@@ -50,7 +50,7 @@ def make_files(folder, json_file, csv_file, wl):
     container.from_folder(path=folder,
                           datasetname='New data to be classified',
                           dataset_type='png',
-                          wavelength=wl,
+                          #wavelength=wl,
                           source='UiO',
                           location='Svaalbard, nya',
                           dataset_description='ASI')
@@ -64,7 +64,7 @@ def make_files(folder, json_file, csv_file, wl):
 
     for entry in container:
         path = Path(entry.image_path).stem
-        entry.wavelength = wl #container[0]['image_path'][-12:-8]
+        #entry.wavelength = wl #container[0]['image_path'][-12:-8]
         date = path.split('_')[1]
         timestamp = path.split('_')[2]
         date = datetime.date(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:]))
