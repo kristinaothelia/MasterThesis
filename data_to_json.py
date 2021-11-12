@@ -28,7 +28,7 @@ def files(green=True):
 
     return folder, json_file, csv_file
 
-def formats(json_file, xlsx_file, csv_file):
+def formats(json_file, csv_file):
 
     with open(json_file) as json_file:
         data = json.load(json_file)
@@ -36,8 +36,6 @@ def formats(json_file, xlsx_file, csv_file):
     df = pd.DataFrame.from_dict(data['entries'])
     print(df['score'])
 
-    df.to_excel(xlsx_file)
-    print("json saved as excel file")
     df.to_csv(csv_file, index=False)
     print("json saved as csv file")
 
@@ -53,7 +51,7 @@ def make_files(folder, json_file, csv_file):
                           dataset_description='ASI')
 
     container.to_json(json_file)
-    formats(json_file, xlsx_file, csv_file)
+    formats(json_file, csv_file)
 
 
     container = DatasetContainer.from_json(json_file)
@@ -73,7 +71,7 @@ def make_files(folder, json_file, csv_file):
 
     container = DatasetContainer.from_json(json_file)
     container.to_json(json_file)
-    formats(json_file, xlsx_file, csv_file)
+    formats(json_file, csv_file)
 
 
 
