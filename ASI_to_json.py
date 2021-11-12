@@ -124,7 +124,7 @@ def add_file_information(json_file, csv_file, omni_data, SW):
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
 
-    for entry in container:
+    for entry in tqdm(container):
 
         path = Path(entry.image_path).stem
 
