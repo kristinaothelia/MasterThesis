@@ -239,7 +239,7 @@ class DatasetContainer(object):
             datasetname=datasetname,
             dataset_type=dataset_type,
             source=source,
-            wavelength=wavelength,
+            #wavelength=wavelength,
             location=location,
             dataset_description=dataset_description
             )
