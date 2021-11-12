@@ -163,9 +163,8 @@ print(omni_data14.loc[omni_data14.index[index]])
 
 
 # DataFrames:
-#aurora_csv_file = read_csv("datasets/Aurora_R.csv") # red aurora data, 2014 and 2020, not predicted
+aurora_csv_file = read_csv("datasets/Aurora_R.csv") # red aurora data, 2014 and 2020, not predicted
 #aurora_csv_file = read_csv("datasets/Aurora_G.csv") # green aurora data, 2014 and 2020, not predicted
-aurora_csv_file = read_csv('/itf-fi-ml/home/koolsen/Master/Aurora_R.csv')
 omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
 omni20 = 'datasets\omni\omni_min_2014_withDate.csv'
 
