@@ -73,7 +73,7 @@ def formats(json_file, csv_file):
     print("json ['entries'] saved as csv file")
 
 
-@jit(nopython=True)
+@jit()  # nopython=True
 def test_new(omni, timepoint):
     for i in range(len(omni)):
         if timepoint in omni[i]:
