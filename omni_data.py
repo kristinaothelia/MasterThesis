@@ -167,7 +167,7 @@ print(omni_data14.loc[omni_data14.index[index]])
 aurora_csv_file = read_csv("datasets/Aurora_R.csv") # red aurora data, 2014 and 2020, not predicted
 #aurora_csv_file = read_csv("datasets/Aurora_G.csv") # green aurora data, 2014 and 2020, not predicted
 omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
-omni20 = 'datasets\omni\omni_min_2014_withDate.csv'
+omni20 = 'datasets\omni\omni_min_2020_withDate.csv'
 
 if os.path.isfile(omni14):
     omni_data14_csv = read_csv(file=omni14)
@@ -177,12 +177,6 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # function optimized to run on gpu
-#@jit(target ="cuda")
-#@cuda.jit
-#@njit
-#@cuda.jit
-
-
 @jit()
 def test_new(omni, timepoint):
     for i in range(len(omni)):
@@ -191,12 +185,6 @@ def test_new(omni, timepoint):
 
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepoint):
 
-    #print("current time: ", time)
-
-    #print(omni_data.loc[:, 'Date'])
-    #print(len(omni_data['Date']))
-    #print(len(aurora_data))
-    #print(aurora_data["timepoint"])
     '''
     for i in range(len(aurora_data)):
         #print(aurora_data["timepoint"][i])
@@ -206,7 +194,6 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepo
             print("True ! ", aurora_data["timepoint"][i], " Cropped time: ", cropped_time)
     '''
 
-    #count = 0
     index = []
     ii = test_new(omni_data_dates, timepoint)
     index.append(ii)
@@ -221,11 +208,6 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepo
             #count += 1
     '''
 
-    #if count > 1:
-    #    print("something wrong. Only want 1 matching time")
-    #    print("index count: ", count)
-        #exit()
-
     #print(index)
     #print(omni_data.iloc[[index]])
     #print(omni_data.loc[omni_data.index[index]])
@@ -237,7 +219,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_data, timepo
 
     return Bz_GSE.iloc[0], Bz_GSM.iloc[0]
 
-'''
+
 # New DataFrame to aurora and omni data
 df_TEST = aurora_csv_file#.iloc[:3]
 #print(df_TEST); print(df_TEST['timepoint'])
@@ -285,57 +267,7 @@ print(df_TEST)
 df_TEST.to_csv("Aurora_R_Bz.csv", index=False)
 #df_TEST.to_excel("Aurora_R_Bz.xls", index=False)
 print("saved files with Bz values")
-'''
+
 
 json_file = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R.json'
 aurora_file = DatasetContainer.from_json(json_file)
-
-def TESTwithJSON(container):
-
-    Bz_GSE_list = []
-    Bz_GSM_list = []
-    #start = time.time()
-    #for i in tqdm(range(len(df_TEST))):
-    for entry in tqdm(container):
-
-        solarwind = dict()
-
-        #timepoint = df_TEST["timepoint"][i]
-        #print(timepoint)
-        timepoint = entry.timepoint
-        print(timepoint)
-        exit()
-        if timepoint[-2:] != "00":
-            timepoint = timepoint[:-2] + "00"
-            #print("30 sec mark, need editing. New time: ", time)
-
-        if timepoint[:4] == "2014":
-            omni_data = omni_data14_csv
-        elif timepoint[:4] == "2020":
-            omni_data = omni_data20_csv
-        else:
-            print("Wrong year input in aurora data")
-            #exit()
-
-        omni_data_dates = omni_data['Date']
-        omni_data_dates = omni_data_dates.values
-
-        #threadsperblock = len(omni_data)
-        #blockspergrid = math.ceil(omni_data.shape[0] / threadsperblock)
-        Bz_GSE, Bz_GSM = match_dates_omni_aurora_data(omni_data, omni_data_dates, aurora_csv_file, timepoint)
-        #Bz_GSE, Bz_GSM = match_dates_omni_aurora_data[blockspergrid, threadsperblock](omni_data, aurora_csv_file, time)
-        Bz_GSE_list.append(Bz_GSE)
-        Bz_GSM_list.append(Bz_GSM)
-
-
-
-        for i, label_pred in enumerate(pred[0]):
-            score[LABELS[i]] = float(label_pred)
-
-        entry.add_solarwind(solarwind)
-
-
-
-    container.to_json('test_json_with_solarwind.json')
-
-TESTwithJSON(aurora_file)
