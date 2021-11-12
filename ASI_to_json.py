@@ -73,7 +73,7 @@ def formats(json_file, csv_file):
     print("json ['entries'] saved as csv file")
 
 
-@jit()
+@jit(nopython=True)
 def test_new(omni, timepoint):
     for i in range(len(omni)):
         if timepoint in omni[i]:
@@ -172,7 +172,7 @@ def add_file_information(json_file, csv_file, omni_data, SW):
 
 # red aurora
 folder, json_file, csv_file, wl = files(green=False)
-file_from_ASIfolder(folder, wl, json_file)
+#file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data20_csv, SW)
 
 # green aurora
