@@ -19,14 +19,18 @@ def files(green=False):
 
     if green:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-        json_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.json'
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/t_data_green_with_2014nya4.csv'
+        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json'
+        json_slett = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.json'
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+        wl = '5577'
     else:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
-        json_file = '/itf-fi-ml/home/koolsen/Master/t_data_with_2014nya4.json'
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/t_data_with_2014nya4.csv'
+        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json'
+        json_slett = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.json'
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
+        wl = '6300'
 
-    return folder, json_file, csv_file
+    return folder, json_file, csv_file, wl
 
 def formats(json_file, csv_file):
 
@@ -38,15 +42,15 @@ def formats(json_file, csv_file):
     print(df['image_path'])
 
     df.to_csv(csv_file, index=False)
-    print("json saved as csv file")
+    print("json ['entries'] saved as csv file")
 
-def make_files(folder, json_file, csv_file):
+def make_files(folder, json_file, csv_file, wl):
 
     container = DatasetContainer()
     container.from_folder(path=folder,
                           datasetname='New data to be classified',
                           dataset_type='png',
-                          wavelength='5577',
+                          wavelength=wl,
                           source='UiO',
                           location='Svaalbard, nya',
                           dataset_description='ASI')
@@ -60,7 +64,7 @@ def make_files(folder, json_file, csv_file):
 
     for entry in container:
         path = Path(entry.image_path).stem
-        entry.wavelength = container[0]['image_path'][-12:-8]
+        entry.wavelength = wl #container[0]['image_path'][-12:-8]
         date = path.split('_')[1]
         timestamp = path.split('_')[2]
         date = datetime.date(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:]))
@@ -70,14 +74,16 @@ def make_files(folder, json_file, csv_file):
 
         entry.timepoint = str(tiime)
 
+    print("Timepoint updated")
     container = DatasetContainer.from_json(json_file)
     container.to_json(json_file)
+    container.to_json(json_slett)
     formats(json_file, csv_file)
 
 
 
-folder, json_file, csv_file = files()
+folder, json_file, csv_file, wl = files()
 make_files(folder, json_file, csv_file)
 
-folder, json_file, csv_file = files(green=True)
+folder, json_file, csv_file, wl = files(green=True)
 make_files(folder, json_file, csv_file)

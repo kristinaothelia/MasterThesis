@@ -60,13 +60,13 @@ def json_to_xls(json_file):
     print("json saved as csv file")
 
 
-
+'''
 if os.path.isfile(xlsx_file) and os.path.isfile(csv_file):
     print("json file exists as excel and csv file")
 else:
     print("json file do not exists as excel and/or csv file")
     json_to_xls(json_file)
-
+'''
 def edit_omni_dates_to_correct_form(omni_data):
 
     Year = omni_data["Year"]
@@ -163,7 +163,8 @@ print(omni_data14.loc[omni_data14.index[index]])
 
 
 # DataFrames:
-aurora_csv_file = read_csv("datasets/xls_to_csv.csv") # red aurora data, 2014 and 2020, not predicted
+aurora_csv_file = read_csv("datasets/Aurora_R.csv") # red aurora data, 2014 and 2020, not predicted
+#aurora_csv_file = read_csv("datasets/Aurora_G.csv") # green aurora data, 2014 and 2020, not predicted
 #aurora_csv_file = read_csv("csv_t_data_green_with_2014nya4.csv")
 omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
 omni20 = 'datasets\omni\omni_min_2014_withDate.csv'
@@ -278,9 +279,7 @@ df_TEST.insert(10,'Bz, nT (GSM)', Bz_GSM_list)
 
 print(df_TEST)
 
-#df_TEST.to_csv("t_data_green_with_2014nya4_and_Bz.csv", index=False)
-#df_TEST.to_excel("t_data_green_with_2014nya4_and_Bz.xls", index=False)
-#
-df_TEST.to_csv("t_data_with_2014nya4_and_Bz.csv", index=False)
-df_TEST.to_excel("t_data_with_2014nya4_and_Bz.xls", index=False)
+#df_TEST.to_csv("Aurora_G_Bz.csv", index=False)
+df_TEST.to_csv("Aurora_R_Bz.csv", index=False)
+#df_TEST.to_excel("Aurora_R_Bz.xls", index=False)
 print("saved files with Bz values")
