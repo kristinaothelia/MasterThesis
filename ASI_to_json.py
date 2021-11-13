@@ -33,6 +33,7 @@ def read_csv(file, print=False):
 #csv_file = 'JSON_TEST_TEST.csv'
 #wl = 'nan'
 
+
 omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
 omni20 = 'datasets\omni\omni_min_2020_withDate.csv'
 
@@ -44,9 +45,14 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 
-
 # Dataset containing data
-def files(green=False):
+def files(green=False, train=False):
+
+    if train:
+        folder = '/itf-fi-ml/home/koolsen/Aurora/Data/All_data'
+        json_file = '/itf-fi-ml/home/koolsen/Master/Full_aurora_NEW.json' # To large fil for GitHub
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Full_aurora_NEW.csv'
+        wl = '5577 and 6300'
 
     if green:
         folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
@@ -119,7 +125,7 @@ def file_from_ASIfolder(folder, wl, json_file):
     #formats(json_file, csv_file)
 
 
-def add_file_information(json_file, csv_file, omni_data, SW):
+def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
 
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
@@ -140,36 +146,45 @@ def add_file_information(json_file, csv_file, omni_data, SW):
         # Add timepoint to json file
         entry.timepoint = str(tiime)
 
-        # make solar wind data by matchind dates
-        tp = entry.timepoint
+        if omni:
 
-        if tp[-2:] != "00":
-            tp = tp[:-2] + "00"
-            #print("30 sec mark, need editing. New time: ", time)
+            # make solar wind data by matchind dates
+            tp = entry.timepoint
 
-        if tp[:4] == "2014":
-            omni_data = omni_data14_csv
-        elif tp[:4] == "2020":
-            omni_data = omni_data20_csv
-        else:
-            print("Wrong year input in aurora data")
-            #exit()
+            if tp[-2:] != "00":
+                tp = tp[:-2] + "00"
+                #print("30 sec mark, need editing. New time: ", time)
 
-        # get only the dates
-        omni_data_dates = omni_data['Date']
-        omni_data_dates = omni_data_dates.values
+            if tp[:4] == "2014":
+                omni_data = omni_data14_csv
+            elif tp[:4] == "2020":
+                omni_data = omni_data20_csv
+            else:
+                print("Wrong year input in aurora data")
+                #exit()
 
-        solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW)
-        #print(solarwind)
+            # get only the dates
+            omni_data_dates = omni_data['Date']
+            omni_data_dates = omni_data_dates.values
 
-        # Add solar wind data (dict) to json file
-        entry.add_solarwind(solarwind)
+            solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW)
+            #print(solarwind)
+
+            # Add solar wind data (dict) to json file
+            entry.add_solarwind(solarwind)
 
 
     print("Timepoint updated")
     container.to_json(json_file)
     formats(json_file, csv_file)
 
+
+# New training dataset
+folder, json_file, csv_file, wl = files(green=False, train=False)
+file_from_ASIfolder(folder, wl, json_file)
+add_file_information(json_file, csv_file, omni_data20_csv, SW, omni=False)
+
+'''
 # red aurora
 folder, json_file, csv_file, wl = files(green=False)
 #file_from_ASIfolder(folder, wl, json_file)
@@ -179,3 +194,4 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 folder, json_file, csv_file, wl = files(green=True)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data20_csv, SW)
+'''
