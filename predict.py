@@ -93,12 +93,22 @@ def predict(model_name, model_path, container, LABELS, save_file):
                 entry.add_score(score)
 
     #container.to_json(path='./datasets/Full_aurora_predicted.json')
-    #container.to_json(path='./datasets/Full_aurora_predicted_b4.json')
-    #container.to_json(path='./t_data_with_2014nya4_predicted_b2.json')
     container.to_json(path=save_file)
 
 
 # make predictions with chosen model and data set
+
+
+#TEST
+model_name = model_names[2]
+model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
+json_file = 'Full_aurora_ml.json'
+container = DatasetContainer.from_json(mlnodes_path+json_file)
+save_file = mlnodes_path+json_file[:-5]+'_predicted_'+model_name+'.json'
+
+predict(model_name, model_path, container, LABELS, save_file)
+exit()
+
 
 mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
 model_name = model_names[2]
