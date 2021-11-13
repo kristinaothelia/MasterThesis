@@ -68,7 +68,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
     checkpoint = torch.load(model_path, map_location='cpu')
     model.load_state_dict(checkpoint['state_dict'])
 
-    model = model.to('cuda:2')
+    model = model.to('cuda:0')
     model.eval()
 
     with torch.no_grad():
@@ -79,7 +79,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
                 img = entry.open()
                 x = transforms(img)
                 x = x.unsqueeze(0)
-                x = x.to('cuda:2')
+                x = x.to('cuda:0')
 
                 pred = model(x).to('cpu')
                 pred = torch.softmax(pred, dim=-1)

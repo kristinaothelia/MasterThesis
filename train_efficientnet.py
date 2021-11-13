@@ -106,7 +106,7 @@ trainer = Trainer(model             = model,
                   lr_scheduler      = lr_scheduler,
                   epochs            = 100,
                   save_period       = 50,
-                  savedir           = './models/{}'.format(model_name[-2:]),
+                  savedir           = './models/{}_newtest'.format(model_name[-2:]),
                   #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                   device            = 'cuda:0',
                   )
