@@ -46,7 +46,7 @@ class DatasetEntry(object):
         self.human_prediction = human_prediction
         self.shape = shape
         self.score = dict()
-        self.solarwind = dict()
+        #self.solarwind = dict()
 
     def __getitem__(self, key):
         return self.to_dict()[key]
@@ -135,7 +135,8 @@ class DatasetEntry(object):
                 'label': self.label,
                 'human_prediction': self.human_prediction,
                 'score': self.score,
-                'solarwind': self.solarwind}
+                #'solarwind': self.solarwind
+                }
 
     def from_dict(self, in_dict: dict):
         """
@@ -153,6 +154,6 @@ class DatasetEntry(object):
             self.human_prediction = in_dict['human_prediction']
             self.shape = in_dict['shape']
             self.score = in_dict['score']
-            self.solarwind = in_dict['solarwind']
+            #self.solarwind = in_dict['solarwind']
 
         return self
