@@ -108,7 +108,7 @@ trainer = Trainer(model             = model,
                   save_period       = 50,
                   savedir           = './models/{}_newtest'.format(model_name[-2:]),
                   #savedir           = '/itf-fi-ml/home/koolsen/Master/',
-                  device            = 'cuda:0',
+                  device            = 'cuda:2',
                   )
 
 trainer.train()
