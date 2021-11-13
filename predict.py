@@ -100,6 +100,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
 
 
 #TEST
+mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
 model_name = model_names[2]
 model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
 json_file = 'Full_aurora_ml.json'
