@@ -29,7 +29,7 @@ class Trainer(BaseTrainer):
                          lr_scheduler   = lr_scheduler,
                          device         = device,
                          epochs         = epochs,
-                         model_info     = model_info
+                         model_info     = model_info,
                          save_period    = save_period,
                          savedir        = savedir,
                          )
