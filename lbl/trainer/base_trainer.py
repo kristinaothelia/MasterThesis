@@ -92,19 +92,18 @@ class BaseTrainer:
             v_acc.append(valid_acc)
 
             if epoch % self.save_period == 0:
-                #self.save_checkpoint(epoch, best=False)
-                print("slett")
+                self.save_checkpoint(epoch, best=False)
 
             #if val_loss < self.min_validation_loss:
             if 1 - valid_acc < self.min_validation_loss:
                 self.min_validation_loss = 1 - valid_acc
-                #self.save_checkpoint(epoch, best=True)
+                self.save_checkpoint(epoch, best=True)
                 best_ep = epoch
                 best_acc = valid_acc
 
             print('-----------------------------------')
 
-        #self.save_checkpoint(epoch, best=False)
+        self.save_checkpoint(epoch, best=False)
         print("ep: ", best_ep, " acc: ", best_acc)
 
         train_end_time = time.time() - train_time
