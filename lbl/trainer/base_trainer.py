@@ -53,7 +53,7 @@ class BaseTrainer:
         self.min_validation_loss = sys.float_info.max  # Minimum validation loss achieved, starting with the larges possible number
 
 
-    def train(self, info):
+    def train(self):
         """
         Full training logic
         """
