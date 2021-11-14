@@ -20,6 +20,7 @@ class BaseTrainer:
                  loss_function: torch.nn,
                  optimizer: torch.optim,
                  epochs: int,
+                 model_info: list(),
                  save_period: int,
                  savedir: str,
                  lr_scheduler: torch.optim.lr_scheduler = None,
@@ -111,7 +112,8 @@ class BaseTrainer:
         log = open(self.checkpoint_dir+"log.txt", "w")
         log.write("Training time [h]: {}".format(train_end_time/(60*60)))
         log.write("Best epoch {} of {}. Validation acc: {}".format(best_ep, self.epochs, best_acc))
-        log.write("Other model info: {}, {}, {}".format(info[0], info[1], info[2]))
+        log.write("Batch size (train): {}".format(model_info[0]))
+        log.write("Other model info: lr:{}, step:{}, gamma:{}".format(model_info[1], model_info[2], model_info[3]))
         log.close()
 
         if epoch == self.epochs:

@@ -92,9 +92,6 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
-    info = [learningRate, stepSize, g]
-    print(info)
-
     trainer = Trainer(model             = model,
                       loss_function     = loss,
                       optimizer         = optimizer,
@@ -102,7 +99,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                       valid_data_loader = valid_loader,
                       lr_scheduler      = lr_scheduler,
                       epochs            = ep,
-                      model_info        = info,
+                      model_info        = [batch_size_train, learningRate, stepSize, g],
                       save_period       = 50,
                       savedir           = './models/{}/batch_size_{}'.format(model_name[-2:], batch_size_train),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
