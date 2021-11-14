@@ -45,7 +45,6 @@ class BaseTrainer:
         self.optimizer = optimizer
 
         self.epochs = epochs
-        self.savedir = savedir
         self.save_period = save_period
         self.start_epoch = 1
 
@@ -53,7 +52,7 @@ class BaseTrainer:
         self.min_validation_loss = sys.float_info.max  # Minimum validation loss achieved, starting with the larges possible number
 
 
-    def train(self):
+    def train(self, info):
         """
         Full training logic
         """
@@ -109,19 +108,23 @@ class BaseTrainer:
         train_end_time = time.time() - train_time
         print("Training time [h]: ", train_end_time/(60*60))
 
+        log = open(self.checkpoint_dir+"log.txt", "w")
+        log.write("Training time [h]: {}".format(train_end_time/(60*60)))
+        log.write("Best epoch {} of {}. Validation acc: {}".format(best_ep, self.epochs, best_acc))
+        log.write("Other model info: {}, {}, {}".format(info[0], info[1], info[2]))
+        log.close()
+
         if epoch == self.epochs:
             plt.figure()
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
-            plt.title("Loss vs Accuracy. V.acc: {}".format(best_acc))
+            plt.title("Loss vs Accuracy. (best v.acc: {.4f})".format(best_acc))
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="validation loss")
             plt.plot(ep, v_acc, label="Validation accuracy")
             plt.xlabel("Epochs")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-            plt.savefig(self.savedir+"/acc_vs_loss.png")
-
-        #return best_ep, best_acc
+            plt.savefig(self.checkpoint_dir+"/acc_vs_loss.png")
 
     def save_checkpoint(self, epoch, best: bool = False):
         """

@@ -16,6 +16,7 @@ class Trainer(BaseTrainer):
                  valid_data_loader: torch.utils.data.dataloader,
                  lr_scheduler: torch.optim.lr_scheduler,
                  epochs:        int,
+                 model_info:    list(),
                  save_period:   int,
                  savedir:       str,
                  device:        str = None,
@@ -28,6 +29,7 @@ class Trainer(BaseTrainer):
                          lr_scheduler   = lr_scheduler,
                          device         = device,
                          epochs         = epochs,
+                         model_info     = model_info
                          save_period    = save_period,
                          savedir        = savedir,
                          )
@@ -46,7 +48,7 @@ class Trainer(BaseTrainer):
         :return: A log that contains average loss and metric in this epoch.
         """
 
-        self.model.train()
+        self.model.train(self.info)
         losses = list()
 
         for batch_idx, (data, target) in enumerate(self.data_loader):
@@ -106,7 +108,7 @@ class Trainer(BaseTrainer):
 
     def _progress(self, batch_idx):
         base = '[{}/{} ({:.0f}%)]'
-        
+
         if hasattr(self.data_loader, 'n_samples'):
             current = batch_idx * self.data_loader.batch_size
             total = self.data_loader.n_samples
