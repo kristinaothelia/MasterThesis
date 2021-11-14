@@ -29,7 +29,7 @@ for entry in container:
     date = datetime.date(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:]))
     timestamp = datetime.time(hour=int(timestamp[:2]), minute=int(timestamp[2:4]), second=int(timestamp[4:]))
 
-    tiime = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=timestamp.hour, minute=timestamp.hour, second=timestamp.second)
+    tiime = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=timestamp.hour, minute=timestamp.minute, second=timestamp.second)
 
     entry.timepoint = str(tiime)
 

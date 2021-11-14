@@ -98,6 +98,19 @@ def predict(model_name, model_path, container, LABELS, save_file):
 
 # make predictions with chosen model and data set
 
+model_name = model_names[2]
+# Load a saved model
+model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
+
+# Load json file to add predictions
+json_file = 'NEW_TEST_ml.json'
+container = DatasetContainer.from_json(json_file)
+save_file = json_file[:-5]+'_predicted_'+model_name+'.json'
+
+predict(model_name, model_path, container, LABELS, save_file)
+
+exit()
+
 mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
 model_name = model_names[2]
 # Load a saved model

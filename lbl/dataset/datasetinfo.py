@@ -111,7 +111,7 @@ class DatasetInfo(object):
             self.datasetname = in_dict['datasetname']
             self.dataset_type = in_dict['dataset_type']
             self.source = in_dict['source']
-            #self.wavelength = in_dict['wavelength']
+            self.wavelength = in_dict['wavelength']
             self.location = in_dict['location']
             self.dataset_description = in_dict['dataset_description']
 
