@@ -39,26 +39,17 @@ class BaseTrainer:
         # Model to device
         self.device = torch.device(device)
 
-        '''
-        # setup GPU device if available, move model into configured device
-        if device is None:
-            self.device, device_ids = self.prepare_device(config['n_gpu'])
-        else:
-            self.device = torch.device(device)
-            device_ids = list()
-        '''
+        self.model = model.to(self.device)
+        self.lr_scheduler = lr_scheduler
+        self.loss_function = loss_function.to(self.device)
+        self.optimizer = optimizer
 
-        self.model              = model.to(self.device)
-        self.lr_scheduler       = lr_scheduler
-        self.loss_function      = loss_function.to(self.device)
-        self.optimizer          = optimizer
+        self.epochs = epochs
+        self.savedir = savedir
+        self.save_period = save_period
+        self.start_epoch = 1
 
-        self.epochs             = epochs
-        self.save_period        = save_period
-        self.start_epoch        = 1
-
-        self.checkpoint_dir     = Path(savedir) / Path(datetime.today().strftime('%Y-%m-%d'))
-
+        self.checkpoint_dir = Path(savedir) / Path(datetime.today().strftime('%Y-%m-%d'))
         self.min_validation_loss = sys.float_info.max  # Minimum validation loss achieved, starting with the larges possible number
 
 
@@ -119,6 +110,7 @@ class BaseTrainer:
         print("Training time [h]: ", train_end_time/(60*60))
 
         if epoch == self.epochs:
+            plt.figure()
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
             plt.title("Loss vs Accuracy. V.acc: {}".format(best_acc))
             plt.plot(ep, t_loss, label="Training loss")
@@ -127,8 +119,9 @@ class BaseTrainer:
             plt.xlabel("Epochs")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-            plt.savefig("plots/acc_vs_loss_{}.png".format(self.epochs))
+            plt.savefig(self.savedir+"/acc_vs_loss.png")
 
+        #return best_ep, best_acc
 
     def save_checkpoint(self, epoch, best: bool = False):
         """
@@ -155,45 +148,3 @@ class BaseTrainer:
 
         torch.save(state, filename)
         print("Saving checkpoint: {} ...".format(filename))
-
-    '''
-    def resume_checkpoint(self,
-                          resume_model: Union[str, Path],
-                          ):
-        """
-        Resume from saved checkpoints
-        Args:
-            resume_model (str, pathlib.Path): Checkpoint path, either absolute or relative
-        """
-        if not isinstance(resume_model, (str, Path)):
-            print('resume_model is not str or Path object but of type {}, '
-                                'aborting previous checkpoint loading'.format(type(resume_model)))
-            return None
-
-        if not Path(resume_model).is_file():
-            print('resume_model object does not exist, ensure that {} is correct, '
-                                'aborting previous checkpoint loading'.format(str(resume_model)))
-            return None
-
-        resume_model = str(resume_model)
-        print("Loading checkpoint: {} ...".format(resume_model))
-
-
-        checkpoint = torch.load(resume_model, map_location='cpu')
-
-        self.model.load_state_dict(checkpoint['state_dict'])
-        self.model = self.model.to(self.device)
-        self.start_epoch = checkpoint['epoch'] + 1
-
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
-        self.lr_scheduler.load_state_dict(checkpoint['scheduler'])
-
-        print('Checkpoint loaded. Resume training from epoch {}'.format(self.start_epoch))
-
-        self.checkpoint_dir = Path(resume_model).parent.parent  # Ensuring the same main folder after resuming
-
-        # Fix this
-        # for key, value in self.metric[self.metric.VALIDATION_KEY].items():
-        #     loss = np.mean(np.array(value['loss']))
-        #     self.min_validation_loss = min(self.min_validation_loss, loss)
-        '''

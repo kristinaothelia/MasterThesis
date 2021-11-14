@@ -109,21 +109,27 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     trainer.train()
 
 
-#container = DatasetContainer.from_json('datasets/Full_aurora_ml.json')
-#container = DatasetContainer.from_json('datasets/Full_aurora_predicted.json')
-#container = DatasetContainer.from_json('files_new.json')
+#json_file = 'datasets/Full_aurora_predicted.json'
 json_file = 'datasets/NEW_TEST_ml.json'
 
-#model_name = 'efficientnet-b0'
-#model_name = 'efficientnet-b1'
-model_name = 'efficientnet-b2'
-#model_name = 'efficientnet-b3'
-#model_name = 'efficientnet-b4'
+model_name = ['efficientnet-b0',
+              'efficientnet-b1',
+              'efficientnet-b2',
+              'efficientnet-b3',
+              'efficientnet-b4']
 
-train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
-train(json_file, model_name, ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
-#train(json_file, model_name, ep=100, batch_size_train=24, learningRate=2e-3, stepSize=75, g=0.1)
+# get model name, run time, and acc?
+# make a txt file over results for comparison?
+#model = []
+#run_time = []
+#acc = []
 
-#model_name = 'efficientnet-b4'
-#train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
-#train(json_file, model_name, ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[0], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
+
+#train(json_file, model_name[2], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=100, batch_size_train=24, learningRate=2e-3, stepSize=75, g=0.1)
+
+train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
+train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
