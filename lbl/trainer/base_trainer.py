@@ -120,14 +120,14 @@ class BaseTrainer:
 
         if epoch == self.epochs:
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
-            plt.title("Loss vs Accuracy")
+            plt.title("Loss vs Accuracy. V.acc: {}".format(best_acc))
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="validation loss")
             plt.plot(ep, v_acc, label="Validation accuracy")
             plt.xlabel("Epochs")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-            plt.savefig("plots/acc_vs_loss.png")
+            plt.savefig("plots/acc_vs_loss_{}.png".format(self.epochs))
 
 
     def save_checkpoint(self, epoch, best: bool = False):
