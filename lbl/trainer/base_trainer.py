@@ -93,6 +93,7 @@ class BaseTrainer:
 
             if epoch % self.save_period == 0:
                 #self.save_checkpoint(epoch, best=False)
+                print("slett")
 
             #if val_loss < self.min_validation_loss:
             if 1 - valid_acc < self.min_validation_loss:
