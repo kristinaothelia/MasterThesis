@@ -55,7 +55,6 @@ def distribution(container, labels):
 
 #distribution(container, LABELS)
 
-
 def Get_hours():
     # Make times
     times = []
