@@ -15,14 +15,21 @@ eks fra json fil:
 """
 
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
-
+'''
 predicted_file = 't_data_with_2014nya4_predicted_b2.json'
 #predicted_file = 'datasets/Full_aurora_predicted_b2.json'
 #corrected_file = 'datasets/t_data_predicted_b2_corr.json'
 
 container = DatasetContainer.from_json(predicted_file)
 print("len container: ", len(container))
+'''
+predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
+predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_efficientnet-b2.json'
 
+container_G = DatasetContainer.from_json(predicted_file_G)
+container_R = DatasetContainer.from_json(predicted_file_R)
+print("len container G: ", len(container_G))
+print("len container R: ", len(container_R))
 
 def distribution(container, labels):
 
@@ -248,8 +255,9 @@ def stats(label=False, year=False, plot_year=True):
 #stats(label='arc', year="2020")
 #stats(label="discrete", year="2014", plot_year=False)
 #stats(label="discrete", year="2020", plot_year=False)
-stats(label="aurora", year="2014")
-stats(label="aurora", year="2020")
+
+#stats(label="aurora", year="2014")
+#stats(label="aurora", year="2020")
 
 # Lage automatisk lagring
 # Lage to soyler, aurora, ikke aurora.
@@ -257,7 +265,7 @@ stats(label="aurora", year="2020")
 
 #stats(label="aurora", year="2020")
 
-plt.show()
+#plt.show()
 
 def stats_aurora(label, year=False):
     """

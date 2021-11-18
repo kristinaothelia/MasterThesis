@@ -121,7 +121,7 @@ class BaseTrainer:
         if epoch == self.epochs:
             plt.figure()
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
-            plt.title("Loss vs Accuracy. (best v.acc: {.4f})".format(best_acc))
+            plt.title("Loss vs Accuracy. (best v.acc: {:.4f})".format(best_acc))
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="validation loss")
             plt.plot(ep, v_acc, label="Validation accuracy")

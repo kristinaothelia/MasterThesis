@@ -6,11 +6,13 @@ import matplotlib.pyplot as plt
 
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
+predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
+predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_efficientnet-b2.json'
 
-predicted_file = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
-
-container = DatasetContainer.from_json(predicted_file)
-print("len container: ", len(container))
+container_G = DatasetContainer.from_json(predicted_file_G)
+container_R = DatasetContainer.from_json(predicted_file_R)
+print("len container G: ", len(container_G))
+print("len container R: ", len(container_R))
 
 def autolabel(n):
     """
@@ -67,98 +69,103 @@ def distribution(container, labels):
 
 #distribution(container, LABELS)
 
+def pred_5050(container, title=''):
 
-weight = []
-dict = {}
-count_5050 = 0
-count_less_than_60 = 0
-count_over_80 = 0
-index = 0
+    weight = []
+    dict = {}
+    count_5050 = 0
+    count_less_than_60 = 0
+    count_over_80 = 0
+    index = 0
 
-for entry in container:
+    for entry in container:
 
-    #print(entry.score[entry.label])
-    #print(entry.score)
-    index += 1
+        #print(entry.score[entry.label])
+        #print(entry.score)
+        index += 1
 
-    if entry.score[entry.label] < 0.6:  # Less than 60 %
+        if entry.score[entry.label] < 0.6:  # Less than 60 %
 
-        #print("Max: %s " %entry.label, entry.score[entry.label])
-        #print('Check second highest label')
-        weight.append(1)
+            #print("Max: %s " %entry.label, entry.score[entry.label])
+            #print('Check second highest label')
+            weight.append(1)
 
-        x = sorted(entry.score.items(),key=(lambda i: i[1]))
+            x = sorted(entry.score.items(),key=(lambda i: i[1]))
 
-        max = (x[-1][0], x[-1][1])
-        max2nd = (x[-2][0], x[-2][1])
+            max = (x[-1][0], x[-1][1])
+            max2nd = (x[-2][0], x[-2][1])
 
-        if abs(max[1] - max2nd[1]) <= 0.1:
+            if abs(max[1] - max2nd[1]) <= 0.1:
 
-            count_5050 += 1
-            print("max:    ", max)
-            print("max2nd: ", max2nd)
-            print()
+                count_5050 += 1
+                '''
+                print("max:    ", max)
+                print("max2nd: ", max2nd)
+                print()
+                '''
 
-            dict[index] = list()
-            dict[index].extend([x[-1][0], x[-2][0]])
+                dict[index] = list()
+                dict[index].extend([x[-1][0], x[-2][0]])
+
+            else:
+                dict[index] = None
+                count_less_than_60 += 1
+                #print("Not very similar max and max2nd, diff: ", abs(max[1] - max2nd[1]))
+                #print("%.3f vs %.3f" %(max[1], max2nd[1]))
 
         else:
+            weight.append(2)
             dict[index] = None
-            count_less_than_60 += 1
-            #print("Not very similar max and max2nd, diff: ", abs(max[1] - max2nd[1]))
-            #print("%.3f vs %.3f" %(max[1], max2nd[1]))
+            #print("Max: %.5f [%s]" %(entry.score[entry.label], entry.label))
+            if entry.score[entry.label] > 0.9:
+                count_over_80 += 1
 
 
-    else:
-        weight.append(2)
-        dict[index] = None
-        #print("Max: %.5f [%s]" %(entry.score[entry.label], entry.label))
-        if entry.score[entry.label] > 0.9:
-            count_over_80 += 1
+    #print(weight)
+    print(title)
+    #print(len(dict))
+    print("Over 80% pred acc.: {} [{:.2f}%]".format(count_over_80, (count_over_80/len(dict))*100))
+    print("50/50 labels: {} [{:.2f}%]".format(count_5050, (count_5050/len(dict))*100))
+    print("(Less than 60% accuracy, but not 50/50: {})".format(count_less_than_60))
+
+    c = 0
+    test1 = 0
+    test2 = 0
+    test3 = 0
+    test4 = 0
+    test5 = 0
+    test6 = 0
 
 
+    for key, value in dict.items():
+        if value != None:
+            c += 1
+            #print(value)
 
-#print(weight)
-print(len(dict))
-print("50/50 labels: ", count_5050)
-print("Less than 60% accuracy, but not 50/50: ", count_less_than_60)
-print("Over 80%: ", count_over_80)
+            if LABELS[0] in value and LABELS[1] in value:
+                test1 += 1
+            if LABELS[0] in value and LABELS[2] in value:
+                test2 += 1
+            if LABELS[0] in value and LABELS[3] in value:
+                test3 += 1
+            if LABELS[1] in value and LABELS[2] in value:
+                test4 += 1
+            if LABELS[1] in value and LABELS[3] in value:
+                test5 += 1
+            if LABELS[2] in value and LABELS[3] in value:
+                test6 += 1
 
-c = 0
-test1 = 0
-test2 = 0
-test3 = 0
-test4 = 0
-test5 = 0
-test6 = 0
+    print("count: %g, combi: %s (%3.1f%%)" %(test1, (LABELS[0], LABELS[1]), (test1/c)*100))
+    print("count: %g, combi: %s (%3.1f%%)" %(test2, (LABELS[0], LABELS[2]), (test2/c)*100))
+    print("count: %g, combi: %s (%3.1f%%)" %(test3, (LABELS[0], LABELS[3]), (test3/c)*100))
+    print("count: %g, combi: %s (%3.1f%%)" %(test4, (LABELS[1], LABELS[2]), (test4/c)*100))
+    print("count: %g, combi: %s (%3.1f%%)" %(test5, (LABELS[1], LABELS[3]), (test5/c)*100))
+    print("count: %g, combi: %s (%3.1f%%)" %(test6, (LABELS[2], LABELS[3]), (test6/c)*100))
+    #print(c)
+    #print(test1+test2+test3+test4+test5+test6)
 
-
-for key, value in dict.items():
-    if value != None:
-        c += 1
-        #print(value)
-
-        if LABELS[0] in value and LABELS[1] in value:
-            test1 += 1
-        if LABELS[0] in value and LABELS[2] in value:
-            test2 += 1
-        if LABELS[0] in value and LABELS[3] in value:
-            test3 += 1
-        if LABELS[1] in value and LABELS[2] in value:
-            test4 += 1
-        if LABELS[1] in value and LABELS[3] in value:
-            test5 += 1
-        if LABELS[2] in value and LABELS[3] in value:
-            test6 += 1
-
-print("count: %g, combi: %s (%3.1f%%)" %(test1, (LABELS[0], LABELS[1]), (test1/c)*100))
-print("count: %g, combi: %s (%3.1f%%)" %(test2, (LABELS[0], LABELS[2]), (test2/c)*100))
-print("count: %g, combi: %s (%3.1f%%)" %(test3, (LABELS[0], LABELS[3]), (test3/c)*100))
-print("count: %g, combi: %s (%3.1f%%)" %(test4, (LABELS[1], LABELS[2]), (test4/c)*100))
-print("count: %g, combi: %s (%3.1f%%)" %(test5, (LABELS[1], LABELS[3]), (test5/c)*100))
-print("count: %g, combi: %s (%3.1f%%)" %(test6, (LABELS[2], LABELS[3]), (test6/c)*100))
-print(c)
-print(test1+test2+test3+test4+test5+test6)
+pred_5050(container_R, title='RED')
+pred_5050(container_G, title='GREEN')
 
 """
 Res for Aurora_R
