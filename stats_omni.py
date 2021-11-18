@@ -17,7 +17,7 @@ predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_
 container_G = DatasetContainer.from_json(predicted_file_G)
 container_R = DatasetContainer.from_json(predicted_file_R)
 print("len container G: ", len(container_G))
-print("len container R: ", len(container_R))
+#print("len container R: ", len(container_R))
 
 def max_min_mean(list, label):
 
@@ -97,7 +97,7 @@ def omni(container, title):
     Nr of entries (no aurora) with 9999.99 value:  13808
     """
 
-def omni_ting(year_='2014', year=False):
+def omni_ting(container, year_='2014', year=False):
 
     # List to add Bz value
     a_less = []
@@ -221,9 +221,9 @@ def Bz(date):
 #Bz(date='2014-12-21 07')
 #exit()
 
-#omni(container=container_G, title='Green')
-#omni(container=container_R, title='Red')
-#exit()
+omni(container=container_G, title='Green')
+omni(container=container_R, title='Red')
+exit()
 #print('----------')
 #omni_ting('2014', True)
 #omni_ting('2020', True)
@@ -323,7 +323,7 @@ def subcategorybar(X, vals, leg, width=0.8):
     plt.legend(leg)
     plt.xticks(_X, X)
 
-def stats_aurora(label, year=False, weight=False):
+def stats_aurora(container, label, year=False, weight=False):
     """
     blabla
     """
@@ -538,15 +538,15 @@ def sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N=None, 
         plt.ylabel("%", fontsize=13)
         plt.legend(fontsize=11)
 
-def Hour_subplot(year, month_name='Jan', month=False):
+def Hour_subplot(container, year, month_name='Jan', month=False):
 
     hours = Get_hours()
 
-    Years, Months, Clock, Hours, TH = stats_aurora(label="aurora-less", year=year, weight=False)
-    Years_arc, Months_arc, Clock_arc, Hours_arc, TH_arc = stats_aurora(label="arc", year=year, weight=False)
-    Years_diff, Months_diff, Clock_diff, Hours_diff, TH_diff = stats_aurora(label="diffuse", year=year, weight=False)
-    Years_disc, Months_disc, Clock_disc, Hours_disc, TH_disc = stats_aurora(label="discrete", year=year, weight=False)
-    Years_A, Months_A, Clock_A, Hours_A, TH_A = stats_aurora(label="aurora", year=year, weight=False)
+    Years, Months, Clock, Hours, TH = stats_aurora(container=container, label="aurora-less", year=year, weight=False)
+    Years_arc, Months_arc, Clock_arc, Hours_arc, TH_arc = stats_aurora(container=container, label="arc", year=year, weight=False)
+    Years_diff, Months_diff, Clock_diff, Hours_diff, TH_diff = stats_aurora(container=container, label="diffuse", year=year, weight=False)
+    Years_disc, Months_disc, Clock_disc, Hours_disc, TH_disc = stats_aurora(container=container, label="discrete", year=year, weight=False)
+    Years_A, Months_A, Clock_A, Hours_A, TH_A = stats_aurora(container=container, label="aurora", year=year, weight=False)
 
 
     if month:
@@ -636,7 +636,7 @@ def Hour_subplot(year, month_name='Jan', month=False):
     #print(tot_sum)
     #print("aurora: ", tot_sum_a, "aurora-less: ", sum(T_c))
 
-    use_tot_sum = False
+    use_tot_sum = True
     if use_tot_sum:
 
         for i in range(len(hours)):
@@ -702,8 +702,8 @@ def Hour_subplot(year, month_name='Jan', month=False):
     plt.legend(fontsize=11)
 
     """
-Hour_subplot(year="2014", month=False)
-Hour_subplot(year="2020", month=False)
+Hour_subplot(container=container_G, year="2014", month=False)
+Hour_subplot(container=container_G, year="2020", month=False)
 
 #plt.savefig("stats/Green/b2/subs_all_classes.png")
 plt.show()

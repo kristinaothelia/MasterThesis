@@ -25,6 +25,7 @@ def Times():
         times.append(str)
     return times
 
+
 def Dates(start_date='20200101', end_date='20201231'):
     """
     start_date: '20200101'
@@ -38,7 +39,6 @@ def Dates(start_date='20200101', end_date='20201231'):
 
         dates.append(dt.strftime('%Y%m%d'))
     return dates
-
 
 def download_info(dates, base_url, times):
 
@@ -130,23 +130,34 @@ def download_images(urls, names, folder_name, total_img_on_website):
         else:
             print(f"Total {count} Images Downloaded Out of {total_img_on_website}")
 
+#dates14 = Dates(start_date='20140101', end_date='20141231') # 2014
+#dates20 = Dates(start_date='20200101', end_date='20201231') # 2020
 
-dates14 = Dates(start_date='20140101', end_date='20141231') # 2014
-dates20 = Dates(start_date='20200101', end_date='20201231') # 2020
+# Vil bare ha Jan, Feb og Dec
+#0101 - 0229 and 1201 - 1231
+dates16 = Dates(start_date='20160101', end_date='20160229') # 2016
+#dates17 = Dates(start_date='20170101', end_date='20170229') # 2017
+dates18 = Dates(start_date='20180101', end_date='20180228') # 2018
+
+dates16_dec = Dates(start_date='20161201', end_date='20161231') # 2016
+#dates17_dec = Dates(start_date='20171201', end_date='20171231') # 2017
+dates18_dec = Dates(start_date='20181201', end_date='20181231') # 2018
+
 times = Times()
 
 station_nya4 = 'nya4' # Ny Aalesund
 station_nya6 = 'nya6' # Ny Aalesund
-#wavelength = ['5577', '6300']
 
-#base_url = 'http://tid.uio.no/plasma/aurora/'+station+'/'+wavelength[1]+'/'
-#base_url = 'http://tid.uio.no/plasma/aurora/'+station+wavelength[1]
+#folder_name= "../DATA_green"
+#out_path = "../T_DATA_green"
+folder_name_G = "../DATA_1618_G"
+folder_name_R = "../DATA_1618_R"
 
-folder_name= "../DATA_green"
-out_path = "../T_DATA_green"
+out_path_G = "../T_DATA_1618_G"
+out_path_R = "../T_DATA_1618_R"
 
 start = time.time()
-
+'''
 urls20, filenames20, total_img_on_website20 = download_info(dates=dates20, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+'/5577/', times=times)
 download_images(urls=urls20, names=filenames20, folder_name=folder_name, total_img_on_website=total_img_on_website20)
 
@@ -156,6 +167,25 @@ download_images(urls=urls14, names=filenames14, folder_name=folder_name, total_i
 urls14_nya4, filenames14_nya4, total_img_on_website14_nya4 = download_info(dates=dates14, base_url='http://tid.uio.no/plasma/aurora/'+station_nya4+'/5577/', times=times)
 download_images(urls=urls14_nya4, names=filenames14_nya4, folder_name=folder_name, total_img_on_website=total_img_on_website14_nya4)
 #download_images(urls=urls, names=filenames, folder_name=folder_name)
+'''
+
+def DL_green(times, dates, station_nya6, folder_name):
+    urls, filenames, total_img_on_website = download_info(dates=dates, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+'/5577/', times=times)
+    download_images(urls=urls, names=filenames, folder_name=folder_name, total_img_on_website=total_img_on_website)
+
+def DL_red(times, dates, station_nya6, folder_name):
+    urls, filenames, total_img_on_website = download_info(dates=dates, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+'/6300/', times=times)
+    download_images(urls=urls, names=filenames, folder_name=folder_name, total_img_on_website=total_img_on_website)
+
+DL_green(times, dates16, station_nya6, folder_name_G)
+DL_green(times, dates16_dec, station_nya6, folder_name_G)
+DL_green(times, dates18, station_nya6, folder_name_G)
+DL_green(times, dates18_dec, station_nya6, folder_name_G)
+
+DL_red(times, dates16, station_nya6, folder_name_R)
+DL_red(times, dates16_dec, station_nya6, folder_name_R)
+DL_red(times, dates18, station_nya6, folder_name_R)
+DL_red(times, dates18_dec, station_nya6, folder_name_R)
 
 stop = time.time() - start
 print("Download time for all images [h]: ", stop/(60*60))
@@ -200,4 +230,5 @@ def transform(folder_name, out_path, test=False):
 
 
 # Transform full image folder
-transform(folder_name, out_path)
+transform(folder_name_R, out_path_R)
+transform(folder_name_G, out_path_G, test=True)
