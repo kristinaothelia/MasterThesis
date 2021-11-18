@@ -15,7 +15,10 @@ from numba import cuda, jit
 # Solar wind parameters we want
 SW = {
     0: "Bz, nT (GSE)",
-    1: "Bz, nT (GSM)",
+    #1: "Bz, nT (GSM)",
+    1: "Speed, km/s",
+    2: "Proton Density, n/cc",
+    3: "Temperature, K",
 }
 
 def read_csv(file, print=False):
@@ -34,16 +37,20 @@ def read_csv(file, print=False):
 #wl = 'nan'
 
 
-omni14 = 'datasets\omni\omni_min_2014_withDate.csv'
-omni20 = 'datasets\omni\omni_min_2020_withDate.csv'
-
+omni_data14_csv = '.\datasets\omni\omni_min_2014_withDate.csv'
+omni_data16_csv = '.\datasets\omni\omni_min_2016_withDate.csv'
+omni_data18_csv = '.\datasets\omni\omni_min_2018_withDate.csv'
+omni_data20_csv = '.\datasets\omni\omni_min_2020_withDate.csv'
+'''
 if os.path.isfile(omni14):
     omni_data14_csv = read_csv(file=omni14)
+    omni_data16_csv = read_csv(file=omni16)
+    omni_data18_csv = read_csv(file=omni18)
     omni_data20_csv = read_csv(file=omni20)
 else:
     omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2014_withDate.csv')
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
-
+'''
 
 # Dataset containing data
 def files(green=False, train=False):

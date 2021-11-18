@@ -122,7 +122,10 @@ def distribution(container, labels, year=None, month=False):
     print("%23s: %4g (%3.1f%%)" %(labels[3], n_disc, (n_disc/tot)*100))
     print("Nr. of labels other than classes: ", f)
     '''
-    print(jan, feb, mar, oct, nov, dec)
+
+    print(sum([jan, jan_arc, jan_diff, jan_disc]))
+    print(sum([feb, feb_arc, feb_diff, feb_disc]))
+    print(sum([dec, dec_arc, dec_diff, dec_disc]))
 
     n_less_M = []
     n_arc_M = []
@@ -228,9 +231,10 @@ def make_dist_and_pie(container1, container2, wl1, wl2, yr1, yr2, month=False):
     subpie(sizes1=sizes1, sizes2=sizes2, labels=LABELS, colors=colors, explode=explode, wl1=wl1, wl2=wl2, yr1=yr1, yr2=yr2)
     #month_subpie(n_less_M14, n_arc_M14, n_diff_M14, n_disc_M14, LABELS, '2014')
     #month_subpie(n_less_M20, n_arc_M20, n_diff_M20, n_disc_M20, LABELS, '2020')
-    plt.show()
+    #plt.show()
 
 make_dist_and_pie(container_R, container_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2014', yr2='2014', month=False)
+make_dist_and_pie(container_R, container_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2020', yr2='2020', month=False)
 
 def pie_fancy(sizes, bar_sizes, labels):
 

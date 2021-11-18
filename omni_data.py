@@ -11,7 +11,7 @@ from numba import cuda, jit
 
 from tqdm import tqdm
 from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
-
+'''
 #json_file = 'datasets/Full_aurora_predicted_b2.json'
 #json_file = 'datasets/t_data_with_2014nya4.json'
 json_file = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.json'
@@ -22,7 +22,7 @@ csv_file  = '/itf-fi-ml/home/koolsen/Master/t_data_green_with_2014nya4.csv'
 #csv_file  = 'datasets/xls_to_csv.csv'
 file14 = "..\omni\omni_min2014.xlsx"
 file20 = "..\omni\omni_min2020.xlsx"
-
+'''
 # Excel file to csv file:
 def read_excel(file):
     start = time.time()
@@ -98,29 +98,25 @@ def edit_omni_dates_to_correct_form(omni_data):
 
     return omni_new
 
-def omni_to_csv():
+def omni_to_csv(file, out_file):
 
-    omni_data = read_excel(file='datasets\omni\omni_min_2014.xlsx')
+    omni_data = read_excel(file=file)
     print(omni_data[:3])
-    xls_to_csv(data=omni_data, name='datasets\omni\omni_min_2014.csv')
+    xls_to_csv(data=omni_data, name=out_file)
 
-    omni_data = read_excel(file='datasets\omni\omni_min_2020.xlsx')
-    print(omni_data[:3])
-    xls_to_csv(data=omni_data, name='datasets\omni\omni_min_2020.csv')
 
-def correct_omni_data():
+def correct_omni_data(file, out_file):
     # Make dataframe with final date values
-    print("2014")
-    omni_data14 = read_csv(file='datasets\omni\omni_min_2014.csv')
-    omni_new14 = edit_omni_dates_to_correct_form(omni_data14)
-    omni_new14.to_csv('datasets\omni\omni_min_2014_withDate.csv', index=False)
-    print("2020")
-    omni_data20 = read_csv(file='datasets\omni\omni_min_2020.csv')
-    omni_new20 = edit_omni_dates_to_correct_form(omni_data20)
-    omni_new20.to_csv('datasets\omni\omni_min_2020_withDate.csv', index=False)
+    omni_data = read_csv(file=file)
+    omni_new = edit_omni_dates_to_correct_form(omni_data)
+    omni_new.to_csv(out_file, index=False)
 
-#omni_to_csv()
-#correct_omni_data()
+omni_to_csv(file='datasets/omni/excel/omni_min_2014.xlsx', out_file='datasets\omni\omni_min_2014.csv')
+omni_to_csv(file='datasets/omni/excel/omni_min_2020.xlsx', out_file='datasets\omni\omni_min_2020.csv')
+
+correct_omni_data(file='datasets\omni\omni_min_2014.csv', out_file='datasets\omni\omni_min_2014_withDate.csv')
+correct_omni_data(file='datasets\omni\omni_min_2020.csv', out_file='datasets\omni\omni_min_2020_withDate.csv')
+exit()
 
 '''
 omni_data14 = read_csv(file='\omni\omni_min2014_withDate.csv')
