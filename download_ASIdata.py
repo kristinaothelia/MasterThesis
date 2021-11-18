@@ -155,18 +155,6 @@ folder_name_R = "../DATA_4yr_R"
 out_path_G = "../T_DATA_4yr_G"
 out_path_R = "../T_DATA_4yr_R"
 
-if os.path.isfile(folder_name_G):
-    print('Folder exists')
-else:
-    print('Make folder')
-    exit()
-
-if os.path.isfile(out_path_G):
-    print('Folder exists')
-else:
-    print('Make folder')
-    exit()
-
 start = time.time()
 '''
 urls20, filenames20, total_img_on_website20 = download_info(dates=dates20, base_url='http://tid.uio.no/plasma/aurora/'+station_nya6+'/5577/', times=times)
