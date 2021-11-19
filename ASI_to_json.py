@@ -118,7 +118,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
     #print(SW[0])
 
     for k in range(len(SW)):
-        print(omni_data.loc[omni_data.index[ii]][SW[k]])
+        print(omni_data.loc[omni_data.index[ii]][SW[k]].iloc[0])
         solarwind[SW[k]] = omni_data.loc[omni_data.index[ii]][SW[k]]#.iloc[0]
 
 
