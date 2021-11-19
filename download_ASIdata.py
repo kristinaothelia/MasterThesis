@@ -240,7 +240,7 @@ def transform(folder_name, out_path, test=False):
             head, tail = os.path.split(imfile2)
             img = io.imread(imfile2)
             io.imsave('t_test.png', img)
-            plt.imshow(img, as_gray=True)
+            plt.imshow(img)
             plt.show()
             exit()
 

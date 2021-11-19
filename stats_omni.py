@@ -220,10 +220,11 @@ def Bz(date):
 
 #Bz(date='2014-12-21 07')
 #exit()
-
+'''
 omni(container=container_G, title='Green')
 omni(container=container_R, title='Red')
 exit()
+'''
 #print('----------')
 #omni_ting('2014', True)
 #omni_ting('2020', True)
@@ -242,7 +243,8 @@ def distribution(container, labels, year=None):
     for entry in container:
 
         if year:
-            if entry.timepoint[:4] == year:
+            #if entry.timepoint[:4] == year:
+            if entry.timepoint[:7] == year:
                 if entry.human_prediction == False:  # False
                     tot += 1
                     if entry.label == LABELS[1]:
@@ -276,17 +278,26 @@ def distribution(container, labels, year=None):
     else:
         print("All years:")
 
+    '''
     print("%23s: %g (%3.1f%%)" %('Total classified images', tot, (tot/len(container))*100))
     print("%23s: %4g (%3.1f%%)" %(labels[0], n_less, (n_less/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[1], n_arc, (n_arc/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[2], n_diff, (n_diff/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[3], n_disc, (n_disc/tot)*100))
     print("Nr. of labels other than classes: ", f)
+    '''
+    return tot
 
 #distribution(container, LABELS)
-#distribution(container, LABELS, year='2014')
+tot_14_jan = distribution(container_G, LABELS, year='2014-01')
+tot_14_feb = distribution(container_G, LABELS, year='2014-02')
+tot_14_dec = distribution(container_G, LABELS, year='2014-12')
+tot_20_jan = distribution(container_G, LABELS, year='2020-01')
+tot_20_feb = distribution(container_G, LABELS, year='2020-02')
+tot_20_dec = distribution(container_G, LABELS, year='2020-12')
 #distribution(container, LABELS, year='2020')
-
+print(tot_14_jan + tot_14_feb +tot_14_dec+tot_20_jan+tot_20_feb+tot_20_dec)
+exit()
 def Get_hours():
     # Make times
     times = []
