@@ -245,5 +245,5 @@ def transform(folder_name, out_path, test=False):
             exit()
 
 # Transform full image folder
-transform(folder_name_R, out_path_R)
-#transform(folder_name_G, out_path_G, test=True)
+#transform(folder_name_R, out_path_R)
+transform(folder_name_G, out_path_G, test=True)
