@@ -106,7 +106,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
     ii = test_new(omni_data_dates, tp)
     index.append(ii)
-    print(index)
+    #print(index)
 
     #for i in range(len(omni_data['Date'])):
     #    if tp in omni_data['Date'][i]:
@@ -119,9 +119,9 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
     #print(SW[0])
 
     for k in range(len(SW)):
-        print(SW[k])
-        print(omni_data.loc[omni_data.index[index]][SW[k]].iloc[0])
-        solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]]#.iloc[0]
+        #print(SW[k])
+        #print(omni_data.loc[omni_data.index[index]][SW[k]].iloc[0])
+        solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
 
 
     #Bz_GSE = omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"]
