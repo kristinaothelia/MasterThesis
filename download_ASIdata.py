@@ -176,20 +176,20 @@ def DL_red(times, dates, station, folder_name):
     urls, filenames, total_img_on_website = download_info(dates=dates, base_url='http://tid.uio.no/plasma/aurora/'+station+'/6300/', times=times)
     download_images(urls=urls, names=filenames, folder_name=folder_name, total_img_on_website=total_img_on_website)
 
-'''
-DL_green(times, dates14, station_nya6, folder_name_G)
-DL_green(times, dates14_dec, station_nya6, folder_name_G)
+
+#DL_green(times, dates14, station_nya6, folder_name_G)
+#DL_green(times, dates14_dec, station_nya6, folder_name_G)
 # nya station as well for 2014
-DL_green(times, dates14, station_nya4, folder_name_G)
-DL_green(times, dates14_dec, station_nya4, folder_name_G)
+#DL_green(times, dates14, station_nya4, folder_name_G)
+#DL_green(times, dates14_dec, station_nya4, folder_name_G)
 
 DL_green(times, dates16, station_nya6, folder_name_G)
 DL_green(times, dates16_dec, station_nya6, folder_name_G)
 DL_green(times, dates18, station_nya6, folder_name_G)
 DL_green(times, dates18_dec, station_nya6, folder_name_G)
-DL_green(times, dates20, station_nya6, folder_name_G)
-DL_green(times, dates20_dec, station_nya6, folder_name_G)
-
+#DL_green(times, dates20, station_nya6, folder_name_G)
+#DL_green(times, dates20_dec, station_nya6, folder_name_G)
+'''
 DL_red(times, dates14, station_nya6, folder_name_R)
 DL_red(times, dates14_dec, station_nya6, folder_name_R)
 # nya station as well for 2014
@@ -246,4 +246,4 @@ def transform(folder_name, out_path, test=False):
 
 # Transform full image folder
 #transform(folder_name_R, out_path_R)
-transform(folder_name_G, out_path_G, test=True)
+#transform(folder_name_G, out_path_G, test=True)
