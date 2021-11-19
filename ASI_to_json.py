@@ -175,7 +175,6 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
         # Add timepoint to json file
         entry.timepoint = str(tiime)
 
-        print(entry.timepoint)
 
         if omni:
 
@@ -190,7 +189,6 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
                 omni_data = omni_data14_csv
 
             if tp[:4] == "2016":
-                print("2016")
                 omni_data = omni_data16_csv
 
             if tp[:4] == "2018":
