@@ -101,11 +101,11 @@ def test_new(omni, timepoint):
 
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
-    index = []
+    #index = []
     solarwind = dict()
 
     ii = test_new(omni_data_dates, tp)
-    index.append(ii)
+    #index.append(ii)
 
     #for i in range(len(omni_data['Date'])):
     #    if tp in omni_data['Date'][i]:
@@ -113,7 +113,9 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
     #print(index)
     #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
-    print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
+    #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
+    print(omni_data.loc[omni_data.index[ii]]["Bz, nT (GSM)"])
+    print(SW[0])
 
     for i in range(len(SW)):
         solarwind[SW[i]] = omni_data.loc[omni_data.index[index]][SW[i]].iloc[0]
