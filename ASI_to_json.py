@@ -14,8 +14,8 @@ from numba import cuda, jit
 
 # Solar wind parameters we want
 SW = {
-    0: "Bz, nT (GSE)",
-    1: "Bz, nT (GSM)",
+    #0: "Bz, nT (GSE)",
+    0: "Bz, nT (GSM)",
     #1: "Speed, km/s",
     #2: "Proton Density, n/cc",
     #3: "Temperature, K"
@@ -113,7 +113,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
     #print(index)
     #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"])
-    #print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
+    print(omni_data.loc[omni_data.index[index]]["Bz, nT (GSM)"])
 
     for i in range(len(SW)):
         solarwind[SW[i]] = omni_data.loc[omni_data.index[index]][SW[i]].iloc[0]
