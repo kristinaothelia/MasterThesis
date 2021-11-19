@@ -62,14 +62,20 @@ def files(green=False, train=False):
         wl = '5577 and 6300'
 
     if green:
-        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+        #folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
+        #json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
+        #csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_G'
+        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
         wl = '5577'
     else:
-        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
-        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json' # To large fil for GitHub
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
+        #folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
+        #json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json' # To large fil for GitHub
+        #csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
+        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_R'
+        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R.json' # To large fil for GitHub
+        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R.csv'
         wl = '6300'
 
     return folder, json_file, csv_file, wl
@@ -121,7 +127,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 def file_from_ASIfolder(folder, wl, json_file):
     container = DatasetContainer()
     container.from_folder(path=folder,
-                          datasetname='New data to be classified',
+                          datasetname='Data to be classified',
                           dataset_type='png',
                           wavelength=wl,
                           source='UiO',
@@ -131,6 +137,15 @@ def file_from_ASIfolder(folder, wl, json_file):
     container.to_json(json_file)
     #formats(json_file, csv_file)
 
+def average_omni_values():
+    """
+    Use solar wind data from 1 hour before timepoint.
+    On night side
+    Make 30 min (?) average Bz value (and the others)
+
+    Some std thing?
+    """
+    print("hmmmmmm..?")
 
 def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
 
@@ -164,11 +179,16 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
 
             if tp[:4] == "2014":
                 omni_data = omni_data14_csv
-            elif tp[:4] == "2020":
+
+            if tp[:4] == "2016":
+                omni_data = omni_data16_csv
+
+            if tp[:4] == "2018":
+                omni_data = omni_data18_csv
+
+            if tp[:4] == "2020":
                 omni_data = omni_data20_csv
-            else:
-                print("Wrong year input in aurora data")
-                #exit()
+
 
             # get only the dates
             omni_data_dates = omni_data['Date']
@@ -185,13 +205,13 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
     container.to_json(json_file)
     formats(json_file, csv_file)
 
-
+'''
 # New training dataset
 folder, json_file, csv_file, wl = files(green=False, train=False)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data20_csv, SW, omni=False)
-
 '''
+
 # red aurora
 folder, json_file, csv_file, wl = files(green=False)
 #file_from_ASIfolder(folder, wl, json_file)
@@ -201,4 +221,3 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 folder, json_file, csv_file, wl = files(green=True)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data20_csv, SW)
-'''

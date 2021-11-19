@@ -176,7 +176,7 @@ def DL_red(times, dates, station, folder_name):
     urls, filenames, total_img_on_website = download_info(dates=dates, base_url='http://tid.uio.no/plasma/aurora/'+station+'/6300/', times=times)
     download_images(urls=urls, names=filenames, folder_name=folder_name, total_img_on_website=total_img_on_website)
 
-
+'''
 DL_green(times, dates14, station_nya6, folder_name_G)
 DL_green(times, dates14_dec, station_nya6, folder_name_G)
 # nya station as well for 2014
@@ -205,7 +205,7 @@ DL_red(times, dates20_dec, station_nya6, folder_name_R)
 
 stop = time.time() - start
 print("Download time for all images [h]: ", stop/(60*60))
-
+'''
 
 
 def transform(folder_name, out_path, test=False):
