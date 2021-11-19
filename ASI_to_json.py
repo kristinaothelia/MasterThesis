@@ -14,11 +14,11 @@ from numba import cuda, jit
 
 # Solar wind parameters we want
 SW = {
-    0: "Bz, nT (GSE)",
-    1: "Bz, nT (GSM)",
-    #1: "Speed, km/s",
-    #2: "Proton Density, n/cc",
-    #3: "Temperature, K"
+    #0: "Bz, nT (GSE)",
+    0: "Bz, nT (GSM)",
+    1: "Speed, km/s",
+    2: "Proton Density, n/cc",
+    3: "Temperature, K"
 }
 
 def read_csv(file, print=False):
@@ -101,11 +101,12 @@ def test_new(omni, timepoint):
 
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
-    #index = []
+    index = []
     solarwind = dict()
 
     ii = test_new(omni_data_dates, tp)
-    #index.append(ii)
+    index.append(ii)
+    print(index)
 
     #for i in range(len(omni_data['Date'])):
     #    if tp in omni_data['Date'][i]:
@@ -118,8 +119,9 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
     #print(SW[0])
 
     for k in range(len(SW)):
-        print(omni_data.loc[omni_data.index[ii]][SW[k]].iloc[0])
-        solarwind[SW[k]] = omni_data.loc[omni_data.index[ii]][SW[k]]#.iloc[0]
+        print(SW[k])
+        print(omni_data.loc[omni_data.index[index]][SW[k]].iloc[0])
+        solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]]#.iloc[0]
 
 
     #Bz_GSE = omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"]
