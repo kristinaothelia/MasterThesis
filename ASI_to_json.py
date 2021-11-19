@@ -220,5 +220,5 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 '''
 # green aurora
 folder, json_file, csv_file, wl = files(green=True)
-file_from_ASIfolder(folder, wl, json_file)
+#file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data16_csv, SW)
