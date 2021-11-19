@@ -175,6 +175,8 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
         # Add timepoint to json file
         entry.timepoint = str(tiime)
 
+        print(entry.timepoint)
+
         if omni:
 
             # make solar wind data by matchind dates
