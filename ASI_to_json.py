@@ -37,10 +37,10 @@ def read_csv(file, print=False):
 #wl = 'nan'
 
 
-omni_data14_csv = '.\datasets\omni\omni_min_2014_withDate.csv'
-omni_data16_csv = '.\datasets\omni\omni_min_2016_withDate.csv'
-omni_data18_csv = '.\datasets\omni\omni_min_2018_withDate.csv'
-omni_data20_csv = '.\datasets\omni\omni_min_2020_withDate.csv'
+omni_data14_csv = read_csv(file = '.\datasets\omni\omni_min_2014_withDate.csv')
+omni_data16_csv = read_csv(file = '.\datasets\omni\omni_min_2016_withDate.csv')
+omni_data18_csv = read_csv(file = '.\datasets\omni\omni_min_2018_withDate.csv')
+omni_data20_csv = read_csv(file = '.\datasets\omni\omni_min_2020_withDate.csv')
 '''
 if os.path.isfile(omni14):
     omni_data14_csv = read_csv(file=omni14)
