@@ -14,11 +14,11 @@ from numba import cuda, jit
 
 # Solar wind parameters we want
 SW = {
-    #0: "Bz, nT (GSE)",
-    0: "Bz, nT (GSM)",
-    1: "Speed, km/s",
-    2: "Proton Density, n/cc",
-    3: "Temperature, K"
+    0: "Bz, nT (GSE)",
+    1: "Bz, nT (GSM)",
+    #1: "Speed, km/s",
+    #2: "Proton Density, n/cc",
+    #3: "Temperature, K"
 }
 
 def read_csv(file, print=False):
@@ -209,7 +209,8 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
             entry.add_solarwind(solarwind)
 
 
-    print("Timepoint updated")
+    print("Json file updated with additional information")
+    print(container)
     container.to_json(json_file)
     formats(json_file, csv_file)
 
