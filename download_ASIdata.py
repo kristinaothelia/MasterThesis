@@ -203,10 +203,10 @@ DL_red(times, dates18_dec, station_nya6, folder_name_R)
 DL_red(times, dates20, station_nya6, folder_name_R)
 DL_red(times, dates20_dec, station_nya6, folder_name_R)
 
-stop = time.time() - start
-print("Download time for all images [h]: ", stop/(60*60))
 '''
 
+stop = time.time() - start
+print("Download time for all images [h]: ", stop/(60*60))
 
 def transform(folder_name, out_path, test=False):
 
