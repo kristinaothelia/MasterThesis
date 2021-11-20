@@ -14,11 +14,11 @@ from numba import cuda, jit
 
 # Solar wind parameters we want
 SW = {
-    0: "Bz, nT (GSE)",
-    1: "Bz, nT (GSM)",
-    #1: "Speed, km/s",
-    #2: "Proton Density, n/cc",
-    #3: "Temperature, K"
+    #0: "Bz, nT (GSE)",
+    0: "Bz, nT (GSM)",
+    1: "Speed, km/s",
+    2: "Proton Density, n/cc",
+    #3: "Temperature, K",
 }
 
 def read_csv(file, print=False):
@@ -175,7 +175,7 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
         # Add timepoint to json file
         entry.timepoint = str(tiime)
 
-
+        '''
         if omni:
 
             # make solar wind data by matchind dates
@@ -207,9 +207,52 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
 
             # Add solar wind data (dict) to json file
             entry.add_solarwind(solarwind)
+        '''
 
 
     print("Json file updated with additional information")
+    print(container)
+    container.to_json(json_file)
+    formats(json_file, csv_file)
+
+def add_omni_information(json_file, csv_file, SW, omni=True):
+
+    container = DatasetContainer.from_json(json_file)
+    print("length container: ", len(container))
+
+    for entry in tqdm(container):
+
+        # make solar wind data by matchind dates
+        tp = entry.timepoint
+
+        if tp[-2:] != "00":
+            tp = tp[:-2] + "00"
+            #print("30 sec mark, need editing. New time: ", time)
+
+        if tp[:4] == "2014":
+            omni_data = omni_data14_csv
+
+        if tp[:4] == "2016":
+            omni_data = omni_data16_csv
+
+        if tp[:4] == "2018":
+            omni_data = omni_data18_csv
+
+        if tp[:4] == "2020":
+            omni_data = omni_data20_csv
+
+
+        # get only the dates
+        omni_data_dates = omni_data['Date']
+        omni_data_dates = omni_data_dates.values
+
+        solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW)
+        #print(solarwind)
+
+        # Add solar wind data (dict) to json file
+        entry.add_solarwind(solarwind)
+
+    print("Json file updated with solarwind information")
     print(container)
     container.to_json(json_file)
     formats(json_file, csv_file)
@@ -232,6 +275,7 @@ start = time.time()
 folder, json_file, csv_file, wl = files(green=True)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data16_csv, SW)
+add_omni_information(json_file, csv_file, SW)
 
 stop = time.time() - start
 print("Time [h]: ", stop/(60*60))
