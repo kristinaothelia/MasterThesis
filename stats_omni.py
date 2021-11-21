@@ -13,10 +13,13 @@ LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
 predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
 predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_efficientnet-b2.json'
+predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_predicted_efficientnet-b2.json'
 
 container_G = DatasetContainer.from_json(predicted_file_G)
-container_R = DatasetContainer.from_json(predicted_file_R)
+#container_R = DatasetContainer.from_json(predicted_file_R)
+container_1618 = DatasetContainer.from_json(predicted_file_1618)
 print("len container G: ", len(container_G))
+print("len container 1618: ", len(container_1618))
 #print("len container R: ", len(container_R))
 
 def max_min_mean(list, label):
@@ -278,17 +281,20 @@ def distribution(container, labels, year=None):
     else:
         print("All years:")
 
-    '''
+
     print("%23s: %g (%3.1f%%)" %('Total classified images', tot, (tot/len(container))*100))
     print("%23s: %4g (%3.1f%%)" %(labels[0], n_less, (n_less/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[1], n_arc, (n_arc/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[2], n_diff, (n_diff/tot)*100))
     print("%23s: %4g (%3.1f%%)" %(labels[3], n_disc, (n_disc/tot)*100))
     print("Nr. of labels other than classes: ", f)
-    '''
+
     return tot
 
 #distribution(container, LABELS)
+#distribution(container_1618, LABELS, year='2016')
+#distribution(container_1618, LABELS, year='2018')
+'''
 tot_14_jan = distribution(container_G, LABELS, year='2014-01')
 tot_14_feb = distribution(container_G, LABELS, year='2014-02')
 tot_14_dec = distribution(container_G, LABELS, year='2014-12')
@@ -298,6 +304,7 @@ tot_20_dec = distribution(container_G, LABELS, year='2020-12')
 #distribution(container, LABELS, year='2020')
 print(tot_14_jan + tot_14_feb +tot_14_dec+tot_20_jan+tot_20_feb+tot_20_dec)
 exit()
+'''
 def Get_hours():
     # Make times
     times = []
@@ -505,51 +512,63 @@ def plot_hourly_nor(hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, year, month=None,
         plt.title("Stats {}".format(year))
         plt.savefig("stats/Green/b2/hour_lineplot_{}.png".format(year))
 
+
 def sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N=None, month_name=None,  N=4):
-    #figsize=(8, 6)
+
+    #f = plt.figure(figsize=(10,3))
+
     if year == '2020':
         shape = '--'
+    elif year == '2014':
+        shape = '.-'
+    elif year == '2016':
+        shape = ':'
     else:
         shape = '-'
 
     subplot(N,1,1)
     if month_name != None:
-        plt.title('Statistics ({}) for all classes'.format(month_name), fontsize=16)
+        plt.title('Statistics ({}) for all classes'.format(month_name), fontsize=18)
     else:
-        plt.title('Yearly statistics for all classes', fontsize=16)
+        plt.title('Yearly statistics for all classes', fontsize=18)
     plt.plot(hours, T_arc_N, shape, label='arc - '+year)
-    plt.ylabel("%", fontsize=13)
-    plt.legend(fontsize=11)
+    plt.ylabel("%", fontsize=15)
+    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True) #, ncol=2
     #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
 
     subplot(N,1,2)
     #plot(hours, T_diff_N, 'diffuse', year, month=None, monthly=False)
     plt.plot(hours, T_diff_N, shape, label='diffuse - '+year)
-    plt.ylabel("%", fontsize=13)
-    plt.legend(fontsize=11)
+    plt.ylabel("%", fontsize=15)
+    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
 
     subplot(N,1,3)
     #plot(hours, T_disc_N, 'discrete', year, month=None, monthly=False)
     plt.plot(hours, T_disc_N, shape, label='discrete - '+year)
-    plt.ylabel("%", fontsize=13)
-    plt.legend(fontsize=11)
+    plt.ylabel("%", fontsize=15)
+    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
 
     subplot(N,1,4)
     #plot(hours, T_c_N, 'no aurora', year, month=None, monthly=False, axis=True)
     plt.plot(hours, T_c_N, shape, label='no aurora - '+year)
     #plt.xlabel("Hour of the day", fontsize=13)
-    plt.ylabel("%", fontsize=13)
-    plt.legend(fontsize=11)
+    plt.ylabel("%", fontsize=15)
+    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
 
     if N == 5:
         subplot(N,1,5)
         #plot(hours, T_c_N, 'no aurora', year, month=None, monthly=False, axis=True)
         plt.plot(hours, T_Aurora_N, shape, label='aurora - '+year)
-        plt.xlabel("Hour of the day", fontsize=13)
-        plt.ylabel("%", fontsize=13)
-        plt.legend(fontsize=11)
+        plt.xlabel("Hour of the day", fontsize=15)
+        plt.ylabel("%", fontsize=15)
+        plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
+    else:
+        plt.xlabel("Hour of the day", fontsize=15)
 
-def Hour_subplot(container, year, month_name='Jan', month=False):
+    #plt.tight_layout(rect=[0,0,0.75,1])
+
+
+def Hour_subplot(container, year, month_name='Jan', N=4, month=False):
 
     hours = Get_hours()
 
@@ -607,7 +626,8 @@ def Hour_subplot(container, year, month_name='Jan', month=False):
         index = M_label_N.index(month_name)
         print(index)
 
-        sub_plots(year, hours, T_c_N[index], T_arc_N[index], T_diff_N[index], T_disc_N[index], T_A_N[index], month_name=month_name, N=5)
+        sub_plots(year, hours, T_c_N[index], T_arc_N[index], T_diff_N[index], T_disc_N[index], T_A_N[index], month_name=month_name, N=N)
+
 
         '''
         for i in range(len(M_label_N)):
@@ -690,7 +710,10 @@ def Hour_subplot(container, year, month_name='Jan', month=False):
     #plot(hours, T_Aurora_N, 'Aurora', year, month=None, monthly=False)
 
     #sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N=None, N=4)
-    sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N, N=5)
+
+
+
+    #sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N, N=N)
 
     """
     #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
@@ -713,11 +736,31 @@ def Hour_subplot(container, year, month_name='Jan', month=False):
     plt.legend(fontsize=11)
 
     """
-Hour_subplot(container=container_G, year="2014", month=False)
-Hour_subplot(container=container_G, year="2020", month=False)
+'''
+plt.figure(figsize=(8, 11)) # bredde, hoyde
+Hour_subplot(container=container_G, year="2014", N=5, month=False)
+Hour_subplot(container=container_1618, year="2016", N=5,month=False)
+Hour_subplot(container=container_1618, year="2018", N=5,month=False)
+Hour_subplot(container=container_G, year="2020", N=5,month=False)
 
 #plt.savefig("stats/Green/b2/subs_all_classes.png")
-plt.show()
+plt.savefig("stats/Green/b2/test_legend.png", bbox_inches="tight")
+#plt.show()
+'''
+
+MN = ['Jan', 'Feb', 'Dec']
+
+for i in range(len(MN)):
+
+    plt.figure(figsize=(8, 11)) # bredde, hoyde
+    Hour_subplot(container=container_G, year="2014", month_name=MN[i], N=5, month=True)
+    Hour_subplot(container=container_1618, year="2016", month_name=MN[i], N=5,month=True)
+    Hour_subplot(container=container_1618, year="2018", month_name=MN[i], N=5,month=True)
+    Hour_subplot(container=container_G, year="2020", month_name=MN[i], N=5,month=True)
+    plt.savefig("stats/Green/b2/monthly_hour_plot_leg_{}.png".format(MN[i]), bbox_inches="tight")
+    #plt.show()
+
+
 '''
 Hour_subplot(year="2014", month_name='Jan', month=True)
 Hour_subplot(year="2020", month_name='Jan', month=True)

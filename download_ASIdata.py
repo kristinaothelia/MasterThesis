@@ -132,15 +132,15 @@ def download_images(urls, names, folder_name, total_img_on_website):
 
 #dates14 = Dates(start_date='20140101', end_date='20141231') # 2014
 #dates20 = Dates(start_date='20200101', end_date='20201231') # 2020
-dates14 = Dates(start_date='20140101', end_date='20140228')
-dates16 = Dates(start_date='20160101', end_date='20160229')
-dates18 = Dates(start_date='20180101', end_date='20180228')
-dates20 = Dates(start_date='20200101', end_date='20200229')
+dates14 = Dates(start_date='20140101', end_date='20140131')
+dates16 = Dates(start_date='20160101', end_date='20160131')
+dates18 = Dates(start_date='20180101', end_date='20180131')
+dates20 = Dates(start_date='20200101', end_date='20200131')
 
-dates14_dec = Dates(start_date='20141201', end_date='20141231')
-dates16_dec = Dates(start_date='20161201', end_date='20161231')
-dates18_dec = Dates(start_date='20181201', end_date='20181231')
-dates20_dec = Dates(start_date='20201201', end_date='20201231')
+dates14_dec = Dates(start_date='20141101', end_date='20141231')
+dates16_dec = Dates(start_date='20161101', end_date='20161231')
+dates18_dec = Dates(start_date='20181101', end_date='20181231')
+dates20_dec = Dates(start_date='20201101', end_date='20201231')
 
 times = Times()
 
