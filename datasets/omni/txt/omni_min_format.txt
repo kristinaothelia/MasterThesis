@@ -1,0 +1,21 @@
+  FORMAT OF THE SUBSETTED FILE
+    
+    ITEMS                      FORMAT   
+     
+ 1 Year                          I4        
+ 2 Day                           I4        
+ 3 Hour                          I3        
+ 4 Minute                        I3        
+ 5 ID for IMF spacecraft         I3        
+ 6 ID for SW Plasma spacecraft   I3        
+ 7 # of points in IMF averages   I4        
+ 8 # of points in Plasma averagesI4        
+ 9 Timeshift                     I7        
+10 Field magnitude average, nT   F8.2      
+11 BX, nT (GSE, GSM)             F8.2      
+12 BY, nT (GSE)                  F8.2      
+13 BZ, nT (GSE)                  F8.2      
+14 BZ, nT (GSM)                  F8.2      
+15 Speed, km/s                   F8.1      
+16 Proton Density, n/cc          F7.2      
+17 Temperature, K                F9.0      

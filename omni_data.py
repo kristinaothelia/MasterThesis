@@ -111,11 +111,18 @@ def correct_omni_data(file, out_file):
     omni_new = edit_omni_dates_to_correct_form(omni_data)
     omni_new.to_csv(out_file, index=False)
 
-#omni_to_csv(file='datasets/omni/excel/omni_min_2014.xlsx', out_file='datasets\omni\omni_min_2014.csv')
-omni_to_csv(file='datasets/omni/excel/omni_min_2018.xlsx', out_file='datasets\omni\omni_min_2018.csv')
+omni_to_csv(file='datasets/omni/excel/omni_min_2014.xlsx', out_file='datasets\omni\omni_min_2014.csv')
+correct_omni_data(file='datasets\omni\omni_min_2014.csv', out_file='datasets\omni\omni_min_2014_withDate.csv')
 
-#correct_omni_data(file='datasets\omni\omni_min_2014.csv', out_file='datasets\omni\omni_min_2014_withDate.csv')
+omni_to_csv(file='datasets/omni/excel/omni_min_2016.xlsx', out_file='datasets\omni\omni_min_2016.csv')
+correct_omni_data(file='datasets\omni\omni_min_2016.csv', out_file='datasets\omni\omni_min_2016_withDate.csv')
+
+omni_to_csv(file='datasets/omni/excel/omni_min_2018.xlsx', out_file='datasets\omni\omni_min_2018.csv')
 correct_omni_data(file='datasets\omni\omni_min_2018.csv', out_file='datasets\omni\omni_min_2018_withDate.csv')
+
+omni_to_csv(file='datasets/omni/excel/omni_min_2020.xlsx', out_file='datasets\omni\omni_min_2020.csv')
+correct_omni_data(file='datasets\omni\omni_min_2020.csv', out_file='datasets\omni\omni_min_2020_withDate.csv')
+
 exit()
 
 '''
