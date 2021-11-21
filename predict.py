@@ -79,7 +79,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
                 img = entry.open()
                 x = transforms(img)
                 x = x.unsqueeze(0)
-                x = x.to('cuda:0')
+                x = x.to('cuda:3')
 
                 pred = model(x).to('cpu')
                 pred = torch.softmax(pred, dim=-1)
