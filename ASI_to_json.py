@@ -176,13 +176,19 @@ def average_omni_values(index, omni_data, N_min):
 
         #print(SW_value)
         #print(len(SW_value))
-        Mean_BZ = np.mean(SW_value, dtype = np.float64)
-        Mean_BZ = "%.2f" % Mean_BZ
-        SD_BZ = np.std(SW_value)
-        SD_BZ = "%.2f" % SD_BZ
+        if len(str(SW_value)) == 1:
 
-        solarwind[SW[k]] = Mean_BZ
-        solarwind[SW_SD[k]] = SD_BZ
+            solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
+            solarwind[SW_SD[k]] = 'None'
+
+        else:
+            Mean_BZ = np.mean(SW_value, dtype = np.float64)
+            Mean_BZ = "%.2f" % Mean_BZ
+            SD_BZ = np.std(SW_value)
+            SD_BZ = "%.2f" % SD_BZ
+
+            solarwind[SW[k]] = Mean_BZ
+            solarwind[SW_SD[k]] = SD_BZ
 
     return solarwind
 
