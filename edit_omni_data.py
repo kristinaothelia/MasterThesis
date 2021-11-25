@@ -183,7 +183,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 img_time = '2020-01-01 08:05:00'
 
 # Nightside
-img_time = '2020-01-01 01:10:00'
+img_time = '2020-12-31 23:55:00'
 
 new_Bz = []
 

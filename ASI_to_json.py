@@ -198,7 +198,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
     dayside = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17']
 
     ii = test_new(omni_data_dates, tp)
-    index = i
+    index = ii
     #print(index)
 
     #for i in range(len(omni_data['Date'])):
@@ -354,8 +354,8 @@ start = time.time()
 
 # green aurora, 2016 and 2018
 folder, json_file, csv_file, wl = files(original=False, mean=True)
-file_from_ASIfolder(folder, wl, json_file)
-add_file_information(json_file, csv_file)
+#file_from_ASIfolder(folder, wl, json_file)
+#add_file_information(json_file, csv_file)
 add_omni_information(json_file, csv_file)
 
 stop = time.time() - start
