@@ -60,7 +60,7 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # Dataset containing data
-def files(original=True, green=True, train=False):
+def files(original=True, green=True, train=False, mean=False):
 
     if train:
         folder = '/itf-fi-ml/home/koolsen/Aurora/Data/All_data'
@@ -69,23 +69,41 @@ def files(original=True, green=True, train=False):
         wl = '5577 and 6300'
 
     if green:
+        wl = '5577'
         if original:
             folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-            json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
-            csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+            if mean:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G_omni_mean.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G_omni_mean.csv'
+            else:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
         else:
             folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_G'
-            json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
-            csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
-        wl = '5577'
+            if mean:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G_omni_mean.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G_omni_mean.csv'
+            else:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
     else:
-        #folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
-        #json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json' # To large fil for GitHub
-        #csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
-        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_R'
-        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R.json' # To large fil for GitHub
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R.csv'
         wl = '6300'
+        if original:
+            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
+            if mean:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R_omni_mean.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R_omni_mean.csv'
+            else:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
+        else:
+            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_R'
+            if mean:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R_omni_mean.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R_omni_mean.csv'
+            else:
+                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R.json' # To large fil for GitHub
+                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R.csv'
 
     return folder, json_file, csv_file, wl
 
@@ -321,7 +339,7 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 start = time.time()
 
 # green aurora, 2016 and 2018
-folder, json_file, csv_file, wl = files(original=False)
+folder, json_file, csv_file, wl = files(original=False, mean=True)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data16_csv)
 add_omni_information(json_file, csv_file)
@@ -332,7 +350,7 @@ print("Time [h] (set 1618): ", stop/(60*60))
 start = time.time()
 
 # green aurora, 2014 and 2020
-folder, json_file, csv_file, wl = files()
+folder, json_file, csv_file, wl = files(mean=True)
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data16_csv)
 add_omni_information(json_file, csv_file)
