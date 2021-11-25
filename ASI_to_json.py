@@ -156,6 +156,7 @@ def average_omni_values(index, omni_data, N_min):
     for k in range(len(SW)):
 
         SW_value = []
+        SW_remove = []
         for j in range(len(indexes)):
 
             index = [indexes[j]]
@@ -164,12 +165,15 @@ def average_omni_values(index, omni_data, N_min):
             #if BZ_value == 9999.99:
             if Value == 9999.99: # No data for Bz
                 #print(Value)
+                SW_remove.append(Value)
                 continue
             elif Value == 99999.9: # No data for Speed
                 #print(Value)
+                SW_remove.append(Value)
                 continue
             elif Value == 999.99: # No data for Density
                 #print(Value)
+                SW_remove.append(Value)
                 continue
             else:
                 SW_value.append(Value)
@@ -179,8 +183,10 @@ def average_omni_values(index, omni_data, N_min):
         #if len(str(SW_value)) == 1:
         if len(SW_value) == 0:
 
-            print(indexes)
+
             print(omni_data.loc[omni_data.index[index]]['Date'].iloc[0])
+            print(SW_remove)
+            sys.exit()
             solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
             solarwind[SW_SD[k]] = 'None'
 
