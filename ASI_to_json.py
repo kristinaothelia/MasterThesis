@@ -13,6 +13,8 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 from numba import cuda, jit
 #print(cuda.gpus)
 
+path = '/itf-fi-ml/home/koolsen/Master/'
+
 # Solar wind parameters we want
 SW = {
     #0: "Bz, nT (GSE)",
@@ -49,10 +51,10 @@ if os.path.isfile(omni14):
     omni_data18_csv = read_csv(file=omni18)
     omni_data20_csv = read_csv(file=omni20)
 else:
-    omni_data14_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2014_withDate.csv')
-    omni_data16_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2016_withDate.csv')
-    omni_data18_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2018_withDate.csv')
-    omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
+    omni_data14_csv = read_csv(file = path+'MasterThesis/datasets/omni/omni_min_2014_withDate.csv')
+    omni_data16_csv = read_csv(file = path+'MasterThesis/datasets/omni/omni_min_2016_withDate.csv')
+    omni_data18_csv = read_csv(file = path+'MasterThesis/datasets/omni/omni_min_2018_withDate.csv')
+    omni_data20_csv = read_csv(file = path+'MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # Dataset containing data
 def files(original=True, green=True, train=False, mean=False):
@@ -66,40 +68,51 @@ def files(original=True, green=True, train=False, mean=False):
     if green:
         wl = '5577'
         if original:
-            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
+            folder = path+'T_DATA_green'
+            json_file = path+'Aurora_G.json' # To large fil for GitHub
+            csv_file = path+'MasterThesis/datasets/Aurora_G.csv'
             if mean:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G_omni_mean.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G_omni_mean.csv'
+                json_file_mean = path+'Aurora_G_omni_mean.json' # To large fil for GitHub
+                csv_file_mean = path+'MasterThesis/datasets/Aurora_G_omni_mean.csv'
             else:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+                json_file_omni = path+'Aurora_G_omni.json' # To large fil for GitHub
+                csv_file_omni = path+'MasterThesis/datasets/Aurora_G_omni.csv'
+
         else:
-            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_G'
+            folder = path+'T_DATA_4yr_G'
+            json_file = path+'Aurora_4yr_G.json' # To large fil for GitHub
+            csv_file = path+'MasterThesis/datasets/Aurora_4yr_G.csv'
             if mean:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G_omni_mean.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G_omni_mean.csv'
+                json_file_mean = path+'Aurora_4yr_G_omni_mean.json' # To large fil for GitHub
+                csv_file_mean = path+'MasterThesis/datasets/Aurora_4yr_G_omni_mean.csv'
             else:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
+                json_file_omni = path+'Aurora_4yr_G_omni.json' # To large fil for GitHub
+                csv_file_omni = path+'MasterThesis/datasets/Aurora_4yr_G_omni.csv'
 
     else:
         wl = '6300'
         if original:
-            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
+            folder = path+'T_DATA'
+            json_file = path+'Aurora_R.json' # To large fil for GitHub
+            csv_file = path+'MasterThesis/datasets/Aurora_R.csv'
             if mean:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R_omni_mean.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R_omni_mean.csv'
+                json_file_mean = path+'Aurora_R_omni_mean.json' # To large fil for GitHub
+                csv_file_mean = path+'MasterThesis/datasets/Aurora_R_omni_mean.csv'
             else:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_R.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_R.csv'
+                json_file_omni = path+'Aurora_R_omni.json' # To large fil for GitHub
+                csv_file_omni = path+'MasterThesis/datasets/Aurora_R_omni.csv'
+
         else:
-            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_R'
+            folder = path+'T_DATA_4yr_R'
+            json_file = path+'Aurora_4yr_R.json' # To large fil for GitHub
+            csv_file = path+'MasterThesis/datasets/Aurora_4yr_R.csv'
             if mean:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R_omni_mean.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R_omni_mean.csv'
+                json_file_mean = path+'Aurora_4yr_R_omni_mean.json' # To large fil for GitHub
+                csv_file_mean = path+'MasterThesis/datasets/Aurora_4yr_R_omni_mean.csv'
             else:
-                json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_R.json' # To large fil for GitHub
-                csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_R.csv'
+                json_file_omni = path+'Aurora_4yr_R_omni.json' # To large fil for GitHub
+                csv_file_omni = path+'MasterThesis/datasets/Aurora_4yr_R_omni.csv'
+
 
     return folder, json_file, csv_file, wl
 
@@ -251,8 +264,8 @@ def file_from_ASIfolder(folder, wl, json_file):
     container.to_json(json_file)
     #formats(json_file, csv_file)
 
-
-def add_file_information(json_file, csv_file, omni_data, omni=True):
+# Add information to data set
+def add_file_information(json_file, csv_file):
 
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
@@ -278,6 +291,7 @@ def add_file_information(json_file, csv_file, omni_data, omni=True):
     container.to_json(json_file)
     formats(json_file, csv_file)
 
+# Add omni values to data set
 def add_omni_information(json_file, csv_file, mean=True):
 
     container = DatasetContainer.from_json(json_file)
@@ -316,8 +330,12 @@ def add_omni_information(json_file, csv_file, mean=True):
 
     print("Json file updated with solarwind information")
     print(container)
-    container.to_json(json_file)
-    formats(json_file, csv_file)
+    if mean:
+        container.to_json(json_file_mean)
+        formats(json_file_mean, csv_file_mean)
+    else:
+        container.to_json(json_file_omni)
+        formats(json_file_omni, csv_file_omni)
 
 '''
 # New training dataset
@@ -337,7 +355,7 @@ start = time.time()
 # green aurora, 2016 and 2018
 folder, json_file, csv_file, wl = files(original=False, mean=True)
 file_from_ASIfolder(folder, wl, json_file)
-add_file_information(json_file, csv_file, omni_data16_csv)
+add_file_information(json_file, csv_file)
 add_omni_information(json_file, csv_file)
 
 stop = time.time() - start
@@ -348,7 +366,7 @@ start = time.time()
 # green aurora, 2014 and 2020
 folder, json_file, csv_file, wl = files(mean=True)
 file_from_ASIfolder(folder, wl, json_file)
-add_file_information(json_file, csv_file, omni_data16_csv)
+add_file_information(json_file, csv_file)
 add_omni_information(json_file, csv_file)
 
 stop = time.time() - start
