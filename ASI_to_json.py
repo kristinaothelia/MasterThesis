@@ -178,6 +178,8 @@ def average_omni_values(index, omni_data, N_min):
         #print(len(SW_value))
         if len(str(SW_value)) == 1:
 
+            print(indexes)
+            print(omni_data.loc[omni_data.index[index]]['Date'].iloc[0])
             solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
             solarwind[SW_SD[k]] = 'None'
 
