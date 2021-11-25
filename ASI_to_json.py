@@ -329,7 +329,11 @@ def add_omni_information(json_file, csv_file, mean=True):
 
     for entry in tqdm(container):
 
+        if i == 2399:
+            print(entry)
         if i == 2400:
+            print(entry)
+        if i == 2401:
             print(entry)
         i += 1
 
