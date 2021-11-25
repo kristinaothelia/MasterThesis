@@ -152,6 +152,7 @@ def average_omni_values(index, omni_data, N_min):
 
     # Remove Negative Elements in List
     indexes = [ele for ele in joinedlist if ele > 0]
+    print(indexes)
 
     for k in range(len(SW)):
 
@@ -329,6 +330,9 @@ def add_omni_information(json_file, csv_file, mean=True):
 
     for entry in tqdm(container):
 
+        print(entry.timepoint)
+
+        '''
         if i == 2399:
             print(entry)
         if i == 2400:
@@ -336,6 +340,7 @@ def add_omni_information(json_file, csv_file, mean=True):
         if i == 2401:
             print(entry)
         i += 1
+        '''
 
 
 

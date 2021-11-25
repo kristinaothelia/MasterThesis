@@ -185,6 +185,8 @@ img_time = '2020-01-01 08:05:00'
 # Nightside
 img_time = '2020-12-31 23:55:00'
 
+img_time = '2016-12-31 00:53:00'
+
 new_Bz = []
 
 def test(tp, SW):
