@@ -107,6 +107,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
 
         # Remove Negative Elements in List
         indexes = [ele for ele in joinedlist if ele > 0]
+        print(indexes)
         #SW_value = []
 
         for k in range(len(SW)):
@@ -158,6 +159,9 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
     else:
         # Nightside. 1 hour time diff.
         N_min = 15 # \pm 15 minutes
+        #if tp[:-6] == '2014-12-31 00':
+        #    tp_new[:-6] = '2016-12-30 00'
+
         tp_new = int(hour) - 1 # Get omni data for one hour before aurora image
 
         if len(str(tp_new)) == 1:
@@ -185,7 +189,7 @@ img_time = '2020-01-01 08:05:00'
 # Nightside
 img_time = '2020-12-31 23:55:00'
 
-img_time = '2016-12-31 00:53:00'
+img_time = '2016-12-31 23:53:00'
 
 new_Bz = []
 

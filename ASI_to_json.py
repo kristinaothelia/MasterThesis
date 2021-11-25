@@ -261,6 +261,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
             elif tp_new < 0:
                 tp_new = hour
             tp_new = '{}{}{}'.format(tp[:-8], str(tp_new), tp[-6:])
+            print('tp: ', tp, 'tp new: ', tp_new)
 
             solarwind = average_omni_values(index, omni_data, N_min)
 
