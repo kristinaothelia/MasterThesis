@@ -176,7 +176,8 @@ def average_omni_values(index, omni_data, N_min):
 
         #print(SW_value)
         #print(len(SW_value))
-        if len(str(SW_value)) == 1:
+        #if len(str(SW_value)) == 1:
+        if len(SW_value) == 0:
 
             print(indexes)
             print(omni_data.loc[omni_data.index[index]]['Date'].iloc[0])
