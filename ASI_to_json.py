@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import json
 import os
@@ -36,12 +37,6 @@ def read_csv(file, print=False):
         print(data)
 
     return data
-
-#folder = 'JSON_TEST'
-#json_file = 'JSON_TEST_TEST.json' # To large fil for GitHub
-#csv_file = 'JSON_TEST_TEST.csv'
-#wl = 'nan'
-
 
 omni14 = '.\datasets\omni\omni_min_2014_withDate.csv'
 omni16 = '.\datasets\omni\omni_min_2016_withDate.csv'
@@ -86,6 +81,7 @@ def files(original=True, green=True, train=False, mean=False):
             else:
                 json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
                 csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
+
     else:
         wl = '6300'
         if original:
@@ -153,19 +149,19 @@ def average_omni_values(index, omni_data, N_min):
             Value = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
             #if BZ_value == 9999.99:
             if Value == 9999.99: # No data for Bz
-                print(Value)
+                #print(Value)
                 continue
             elif Value == 99999.9: # No data for Speed
-                print(Value)
+                #print(Value)
                 continue
             elif Value == 999.99: # No data for Density
-                print(Value)
+                #print(Value)
                 continue
             else:
                 SW_value.append(Value)
 
-        print(SW_value)
-        print(len(SW_value))
+        #print(SW_value)
+        #print(len(SW_value))
         Mean_BZ = np.mean(SW_value, dtype = np.float64)
         Mean_BZ = "%.2f" % Mean_BZ
         SD_BZ = np.std(SW_value)
@@ -217,7 +213,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
 
             if len(str(tp_new)) == 1:
                 tp_new =  '0{}'.format(tp_new)
-                print(tp_new)
+                #print(tp_new)
             #if tp_new == 0:
             #    tp_new = '00'
             elif tp_new < 0:
@@ -313,7 +309,7 @@ def add_omni_information(json_file, csv_file, mean=True):
         omni_data_dates = omni_data_dates.values
 
         solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean)
-        print(solarwind)
+        #print(solarwind)
 
         # Add solar wind data (dict) to json file
         entry.add_solarwind(solarwind)
