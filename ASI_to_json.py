@@ -128,7 +128,14 @@ def formats(json_file, csv_file):
     print("json ['entries'] saved as csv file")
 
 
-def average_omni_values(index, omni_data, N_min):
+@jit()  # nopython=True
+def test_new(omni, timepoint):
+    for i in range(len(omni)):
+        if timepoint in omni[i]:
+            return i
+
+
+def average_omni_values(index, omni_data, omni_data_dates, tp, N_min):
     """
     Use solar wind data from 1 hour before timepoint.
     On night side
@@ -136,6 +143,10 @@ def average_omni_values(index, omni_data, N_min):
 
     Some std thing?
     """
+
+    ii = test_new(omni_data_dates, tp)
+    index = ii
+
     solarwind = dict()
     indexes_min = []
     indexes_plus = []
@@ -152,7 +163,6 @@ def average_omni_values(index, omni_data, N_min):
 
     # Remove Negative Elements in List
     indexes = [ele for ele in joinedlist if ele > 0]
-    print(indexes)
 
     for k in range(len(SW)):
 
@@ -187,14 +197,6 @@ def average_omni_values(index, omni_data, N_min):
         #if len(str(SW_value)) == 1:
         if len(SW_value) == 0:
 
-            '''
-            print(len(indexes))
-            print(indexes)
-            print(omni_data.loc[omni_data.index[index]]['Date'].iloc[0])
-            sys.exit()
-            solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
-            solarwind[SW_SD[k]] = 'None'
-            '''
             Mean_BZ = np.mean(SW_remove, dtype = np.float64)
             Mean_BZ = "%.2f" % Mean_BZ
             SD_BZ = np.std(SW_remove)
@@ -214,20 +216,13 @@ def average_omni_values(index, omni_data, N_min):
 
     return solarwind
 
-
-@jit()  # nopython=True
-def test_new(omni, timepoint):
-    for i in range(len(omni)):
-        if timepoint in omni[i]:
-            return i
-
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
 
     index = 0
     dayside = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17']
 
-    ii = test_new(omni_data_dates, tp)
-    index = ii
+    #ii = test_new(omni_data_dates, tp)
+    #index = ii
     #print(index)
 
     #for i in range(len(omni_data['Date'])):
@@ -246,7 +241,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
         if hour in dayside:
             # Dayside
             N_min = 3 # \pm 3 minutes
-            solarwind = average_omni_values(index, omni_data, N_min)
+            solarwind = average_omni_values(index, omni_data, omni_data_dates, tp, N_min)
 
         else:
             # Nightside. 1 hour time diff.
@@ -263,7 +258,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
             tp_new = '{}{}{}'.format(tp[:-8], str(tp_new), tp[-6:])
             print('tp: ', tp, 'tp new: ', tp_new)
 
-            solarwind = average_omni_values(index, omni_data, N_min)
+            solarwind = average_omni_values(index, omni_data, omni_data_dates, tp, N_min)
 
     else:
         solarwind = dict()
@@ -330,20 +325,6 @@ def add_omni_information(json_file, csv_file, mean=True):
     i = 1
 
     for entry in tqdm(container):
-
-        print(entry.timepoint)
-
-        '''
-        if i == 2399:
-            print(entry)
-        if i == 2400:
-            print(entry)
-        if i == 2401:
-            print(entry)
-        i += 1
-        '''
-
-
 
         # make solar wind data by matchind dates
         tp = entry.timepoint
