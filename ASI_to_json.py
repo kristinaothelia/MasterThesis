@@ -136,6 +136,7 @@ def average_omni_values(index, omni_data, N_min):
 
     Some std thing?
     """
+    solarwind = dict()
     indexes_min = []
     indexes_plus = []
 
@@ -183,6 +184,7 @@ def average_omni_values(index, omni_data, N_min):
         solarwind[SW[k]] = Mean_BZ
         solarwind[SW_SD[k]] = SD_BZ
 
+    return solarwind
 
 
 @jit()  # nopython=True
@@ -194,7 +196,6 @@ def test_new(omni, timepoint):
 def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
 
     index = 0
-    solarwind = dict()
     dayside = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17']
 
     ii = test_new(omni_data_dates, tp)
@@ -217,7 +218,7 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
         if hour in dayside:
             # Dayside
             N_min = 3 # \pm 3 minutes
-            average_omni_values(index, omni_data, N_min)
+            solarwind = average_omni_values(index, omni_data, N_min)
 
         else:
             # Nightside. 1 hour time diff.
@@ -233,10 +234,10 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
                 tp_new = hour
             tp_new = '{}{}{}'.format(tp[:-8], str(tp_new), tp[-6:])
 
-            average_omni_values(index, omni_data, N_min)
+            solarwind = average_omni_values(index, omni_data, N_min)
 
     else:
-
+        solarwind = dict()
         index = [index]
         for k in range(len(SW)):
             #print(SW[k])
