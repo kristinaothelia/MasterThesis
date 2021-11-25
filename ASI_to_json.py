@@ -317,7 +317,7 @@ def add_file_information(json_file, csv_file):
     formats(json_file, csv_file)
 
 # Add omni values to data set
-def add_omni_information(json_file, csv_file, mean=True):
+def add_omni_information(json_file, json_file_, csv_file_, mean=True):
 
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
@@ -357,12 +357,10 @@ def add_omni_information(json_file, csv_file, mean=True):
 
     print("Json file updated with solarwind information")
     print(container)
-    if mean:
-        container.to_json(json_file_mean)
-        formats(json_file_mean, csv_file_mean)
-    else:
-        container.to_json(json_file_omni)
-        formats(json_file_omni, csv_file_omni)
+
+    container.to_json(json_file_)
+    formats(json_file_, csv_file_)
+
 
 '''
 # New training dataset
@@ -380,10 +378,12 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 start = time.time()
 
 # green aurora, 2016 and 2018
-folder, json_file, csv_file, wl = files(original=False, mean=True)
+folder, json_file, csv_file, wl = files(original=False)
+json_file_mean = path+'Aurora_4yr_G_omni_mean.json' # To large fil for GitHub
+csv_file_mean = path+'MasterThesis/datasets/Aurora_4yr_G_omni_mean.csv'
 #file_from_ASIfolder(folder, wl, json_file)
 #add_file_information(json_file, csv_file)
-add_omni_information(json_file, csv_file)
+add_omni_information(json_file, json_file_mean, csv_file_mean)
 
 stop = time.time() - start
 print("Time [h] (set 1618): ", stop/(60*60))
@@ -391,10 +391,12 @@ print("Time [h] (set 1618): ", stop/(60*60))
 start = time.time()
 
 # green aurora, 2014 and 2020
-folder, json_file, csv_file, wl = files(mean=True)
+folder, json_file, csv_file, wl = files()
+json_file_mean = path+'Aurora_G_omni_mean.json' # To large fil for GitHub
+csv_file_mean = path+'MasterThesis/datasets/Aurora_G_omni_mean.csv'
 file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file)
-add_omni_information(json_file, csv_file)
+add_omni_information(json_file, json_file_mean, csv_file_mean)
 
 stop = time.time() - start
 print("Time [h] (set 1420): ", stop/(60*60))
