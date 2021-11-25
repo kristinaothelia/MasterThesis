@@ -13,12 +13,24 @@ from pylab import *
 LABELS = ['no aurora', 'arc', 'diffuse', 'discrete']
 
 predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
-predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_efficientnet-b2.json'
+predicted_file_1618_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_predicted_efficientnet-b2.json'
 
 container_G = DatasetContainer.from_json(predicted_file_G)
-container_R = DatasetContainer.from_json(predicted_file_R)
+container_1618_G = DatasetContainer.from_json(predicted_file_1618_G)
 print("len container G: ", len(container_G))
-print("len container R: ", len(container_R))
+print("len container R: ", len(container_1618_G))
+
+# Remove data for Feb, Mar, Oct
+counter = 0
+for i in range(len(container_G)):
+    i -= counter
+    if container_G[i].timepoint[5:7] == '02' \
+    or container_G[i].timepoint[5:7] == '03' \
+    or container_G[i].timepoint[5:7] == '10':
+        del container_G[i]
+        counter += 1
+print('removed images from container_G: ', counter)
+print('new container len: ', len(container_G))
 
 def distribution(container, labels, year=None, month=False):
 
@@ -233,8 +245,90 @@ def make_dist_and_pie(container1, container2, wl1, wl2, yr1, yr2, month=False):
     #month_subpie(n_less_M20, n_arc_M20, n_diff_M20, n_disc_M20, LABELS, '2020')
     #plt.show()
 
+'''
 make_dist_and_pie(container_R, container_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2014', yr2='2014', month=False)
+make_dist_and_pie(container_1618_R, container_1618_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2016', yr2='2016', month=False)
+make_dist_and_pie(container_1618_R, container_1618_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2018', yr2='2018', month=False)
 make_dist_and_pie(container_R, container_G, wl1='6300 (Red)', wl2='5577 (Green)', yr1='2020', yr2='2020', month=False)
+'''
+
+def yr_4(container, labels, year, wl, a_less=False, month=False):
+
+    tot1, n_less1, n_arc1, n_diff1, n_disc1, \
+    n_less_M1, n_arc_M1, n_diff_M1, n_disc_M1 \
+    = distribution(container[0], labels, year[0], month)
+
+    tot2, n_less2, n_arc2, n_diff2, n_disc2, \
+    n_less_M2, n_arc_M2, n_diff_M2, n_disc_M2 \
+    = distribution(container[1], labels, year[1], month)
+
+    tot3, n_less3, n_arc3, n_diff3, n_disc3, \
+    n_less_M3, n_arc_M3, n_diff_M3, n_disc_M3 \
+    = distribution(container[2], labels, year[2], month)
+
+    tot4, n_less4, n_arc4, n_diff4, n_disc4, \
+    n_less_M4, n_arc_M4, n_diff_M4, n_disc_M4 \
+    = distribution(container[3], labels, year[3], month)
+
+    #Pie chart, where the slices will be ordered and plotted counter-clockwise:
+    sizes1 = [n_less1, n_arc1, n_diff1, n_disc1]
+    print(n_less1+ n_arc1+ n_diff1+ n_disc1)
+    print(n_less1+ n_arc1+ n_diff1+ n_disc1)
+    sizes2 = [n_less2, n_arc2, n_diff2, n_disc2]
+    sizes3 = [n_less3, n_arc3, n_diff3, n_disc3]
+    sizes4 = [n_less4, n_arc4, n_diff4, n_disc4]
+
+    #aurora14 = sum(sizes14[1]+sizes14[2]+sizes14[3])
+    explode = (0.05, 0.05, 0.05, 0.05)
+    colors = ['dimgrey','dodgerblue','forestgreen', 'mediumslateblue']
+
+    if a_less:
+        sizes1 = sizes1[1:]
+        sizes2 = sizes2[1:]
+        sizes3 = sizes3[1:]
+        sizes4 = sizes4[1:]
+        labels = labels[1:]
+        colors = colors[1:]
+        explode = explode[1:]
+        tot1 = tot1 - n_less1
+        tot2 = tot2 - n_less2
+        tot3 = tot3 - n_less3
+        tot4 = tot4 - n_less4
+
+    title = "Distribution"
+    if len(labels) == 3:
+        title = "Aurora distribution"
+
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2,2, figsize=(6.5, 8.5))#,figsize=(8, 4.5)
+    fig.suptitle(title, fontsize=16)
+
+    ax1.pie(sizes1, explode=explode, labels=labels, colors=colors, autopct = '%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})    #, startangle=90
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax1.set_title("{} [{}]\n# of images: {}".format(year[0], wl[0], tot1), fontsize=13)
+
+    ax2.pie(sizes2, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})#, startangle=90
+    ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax2.set_title("{} [{}]\n# of images: {}".format(year[1], wl[1], tot2), fontsize=13)
+
+    ax3.pie(sizes3, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})#, startangle=90
+    ax3.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax3.set_title("{} [{}]\n# of images: {}".format(year[2], wl[2], tot3), fontsize=13)
+
+    ax4.pie(sizes4, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})#, startangle=90
+    ax4.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax4.set_title("{} [{}]\n# of images: {}".format(year[3], wl[3], tot4), fontsize=13)
+
+year = ['2014', '2016', '2018', '2020']
+container = [container_G, container_1618_G, container_1618_G, container_G]
+wl = ['5577 Å', '5577 Å', '5577 Å', '5577 Å']
+yr_4(container, LABELS, year, wl, month=False)
+#plt.show()
+yr_4(container, LABELS, year, wl, a_less= True, month=False)
+plt.show()
 
 def pie_fancy(sizes, bar_sizes, labels):
 

@@ -22,6 +22,19 @@ print("len container G: ", len(container_G))
 print("len container 1618: ", len(container_1618))
 #print("len container R: ", len(container_R))
 
+# Remove data for Feb, Mar, Oct
+counter = 0
+for i in range(len(container_G)):
+    i -= counter
+    if container_G[i].timepoint[5:7] == '02' \
+    or container_G[i].timepoint[5:7] == '03' \
+    or container_G[i].timepoint[5:7] == '10':
+        del container_G[i]
+        counter += 1
+print('removed images from container_G: ', counter)
+print('new container len: ', len(container_G))
+
+
 def max_min_mean(list, label):
 
     print("{}, max, min, mean:".format(label))
@@ -467,6 +480,8 @@ def get_hour_count_per_month(TH, hours):
         TH_11_c.append(TH_11.count(hours[i]))
         TH_12_c.append(TH_12.count(hours[i]))
 
+
+    # OBS!! normalisering her?
     for i in range(len(hours)):
         TH_01_c_N.append((TH_01_c[i]/sum(TH_01_c))*100)
         TH_02_c_N.append((TH_02_c[i]/sum(TH_02_c))*100)
@@ -624,7 +639,7 @@ def Hour_subplot(container, year, month_name='Jan', N=4, month=False):
         M_label_N = ['Jan', 'Feb', 'Oct', 'Nov', 'Dec']
 
         index = M_label_N.index(month_name)
-        print(index)
+        print(M_label_N[index])
 
         sub_plots(year, hours, T_c_N[index], T_arc_N[index], T_diff_N[index], T_disc_N[index], T_A_N[index], month_name=month_name, N=N)
 
@@ -647,108 +662,107 @@ def Hour_subplot(container, year, month_name='Jan', N=4, month=False):
                 plt.xlabel("Hour of the day"); plt.ylabel("Count")
                 #plt.savefig("stats/Green/b2/hour_plot_%s_%s.png" %(year, M_label[i]))
 
-    # Year
-    T_c = []; T_arc = []; T_diff = []; T_disc = []
-    T_c_N = []; T_arc_N = []; T_diff_N = []; T_disc_N = []
-
-    for i in range(len(hours)):
-        T_c.append(Hours.count(hours[i]))
-        T_arc.append(Hours_arc.count(hours[i]))
-        T_diff.append(Hours_diff.count(hours[i]))
-        T_disc.append(Hours_disc.count(hours[i]))
-
-    T_Aurora = []
-    T_Aurora_N  = []
-    T_Aurora = [a + b + c for a, b, c in zip(T_arc, T_diff, T_disc)]
-
-    tot_sum = sum(T_c+T_arc+T_diff+T_disc)
-    tot_sum_a = sum(T_arc+T_diff+T_disc)
-
-    #print(tot_sum)
-    #print("aurora: ", tot_sum_a, "aurora-less: ", sum(T_c))
-
-    use_tot_sum = True
-    if use_tot_sum:
+    else:
+        # Year
+        T_c = []; T_arc = []; T_diff = []; T_disc = []
+        T_c_N = []; T_arc_N = []; T_diff_N = []; T_disc_N = []
 
         for i in range(len(hours)):
-            T_c_N.append((T_c[i]/tot_sum)*100)
-            T_arc_N.append((T_arc[i]/tot_sum)*100)
-            T_diff_N.append((T_diff[i]/tot_sum)*100)
-            T_disc_N.append((T_disc[i]/tot_sum)*100)
-            T_Aurora_N.append((T_Aurora[i]/tot_sum)*100)
+            T_c.append(Hours.count(hours[i]))
+            T_arc.append(Hours_arc.count(hours[i]))
+            T_diff.append(Hours_diff.count(hours[i]))
+            T_disc.append(Hours_disc.count(hours[i]))
 
-    else:
-        for i in range(len(hours)):
-            T_c_N.append((T_c[i]/sum(T_c))*100)
-            T_arc_N.append((T_arc[i]/sum(T_arc))*100)
-            T_diff_N.append((T_diff[i]/sum(T_diff))*100)
-            T_disc_N.append((T_disc[i]/sum(T_disc))*100)
-            T_Aurora_N.append((T_Aurora[i]/tot_sum_a)*100)
+        T_Aurora = []
+        T_Aurora_N  = []
+        T_Aurora = [a + b + c for a, b, c in zip(T_arc, T_diff, T_disc)]
 
+        tot_sum = sum(T_c+T_arc+T_diff+T_disc)
+        tot_sum_a = sum(T_arc+T_diff+T_disc)
 
+        #print(tot_sum)
+        #print("aurora: ", tot_sum_a, "aurora-less: ", sum(T_c))
 
-    '''
-    per = True
-    if per:
+        use_tot_sum = True
+        if use_tot_sum:
 
-        plt.figure()
-        subcategorybar(hours, [T_arc_N, T_diff_N, T_disc_N], ["arc. tot: %d" %sum(T_arc), "diff. tot: %d"%sum(T_diff), "disc. tot: %d"%sum(T_disc)])
-        plt.title("Stats %s" %year)
-        #plt.xticks(rotation='vertical')
-        plt.xlabel("Hour of the day"); plt.ylabel("Percentage")
-        #plt.savefig("stats/Green/b2//hour_plot_per_%s.png" %year)
-    else:
-        plt.figure()
-        subcategorybar(hours, [T_arc, T_diff, T_disc], ["arc. tot: %d" %sum(T_arc), "diff. tot: %d"%sum(T_diff), "disc. tot: %d"%sum(T_disc)])
-        #%.1f?
-        plt.title("Stats %s" %year)
-        #plt.xticks(rotation='vertical')
-        plt.xlabel("Hour of the day"); plt.ylabel("Count")
-        #plt.savefig("stats/Green/b2//hour_plot_per_%s.png" %year)
-    '''
+            for i in range(len(hours)):
+                T_c_N.append((T_c[i]/tot_sum)*100)
+                T_arc_N.append((T_arc[i]/tot_sum)*100)
+                T_diff_N.append((T_diff[i]/tot_sum)*100)
+                T_disc_N.append((T_disc[i]/tot_sum)*100)
+                T_Aurora_N.append((T_Aurora[i]/tot_sum)*100)
 
-    #plot(hours, T_Aurora_N, 'Aurora', year, month=None, monthly=False)
-
-    #sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N=None, N=4)
+        else:
+            for i in range(len(hours)):
+                T_c_N.append((T_c[i]/sum(T_c))*100)
+                T_arc_N.append((T_arc[i]/sum(T_arc))*100)
+                T_diff_N.append((T_diff[i]/sum(T_diff))*100)
+                T_disc_N.append((T_disc[i]/sum(T_disc))*100)
+                T_Aurora_N.append((T_Aurora[i]/tot_sum_a)*100)
 
 
 
-    #sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N, N=N)
+        '''
+        per = True
+        if per:
 
-    """
-    #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
-    #plot(hours, T_diff_N, 'diffuse', year, month=None, monthly=False)
-    #plot(hours, T_disc_N, 'discrete', year, month=None, monthly=False)
-    #plot_hourly_nor(hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, year)
-    if year == '2014':
-        n = 1
-        subplot(2,1,n)
-        plt.title('Yearly statistics for aurora/no aurora', fontsize=16)
-    else:
-        n = 2
-        subplot(2,1,n)
-        plt.xlabel("Hour of the day", fontsize=13)
+            plt.figure()
+            subcategorybar(hours, [T_arc_N, T_diff_N, T_disc_N], ["arc. tot: %d" %sum(T_arc), "diff. tot: %d"%sum(T_diff), "disc. tot: %d"%sum(T_disc)])
+            plt.title("Stats %s" %year)
+            #plt.xticks(rotation='vertical')
+            plt.xlabel("Hour of the day"); plt.ylabel("Percentage")
+            #plt.savefig("stats/Green/b2//hour_plot_per_%s.png" %year)
+        else:
+            plt.figure()
+            subcategorybar(hours, [T_arc, T_diff, T_disc], ["arc. tot: %d" %sum(T_arc), "diff. tot: %d"%sum(T_diff), "disc. tot: %d"%sum(T_disc)])
+            #%.1f?
+            plt.title("Stats %s" %year)
+            #plt.xticks(rotation='vertical')
+            plt.xlabel("Hour of the day"); plt.ylabel("Count")
+            #plt.savefig("stats/Green/b2//hour_plot_per_%s.png" %year)
+        '''
 
-    plt.plot(hours, T_c_N, '-', label='no aurora - '+year)
-    #plt.ylabel("%", fontsize=13)
-    plt.plot(hours, T_Aurora_N, '--', label='aurora - '+year)
-    plt.ylabel("%", fontsize=13)
-    plt.legend(fontsize=11)
+        #plot(hours, T_Aurora_N, 'Aurora', year, month=None, monthly=False)
 
-    """
-'''
+        #sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N=None, N=4)
+
+
+
+        sub_plots(year, hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, T_Aurora_N, N=N)
+
+        """
+        #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
+        #plot(hours, T_diff_N, 'diffuse', year, month=None, monthly=False)
+        #plot(hours, T_disc_N, 'discrete', year, month=None, monthly=False)
+        #plot_hourly_nor(hours, T_c_N, T_arc_N, T_diff_N, T_disc_N, year)
+        if year == '2014':
+            n = 1
+            subplot(2,1,n)
+            plt.title('Yearly statistics for aurora/no aurora', fontsize=16)
+        else:
+            n = 2
+            subplot(2,1,n)
+            plt.xlabel("Hour of the day", fontsize=13)
+
+        plt.plot(hours, T_c_N, '-', label='no aurora - '+year)
+        #plt.ylabel("%", fontsize=13)
+        plt.plot(hours, T_Aurora_N, '--', label='aurora - '+year)
+        plt.ylabel("%", fontsize=13)
+        plt.legend(fontsize=11)
+
+        """
+
 plt.figure(figsize=(8, 11)) # bredde, hoyde
 Hour_subplot(container=container_G, year="2014", N=5, month=False)
 Hour_subplot(container=container_1618, year="2016", N=5,month=False)
 Hour_subplot(container=container_1618, year="2018", N=5,month=False)
 Hour_subplot(container=container_G, year="2020", N=5,month=False)
 
-#plt.savefig("stats/Green/b2/subs_all_classes.png")
-plt.savefig("stats/Green/b2/test_legend.png", bbox_inches="tight")
-#plt.show()
-'''
+plt.savefig("stats/Green/b2/yearly_hour_plot.png", bbox_inches="tight")
+exit()
 
-MN = ['Jan', 'Feb', 'Dec']
+MN = ['Jan', 'Nov', 'Dec']
 
 for i in range(len(MN)):
 

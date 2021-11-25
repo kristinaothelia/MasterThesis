@@ -14,6 +14,18 @@ container_R = DatasetContainer.from_json(predicted_file_R)
 print("len container G: ", len(container_G))
 print("len container R: ", len(container_R))
 
+# Remove data for Feb, Mar, Oct
+counter = 0
+for i in range(len(container_G)):
+    i -= counter
+    if container_G[i].timepoint[5:7] == '02' \
+    or container_G[i].timepoint[5:7] == '03' \
+    or container_G[i].timepoint[5:7] == '10':
+        del container_G[i]
+        counter += 1
+print('removed images from container_G: ', counter)
+print('new container len: ', len(container_G))
+
 def autolabel(n):
     """
     Attach a text label above each bar displaying its height

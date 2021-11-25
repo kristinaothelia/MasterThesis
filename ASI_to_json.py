@@ -21,6 +21,12 @@ SW = {
     #3: "Temperature, K",
 }
 
+SW_SD = {
+    0: "Bz, nT (GSM), SD",
+    1: "Speed, km/s, SD",
+    2: "Proton Density, n/cc, SD",
+}
+
 def read_csv(file, print=False):
 
     data = pd.read_csv(file)
@@ -54,7 +60,7 @@ else:
     omni_data20_csv = read_csv(file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/omni/omni_min_2020_withDate.csv')
 
 # Dataset containing data
-def files(green=False, train=False):
+def files(original=True, green=True, train=False):
 
     if train:
         folder = '/itf-fi-ml/home/koolsen/Aurora/Data/All_data'
@@ -63,12 +69,14 @@ def files(green=False, train=False):
         wl = '5577 and 6300'
 
     if green:
-        #folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
-        #json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
-        #csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
-        folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_G'
-        json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
-        csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
+        if original:
+            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_green'
+            json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_G.json' # To large fil for GitHub
+            csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_G.csv'
+        else:
+            folder = '/itf-fi-ml/home/koolsen/Master/T_DATA_4yr_G'
+            json_file = '/itf-fi-ml/home/koolsen/Master/Aurora_4yr_G.json' # To large fil for GitHub
+            csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Aurora_4yr_G.csv'
         wl = '5577'
     else:
         #folder = '/itf-fi-ml/home/koolsen/Master/T_DATA'
@@ -93,19 +101,77 @@ def formats(json_file, csv_file):
     print("json ['entries'] saved as csv file")
 
 
+def average_omni_values(index, omni_data, N_min):
+    """
+    Use solar wind data from 1 hour before timepoint.
+    On night side
+    Make 30 min (?) average Bz value (and the others)
+
+    Some std thing?
+    """
+    indexes_min = []
+    indexes_plus = []
+
+    for i in range(1, N_min+1):
+
+        indexes_min.append(index - i)
+        indexes_plus.append(index + i)
+        i += 1
+
+    indexes_min.sort()
+    index = [index]
+    joinedlist = indexes_min + index + indexes_plus
+
+    # Remove Negative Elements in List
+    indexes = [ele for ele in joinedlist if ele > 0]
+
+    for k in range(len(SW)):
+
+        SW_value = []
+        for j in range(len(indexes)):
+
+            index = [indexes[j]]
+            #BZ_value = omni_data.loc[omni_data.index[index]][SW[0]].iloc[0]
+            Value = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
+            #if BZ_value == 9999.99:
+            if Value == 9999.99: # No data for Bz
+                print(Value)
+                continue
+            elif Value == 99999.9: # No data for Speed
+                print(Value)
+                continue
+            elif Value == 999.99: # No data for Density
+                print(Value)
+                continue
+            else:
+                SW_value.append(Value)
+
+        print(SW_value)
+        print(len(SW_value))
+        Mean_BZ = np.mean(SW_value, dtype = np.float64)
+        Mean_BZ = "%.2f" % Mean_BZ
+        SD_BZ = np.std(SW_value)
+        SD_BZ = "%.2f" % SD_BZ
+
+        solarwind[SW[k]] = Mean_BZ
+        solarwind[SW_SD[k]] = SD_BZ
+
+
+
 @jit()  # nopython=True
 def test_new(omni, timepoint):
     for i in range(len(omni)):
         if timepoint in omni[i]:
             return i
 
-def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
+def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean=True):
 
-    index = []
+    index = 0
     solarwind = dict()
+    dayside = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17']
 
     ii = test_new(omni_data_dates, tp)
-    index.append(ii)
+    index = i
     #print(index)
 
     #for i in range(len(omni_data['Date'])):
@@ -118,10 +184,37 @@ def match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW):
     #print(omni_data.loc[omni_data.index[ii]]["Bz, nT (GSM)"])
     #print(SW[0])
 
-    for k in range(len(SW)):
-        #print(SW[k])
-        #print(omni_data.loc[omni_data.index[index]][SW[k]].iloc[0])
-        solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
+    if mean:
+
+        hour = tp[-8:-6]
+        if hour in dayside:
+            # Dayside
+            N_min = 3 # \pm 3 minutes
+            average_omni_values(index, omni_data, N_min)
+
+        else:
+            # Nightside. 1 hour time diff.
+            N_min = 15 # \pm 15 minutes
+            tp_new = int(hour) - 1 # Get omni data for one hour before aurora image
+
+            if len(str(tp_new)) == 1:
+                tp_new =  '0{}'.format(tp_new)
+                print(tp_new)
+            #if tp_new == 0:
+            #    tp_new = '00'
+            elif tp_new < 0:
+                tp_new = hour
+            tp_new = '{}{}{}'.format(tp[:-8], str(tp_new), tp[-6:])
+
+            average_omni_values(index, omni_data)
+
+    else:
+
+        index = [index]
+        for k in range(len(SW)):
+            #print(SW[k])
+            #print(omni_data.loc[omni_data.index[index]][SW[k]].iloc[0])
+            solarwind[SW[k]] = omni_data.loc[omni_data.index[index]][SW[k]].iloc[0]
 
 
     #Bz_GSE = omni_data.loc[omni_data.index[index]]["Bz, nT (GSE)"]
@@ -144,17 +237,8 @@ def file_from_ASIfolder(folder, wl, json_file):
     container.to_json(json_file)
     #formats(json_file, csv_file)
 
-def average_omni_values():
-    """
-    Use solar wind data from 1 hour before timepoint.
-    On night side
-    Make 30 min (?) average Bz value (and the others)
 
-    Some std thing?
-    """
-    print("hmmmmmm..?")
-
-def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
+def add_file_information(json_file, csv_file, omni_data, omni=True):
 
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
@@ -175,47 +259,12 @@ def add_file_information(json_file, csv_file, omni_data, SW, omni=True):
         # Add timepoint to json file
         entry.timepoint = str(tiime)
 
-        '''
-        if omni:
-
-            # make solar wind data by matchind dates
-            tp = entry.timepoint
-
-            if tp[-2:] != "00":
-                tp = tp[:-2] + "00"
-                #print("30 sec mark, need editing. New time: ", time)
-
-            if tp[:4] == "2014":
-                omni_data = omni_data14_csv
-
-            if tp[:4] == "2016":
-                omni_data = omni_data16_csv
-
-            if tp[:4] == "2018":
-                omni_data = omni_data18_csv
-
-            if tp[:4] == "2020":
-                omni_data = omni_data20_csv
-
-
-            # get only the dates
-            omni_data_dates = omni_data['Date']
-            omni_data_dates = omni_data_dates.values
-
-            solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW)
-            #print(solarwind)
-
-            # Add solar wind data (dict) to json file
-            entry.add_solarwind(solarwind)
-        '''
-
-
     print("Json file updated with additional information")
     print(container)
     container.to_json(json_file)
     formats(json_file, csv_file)
 
-def add_omni_information(json_file, csv_file, SW, omni=True):
+def add_omni_information(json_file, csv_file, mean=True):
 
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
@@ -227,7 +276,6 @@ def add_omni_information(json_file, csv_file, SW, omni=True):
 
         if tp[-2:] != "00":
             tp = tp[:-2] + "00"
-            #print("30 sec mark, need editing. New time: ", time)
 
         if tp[:4] == "2014":
             omni_data = omni_data14_csv
@@ -246,8 +294,8 @@ def add_omni_information(json_file, csv_file, SW, omni=True):
         omni_data_dates = omni_data['Date']
         omni_data_dates = omni_data_dates.values
 
-        solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, SW)
-        #print(solarwind)
+        solarwind = match_dates_omni_aurora_data(omni_data, omni_data_dates, tp, mean)
+        print(solarwind)
 
         # Add solar wind data (dict) to json file
         entry.add_solarwind(solarwind)
@@ -272,11 +320,22 @@ add_file_information(json_file, csv_file, omni_data20_csv, SW)
 '''
 start = time.time()
 
-# green aurora
-folder, json_file, csv_file, wl = files(green=True)
+# green aurora, 2016 and 2018
+folder, json_file, csv_file, wl = files(original=False)
 file_from_ASIfolder(folder, wl, json_file)
-add_file_information(json_file, csv_file, omni_data16_csv, SW)
-add_omni_information(json_file, csv_file, SW)
+add_file_information(json_file, csv_file, omni_data16_csv)
+add_omni_information(json_file, csv_file)
 
 stop = time.time() - start
-print("Time [h]: ", stop/(60*60))
+print("Time [h] (set 1618): ", stop/(60*60))
+
+start = time.time()
+
+# green aurora, 2014 and 2020
+folder, json_file, csv_file, wl = files()
+file_from_ASIfolder(folder, wl, json_file)
+add_file_information(json_file, csv_file, omni_data16_csv)
+add_omni_information(json_file, csv_file)
+
+stop = time.time() - start
+print("Time [h] (set 1420): ", stop/(60*60))
