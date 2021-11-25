@@ -325,7 +325,15 @@ def add_omni_information(json_file, csv_file, mean=True):
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
 
+    i = 1
+
     for entry in tqdm(container):
+
+        if i == 2400:
+            print(entry)
+        i += 1
+
+
 
         # make solar wind data by matchind dates
         tp = entry.timepoint
