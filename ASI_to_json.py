@@ -151,6 +151,8 @@ def average_omni_values(index, omni_data, omni_data_dates, tp, N_min):
     indexes_min = []
     indexes_plus = []
 
+    print(index)
+
     for i in range(1, N_min+1):
 
         indexes_min.append(index - i)
@@ -325,6 +327,7 @@ def add_omni_information(json_file, json_file_, csv_file_, mean=True):
     i = 1
 
     for entry in tqdm(container):
+        print(entry.timepoint)
 
         # make solar wind data by matchind dates
         tp = entry.timepoint
