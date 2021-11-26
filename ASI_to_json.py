@@ -326,10 +326,10 @@ def add_omni_information(json_file, json_file_, csv_file_, mean=True):
     counter = 0
     for i in range(len(container)):
         i -= counter
-        if container_G[i].timepoint[5:7] == '02' \
-        or container_G[i].timepoint[5:7] == '03' \
-        or container_G[i].timepoint[5:7] == '10':
-            del container_G[i]
+        if container[i].timepoint[5:7] == '02' \
+        or container[i].timepoint[5:7] == '03' \
+        or container[i].timepoint[5:7] == '10':
+            del container[i]
             counter += 1
     print('removed images from container: ', counter)
     print('new container len: ', len(container))
