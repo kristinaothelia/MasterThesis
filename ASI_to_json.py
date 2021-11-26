@@ -375,6 +375,8 @@ folder, json_file, csv_file, wl = files(green=False)
 #file_from_ASIfolder(folder, wl, json_file)
 add_file_information(json_file, csv_file, omni_data20_csv, SW)
 '''
+
+'''
 start = time.time()
 
 # green aurora, 2016 and 2018
@@ -387,15 +389,15 @@ add_omni_information(json_file, json_file_mean, csv_file_mean)
 
 stop = time.time() - start
 print("Time [h] (set 1618): ", stop/(60*60))
-
+'''
 start = time.time()
 
 # green aurora, 2014 and 2020
 folder, json_file, csv_file, wl = files()
 json_file_mean = path+'Aurora_G_omni_mean.json' # To large fil for GitHub
 csv_file_mean = path+'MasterThesis/datasets/Aurora_G_omni_mean.csv'
-file_from_ASIfolder(folder, wl, json_file)
-add_file_information(json_file, csv_file)
+#file_from_ASIfolder(folder, wl, json_file)
+#add_file_information(json_file, csv_file)
 add_omni_information(json_file, json_file_mean, csv_file_mean)
 
 stop = time.time() - start
