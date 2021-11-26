@@ -151,8 +151,6 @@ def average_omni_values(index, omni_data, omni_data_dates, tp, N_min):
     indexes_min = []
     indexes_plus = []
 
-    print(index)
-
     for i in range(1, N_min+1):
 
         indexes_min.append(index - i)
@@ -324,10 +322,20 @@ def add_omni_information(json_file, json_file_, csv_file_, mean=True):
     container = DatasetContainer.from_json(json_file)
     print("length container: ", len(container))
 
-    i = 1
+    # Remove data for Feb, Mar, Oct
+    counter = 0
+    for i in range(len(container)):
+        i -= counter
+        if container_G[i].timepoint[5:7] == '02' \
+        or container_G[i].timepoint[5:7] == '03' \
+        or container_G[i].timepoint[5:7] == '10':
+            del container_G[i]
+            counter += 1
+    print('removed images from container: ', counter)
+    print('new container len: ', len(container))
+
 
     for entry in tqdm(container):
-        print(entry.timepoint)
 
         # make solar wind data by matchind dates
         tp = entry.timepoint
