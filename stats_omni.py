@@ -3,37 +3,113 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.patches import ConnectionPatch
 from pylab import *
 # -----------------------------------------------------------------------------
+
+def subpie(sizes1, sizes2, labels, colors, explode, wl1, wl2, yr1, yr2):
+    title = "Distribution."
+    if len(labels) == 3:
+        title = "Aurora dist."
+
+    fig, (ax1, ax2) = plt.subplots(1,2,figsize=(8, 4.5))
+    fig.suptitle(title, fontsize=16)
+    ax1.pie(sizes1, explode=explode, labels=labels, colors=colors, autopct = '%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})    #, startangle=90
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax1.set_title("{}, {}".format(yr1, wl1), fontsize=13)
+
+    ax2.pie(sizes2, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%',
+            shadow=True, textprops={'fontsize': 11})#, startangle=90
+    ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax2.set_title("{}, {}".format(yr2, wl2), fontsize=13)
+    #plt.legend(fontsize=11)
+    #plt.show()
 
 # Red:      6300        Count:  142 470
 # Green:    5577        Count:  284 840
 
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
-predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_predicted_efficientnet-b2.json'
-predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_predicted_efficientnet-b2.json'
-predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_predicted_efficientnet-b2.json'
+#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2.json'
+predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_cut.json'
+predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_omni_predicted_efficientnet-b2.json'
+predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_omni_predicted_efficientnet-b2.json'
 
 container_G = DatasetContainer.from_json(predicted_file_G)
 #container_R = DatasetContainer.from_json(predicted_file_R)
-container_1618 = DatasetContainer.from_json(predicted_file_1618)
+#container_1618 = DatasetContainer.from_json(predicted_file_1618)
 print("len container G: ", len(container_G))
-print("len container 1618: ", len(container_1618))
+#print("len container 1618: ", len(container_1618))
 #print("len container R: ", len(container_R))
 
-# Remove data for Feb, Mar, Oct
-counter = 0
-for i in range(len(container_G)):
-    i -= counter
-    if container_G[i].timepoint[5:7] == '02' \
-    or container_G[i].timepoint[5:7] == '03' \
-    or container_G[i].timepoint[5:7] == '10':
-        del container_G[i]
-        counter += 1
-print('removed images from container_G: ', counter)
-print('new container len: ', len(container_G))
+def remove(container):
+    # Remove data for Feb, Mar, Oct
+    counter = 0
+    for i in range(len(container)):
+        i -= counter
+        if container[i].timepoint[5:7] == '02' \
+        or container[i].timepoint[5:7] == '03' \
+        or container[i].timepoint[5:7] == '10':
+            del container[i]
+            counter += 1
+    print('removed images from container: ', counter)
+    print('new container len: ', len(container))
 
+    container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_cut.json')
+
+#remove(container_G)
+
+def split(container, nightside=False):
+
+
+    if nightside:
+        print('nightside')
+        counter = 0
+
+        for i in range(len(container)):
+
+            i -= counter
+
+            if int(container[i].timepoint[-8:-6]) > 6 and int(container[i].timepoint[-8:-6]) < 17:
+
+                #print(container[i].timepoint[-8:-6])
+                del container[i]
+                counter += 1
+        print('removed images from container: ', counter)
+        print('new container len: ', len(container))
+
+        container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_night.json')
+        return container
+
+    else:
+        print('dayside')
+        counter = 0
+
+        for i in range(len(container)):
+
+            i -= counter
+
+            if int(container[i].timepoint[-8:-6]) > 6 and int(container[i].timepoint[-8:-6]) < 17:
+                #counter += 1
+                continue
+
+            else:
+                #print(container[i].timepoint[-8:-6])
+                del container[i]
+                counter += 1
+
+        #print('removed images from container: ', counter)
+        print('new container len: ', len(container))
+
+        container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_day.json')
+        return container
+
+#container_D = split(container_G)
+#container_N = split(container_G, nightside=True)
+
+container_D = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_day.json')
+container_N = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_night.json')
 
 def max_min_mean(list, label):
 
@@ -46,12 +122,13 @@ def neg_pos(list_, label):
 
     neg_count = len(list(filter(lambda x: (x < 0), list_)))
     pos_count = len(list(filter(lambda x: (x >= 0), list_)))
-    print("Nr. of entries [{}] with neg and pos Bz values".format(label))
+    print("\nNr. of entries [{}] with neg and pos Bz values".format(label))
     print("neg: %g [%3.2f%%]" %(neg_count, (neg_count/len(list_))*100))
     print("pos: %g [%3.2f%%]" %(pos_count, (pos_count/len(list_))*100))
     #return neg_count, pos_count
 
-def omni(container, title):
+
+def omni(container, title=None):
 
     Bz_values_GSE = []
     #Bz_values_GSM = []
@@ -172,23 +249,29 @@ def omni_ting(container, year_='2014', year=False):
                 else:
                     count99 += 1
 
+    '''
     max_min_mean(list=a_less, label=LABELS[0])
     max_min_mean(list=arc, label=LABELS[1])
     max_min_mean(list=diff, label=LABELS[2])
     max_min_mean(list=disc, label=LABELS[3])
+    '''
 
     neg_pos(a_less, LABELS[0])
     neg_pos(arc, LABELS[1])
     neg_pos(diff, LABELS[2])
     neg_pos(disc, LABELS[3])
 
-    print("Nr. of [{}] entries: {}".format(LABELS[0], len(a_less)))
+    '''
+    #print("Nr. of [{}] entries: {}".format(LABELS[0], len(a_less)))
     print("Nr. of [{}] entries: {}".format(LABELS[1], len(arc)))
     print("Nr. of [{}] entries: {}".format(LABELS[2], len(diff)))
     print("Nr. of [{}] entries: {}".format(LABELS[3], len(disc)))
 
     print("Nr of entries (aurora) with 9999.99 value:    ", count99)
     print("Nr of entries (no aurora) with 9999.99 value: ", count99_aless)
+    '''
+
+    return a_less, arc, diff, disc
 
 def Bz(date):
 
@@ -237,12 +320,44 @@ def Bz(date):
 #Bz(date='2014-12-21 07')
 #exit()
 '''
+#omni(container=container_D)
+#omni(container=container_N)
 omni(container=container_G, title='Green')
 omni(container=container_R, title='Red')
 exit()
 '''
 #print('----------')
-#omni_ting('2014', True)
+
+def Bz_plots(c, c_Night, title):
+
+    fig, ax = plt.subplots()
+
+    #bins = [-15, -10, -5, 0, 5, 10, 15, 20, 25]
+    bins = np.linspace(-25, 25, 51)
+
+    a_heights, a_bins = np.histogram(c, bins=bins, density=True)
+    b_heights, b_bins = np.histogram(c_Night, bins=bins, density=True)
+
+    plt.plot(a_bins[:-1], a_heights, '.-', label='day')
+    plt.plot(b_bins[:-1], b_heights, '*-', label='night')
+    plt.axvline(x=0, ls='--', color='lightgrey')
+    plt.title(title)
+    plt.xlabel('Bz value')
+    plt.ylabel('%')
+    plt.ylim(0, 0.25)
+    plt.legend()
+
+a_less, arc, diff, disc = omni_ting(container_D)
+a_less_Night, arc_Night, diff_Night, disc_Night = omni_ting(container_N)
+
+Bz_plots(a_less, a_less_Night, 'no aurora')
+Bz_plots(arc, arc_Night, 'arc')
+Bz_plots(diff, diff_Night, 'diffuse')
+Bz_plots(disc, disc_Night, 'discrete')
+
+plt.show()
+#omni_ting(container_D, '2014', True)
+#omni_ting(container_N, '2014', True)
 #omni_ting('2020', True)
 
 #Make plots when Bz <0 and Bz > 0.
@@ -250,7 +365,7 @@ exit()
 #Hour plot
 #Year or Month plot
 
-#exit()
+exit()
 
 def distribution(container, labels, year=None):
 
