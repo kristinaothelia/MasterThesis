@@ -126,6 +126,7 @@ class Trainer(BaseTrainer):
 
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
+                print(out)
                 print(ground_truths)
                 confusion_matrix[ground_truths][out] += 1
                 print(confusion_matrix)
