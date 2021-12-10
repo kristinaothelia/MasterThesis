@@ -113,6 +113,9 @@ class Trainer(BaseTrainer):
         class_total   = [0]*n
 
         confusion_matrix = np.zeros((n,n)) #torch.zeros(4, 4)
+        confusion_matrix[2][1] += 1
+        confusion_matrix[2][1] += 1
+        confusion_matrix[3][2] += 1
         print(confusion_matrix)
         with torch.no_grad():
             for data, target in self.valid_data_loader:
@@ -130,7 +133,7 @@ class Trainer(BaseTrainer):
                 _,pred = torch.max(output, 1)
                 correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
                 correct = np.squeeze(correct_tensor.numpy()) if self.device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
-
+                print(correct)
                 for i in range(target.size(0)):
                     label = target.data[i]
                     print(label)
