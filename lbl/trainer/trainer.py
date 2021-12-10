@@ -109,7 +109,7 @@ class Trainer(BaseTrainer):
                 metrics.append(a)
 
                 for t, p in zip(target.view(-1), out.view(-1)):
-                    confusion_matrix[t.long(), p_long()] += 1
+                    confusion_matrix[t.long(), p.long()] += 1
 
         return np.mean(np.array(metrics)), np.mean(np.array(losses)), confusion_matrix
 
