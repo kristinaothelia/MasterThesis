@@ -124,6 +124,12 @@ class BaseTrainer:
 
         print(best_conf_matrix)
 
+        fig = tpl.figure()
+        ax = sns.heatmap(confusion_matrix, annot=True, vmax=20)
+        ax.set_xlabel('Predicted');
+        ax.set_ylabel('True');
+        fig.show()
+
         #plt.figure(figsize=(15,10))
         fig = tpl.figure()
         class_names = ['no aurora', 'arc', 'diffuse', 'discrete']

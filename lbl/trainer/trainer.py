@@ -106,8 +106,11 @@ class Trainer(BaseTrainer):
         losses  = list()
         #preds = torch.tensor([])
 
-        y_true = []
-        y_pred = []
+        #y_true = [0]*4
+        #y_pred = [0]*4
+
+        class_correct = [0]*4
+        class_total   = [0]*4
 
         confusion_matrix = torch.zeros(4, 4)
 
@@ -124,26 +127,32 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
 
-                target = target.detach().cpu().numpy() # labels
-                output = output.detach().cpu().numpy() # y_hat
-                for i in range(self.batch_size):
-                    y_true.append(target[i])
-                    y_pred.append(output[i,:])
+                _,pred = torch.max(output, 1)
+                correct_tensor = pred.eq(target.data.view_as(pred))
+                correct = np.squeeze(correct_tensor.numpy()) if device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
+
+                for i in range(target.size(0)):
+                    label = target.data[i]
+                    class_correct[label] += correct[i].item()
+                    class_total[label] += 1
+
+                    # Update confusion matrix
+                    confusion_matrix[label][pred.data[i]] += 1
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
-                for t, p in zip(target.view(-1), out.view(-1)):
-                    confusion_matrix[t.long(), p.long()] += 1
+                #for t, p in zip(target.view(-1), out.view(-1)):
+                #    confusion_matrix[t.long(), p.long()] += 1
 
-                print(confusion_matrix)
+                #print(confusion_matrix)
 
-                y_pred = np.asarray(y_pred)
-                if y_pred.shape[1] > 1: #We have a classification problem, convert to labels
-                    y_pred = np.argmax(y_pred, axis=1)
+                #y_pred = np.asarray(y_pred)
+                #if y_pred.shape[1] > 1: #We have a classification problem, convert to labels
+                #    y_pred = np.argmax(y_pred, axis=1)
 
-                print('pred: ', y_pred, 'true: ', y_true)
+                #print('pred: ', y_pred, 'true: ', y_true)
 
         print(accuracy)
         # valid_acc, valid_loss
