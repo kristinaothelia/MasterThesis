@@ -126,23 +126,22 @@ class Trainer(BaseTrainer):
 
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
-                print(out)
-                print(ground_truths)
-                confusion_matrix[ground_truths][out] += 1
-                print(confusion_matrix)
 
-                _,pred = torch.max(output, 1)
-                correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
-                correct = np.squeeze(correct_tensor.numpy()) if self.device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
-                print(correct)
-                for i in range(target.size(0)):
-                    label = target.data[i]
-                    print(label)
-                    class_correct[label] += correct[i].item()
-                    class_total[label] += 1
+                confusion_matrix[ground_truths][out] += 1
+                #print(confusion_matrix)
+
+                #_,pred = torch.max(output, 1)
+                #correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
+                #correct = np.squeeze(correct_tensor.numpy()) if self.device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
+                #print(correct)
+                #for i in range(target.size(0)):
+                #    label = target.data[i]
+                #    print(label)
+                #    class_correct[label] += correct[i].item()
+                #    class_total[label] += 1
 
                     # Update confusion matrix
-                    confusion_matrix[label][pred.data[i]] += 1
+                #    confusion_matrix[label][pred.data[i]] += 1
                     #confusion_matrix[ground_truths][out] += 1
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
@@ -161,6 +160,7 @@ class Trainer(BaseTrainer):
                 #print('pred: ', y_pred, 'true: ', y_true)
 
         print(accuracy)
+        print(confusion_matrix)
         # valid_acc, valid_loss
         return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix
 
