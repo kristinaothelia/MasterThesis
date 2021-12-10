@@ -159,8 +159,7 @@ class Trainer(BaseTrainer):
 
                 #print('pred: ', y_pred, 'true: ', y_true)
 
-        print(accuracy)
-        print(confusion_matrix)
+        #print(confusion_matrix)
         # valid_acc, valid_loss
         return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix
 
