@@ -105,7 +105,7 @@ class Trainer(BaseTrainer):
                 print(ground_truths)
 
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
-                print(a)
+
                 metrics.append(a)
 
                 for t, p in zip(target.view(-1), out.view(-1)):

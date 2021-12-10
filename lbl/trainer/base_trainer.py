@@ -1,6 +1,7 @@
 import time
 import sys
 import pandas as pd
+import seaborn as sns
 
 from typing import Union
 from pathlib import Path
