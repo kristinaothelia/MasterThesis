@@ -19,6 +19,13 @@ from lbl.preprocessing import (
     )
 # -----------------------------------------------------------------------------
 
+LABELS = {
+    0: "aurora-less",
+    1: "arc",
+    2: "diffuse",
+    3: "discrete",
+}
+
 def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     container = DatasetContainer.from_json(json_file)
@@ -33,6 +40,27 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
             del container[i]
             counter += 1
     print(counter)
+
+    new_length = len(container)
+    clear = 0
+    arc = 0
+    diff = 0
+    disc = 0
+
+    for i in range(new_length):
+        if container[i].label == LABELS[0]:
+            clear += 1
+        if container[i].label == LABELS[1]:
+            arc += 1
+        if container[i].label == LABELS[2]:
+            diff += 1
+        if container[i].label == LABELS[3]:
+            disc += 1
+
+    class_count = [clear, arc, diff, disc]
+    class_weights = [clear/clear, arc/clear, diff/clear, disc/clear]
+    #sample_weights = [0] * len(container)
+    print(class_weights)
 
     train, valid = container.split(seed=42, split=0.8)
 
@@ -69,9 +97,16 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
         # PadImage(size=480),
         ])
 
-
     train_loader = DatasetLoader(container=train, transforms=train_transforms)
     valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
+
+    #for idx, (data, label) in enumerate(train_loader):
+    #    print(label)
+    #    class_weight = class_weights[label]
+    #    sample_weights[idx] = class_weight
+
+
+    #sampler = torch.utils.data.WeightedRandomSampler(sample_weights, num_samples=len(sample_weights), replacement=True)
 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
@@ -93,7 +128,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    loss         = torch.nn.CrossEntropyLoss()
+    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -115,7 +150,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
 
 #json_file = 'datasets/Full_aurora_predicted.json'
-json_file = 'datasets/NEW_TEST_ml.json'
+#json_file = 'datasets/NEW_TEST_ml.json'
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
@@ -129,6 +164,7 @@ model_name = ['efficientnet-b0',
 
 #train(json_file, model_name[2], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
+exit()
 train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=2e-3, stepSize=75, g=0.1)
 
 #train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)

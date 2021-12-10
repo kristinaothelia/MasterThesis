@@ -31,85 +31,32 @@ def subpie(sizes1, sizes2, labels, colors, explode, wl1, wl2, yr1, yr2):
 
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
-#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2.json'
-predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_cut.json'
-predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_omni_predicted_efficientnet-b2.json'
-predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_omni_predicted_efficientnet-b2.json'
+# All 4 years, jan+nov+dec
+predicted_G_Full = r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_mean_predicted_efficientnet-b2.json'
+container_Full = DatasetContainer.from_json(predicted_G_Full)
+print("len container Full: ", len(container_Full))
 
-container_G = DatasetContainer.from_json(predicted_file_G)
+container_D = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_mean_predicted_efficientnet-b2_daytime.json')
+container_N = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_mean_predicted_efficientnet-b2_nighttime.json')
+
+print('len container day:   ', len(container_D))
+print('len container night: ', len(container_N))
+
+#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2.json'
+#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_cut.json'
+#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_mean_predicted_efficientnet-b2.json'
+#predicted_file_G = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_mean_predicted_efficientnet-b2_cut.json'
+#predicted_file_R = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_R_omni_predicted_efficientnet-b2.json'
+#predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_omni_predicted_efficientnet-b2.json'
+#predicted_file_1618 = r'C:\Users\Krist\Documents\ASI_json_files\Aurora_1618_G_omni_mean_predicted_efficientnet-b2.json'
+
+#container_G = DatasetContainer.from_json(predicted_file_G)
 #container_R = DatasetContainer.from_json(predicted_file_R)
 #container_1618 = DatasetContainer.from_json(predicted_file_1618)
-print("len container G: ", len(container_G))
+#print("len container G: ", len(container_G))
 #print("len container 1618: ", len(container_1618))
 #print("len container R: ", len(container_R))
 
-def remove(container):
-    # Remove data for Feb, Mar, Oct
-    counter = 0
-    for i in range(len(container)):
-        i -= counter
-        if container[i].timepoint[5:7] == '02' \
-        or container[i].timepoint[5:7] == '03' \
-        or container[i].timepoint[5:7] == '10':
-            del container[i]
-            counter += 1
-    print('removed images from container: ', counter)
-    print('new container len: ', len(container))
-
-    container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_cut.json')
-
-#remove(container_G)
-
-def split(container, nightside=False):
-
-
-    if nightside:
-        print('nightside')
-        counter = 0
-
-        for i in range(len(container)):
-
-            i -= counter
-
-            if int(container[i].timepoint[-8:-6]) > 6 and int(container[i].timepoint[-8:-6]) < 17:
-
-                #print(container[i].timepoint[-8:-6])
-                del container[i]
-                counter += 1
-        print('removed images from container: ', counter)
-        print('new container len: ', len(container))
-
-        container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_night.json')
-        return container
-
-    else:
-        print('dayside')
-        counter = 0
-
-        for i in range(len(container)):
-
-            i -= counter
-
-            if int(container[i].timepoint[-8:-6]) > 6 and int(container[i].timepoint[-8:-6]) < 17:
-                #counter += 1
-                continue
-
-            else:
-                #print(container[i].timepoint[-8:-6])
-                del container[i]
-                counter += 1
-
-        #print('removed images from container: ', counter)
-        print('new container len: ', len(container))
-
-        container.to_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_day.json')
-        return container
-
-#container_D = split(container_G)
-#container_N = split(container_G, nightside=True)
-
-container_D = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_day.json')
-container_N = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_predicted_efficientnet-b2_night.json')
 
 def max_min_mean(list, label):
 
@@ -120,8 +67,8 @@ def max_min_mean(list, label):
 
 def neg_pos(list_, label):
 
-    neg_count = len(list(filter(lambda x: (x < 0), list_)))
-    pos_count = len(list(filter(lambda x: (x >= 0), list_)))
+    neg_count = len(list(filter(lambda x: (float(x) < 0), list_)))
+    pos_count = len(list(filter(lambda x: (float(x) >= 0), list_)))
     print("\nNr. of entries [{}] with neg and pos Bz values".format(label))
     print("neg: %g [%3.2f%%]" %(neg_count, (neg_count/len(list_))*100))
     print("pos: %g [%3.2f%%]" %(pos_count, (pos_count/len(list_))*100))
@@ -130,8 +77,7 @@ def neg_pos(list_, label):
 
 def omni(container, title=None):
 
-    Bz_values_GSE = []
-    #Bz_values_GSM = []
+    Bz_values_GSM = []
     Bz_labels = []
 
     Bz_a_less = []
@@ -150,8 +96,7 @@ def omni(container, title=None):
             if entry.solarwind['Bz, nT (GSM)'] == 9999.99:
                 count99 += 1
             else:
-                Bz_values_GSE.append(entry.solarwind['Bz, nT (GSM)'])
-                #Bz_values_GSM.append(entry.solarwind['Bz, nT (GSM)'])
+                Bz_values_GSM.append(float(entry.solarwind['Bz, nT (GSM)']))
                 Bz_labels.append(entry.label)
 
         else:
@@ -159,36 +104,19 @@ def omni(container, title=None):
             if entry.solarwind['Bz, nT (GSM)'] == 9999.99:
                 count99_aless += 1
             else:
-                Bz_a_less.append(entry.solarwind['Bz, nT (GSM)'])
+                Bz_a_less.append(float(entry.solarwind['Bz, nT (GSM)']))
 
     print(title);print('-----------------------')
 
-    max_min_mean(list=Bz_values_GSE, label='Aurora')
+    max_min_mean(list=Bz_values_GSM, label='Aurora')
     max_min_mean(list=Bz_a_less, label=LABELS[0])
 
-    neg_pos(list_=Bz_values_GSE, label='Aurora')
+    neg_pos(list_=Bz_values_GSM, label='Aurora')
     neg_pos(list_=Bz_a_less, label=LABELS[0])
 
     print("Nr of entries (aurora) with 9999.99 value:    ", count99)
     print("Nr of entries (no aurora) with 9999.99 value: ", count99_aless)
 
-    """ GSE:
-    len container:  284840
-    Aurora, max, min, mean:
-    25.38
-    -16.9
-    0.14504999523854875
-    Aurora-less, max, min, mean:
-    25.9
-    -16.78
-    -0.001794082802598419
-    Aurora, neg:  68933
-    Aurora, pos:  67580
-    Aurora-less, neg:  68771
-    Aurora-less, pos:  56998
-    Nr of entries (aurora) with 9999.99 value:     8750
-    Nr of entries (no aurora) with 9999.99 value:  13808
-    """
 
 def omni_ting(container, year_='2014', year=False):
 
@@ -200,52 +128,52 @@ def omni_ting(container, year_='2014', year=False):
 
     count99 = 0
     count99_aless = 0
-    input = 'Bz, nT (GSE)'
+    input = 'Bz, nT (GSM)'
 
     if year:
         for entry in container:
             if entry.timepoint[:4] == year_:
                 if entry.label == LABELS[0]:
-                    if entry.solarwind[input] != 9999.99:
-                        a_less.append(entry.solarwind[input])
+                    if float(entry.solarwind[input]) != 9999.99:
+                        a_less.append(float(entry.solarwind[input]))
                     else:
                         count99_aless += 1
                 elif entry.label == LABELS[1]:
-                    if entry.solarwind[input] != 9999.99:
-                        arc.append(entry.solarwind[input])
+                    if float(entry.solarwind[input]) != 9999.99:
+                        arc.append(float(entry.solarwind[input]))
                     else:
                         count99 += 1
                 elif entry.label == LABELS[2]:
-                    if entry.solarwind[input] != 9999.99:
-                        diff.append(entry.solarwind[input])
+                    if float(entry.solarwind[input]) != 9999.99:
+                        diff.append(float(entry.solarwind[input]))
                     else:
                         count99 += 1
                 elif entry.label == LABELS[3]:
-                    if entry.solarwind[input] != 9999.99:
-                        disc.append(entry.solarwind[input])
+                    if float(entry.solarwind[input]) != 9999.99:
+                        disc.append(float(entry.solarwind[input]))
                     else:
                         count99 += 1
 
     else:
         for entry in container:
             if entry.label == LABELS[0]:
-                if entry.solarwind[input] != 9999.99:
-                    a_less.append(entry.solarwind[input])
+                if float(entry.solarwind[input]) != 9999.99:
+                    a_less.append(float(entry.solarwind[input]))
                 else:
                     count99_aless += 1
             elif entry.label == LABELS[1]:
-                if entry.solarwind[input] != 9999.99:
-                    arc.append(entry.solarwind[input])
+                if float(entry.solarwind[input]) != 9999.99:
+                    arc.append(float(entry.solarwind[input]))
                 else:
                     count99 += 1
             elif entry.label == LABELS[2]:
-                if entry.solarwind[input] != 9999.99:
-                    diff.append(entry.solarwind[input])
+                if float(entry.solarwind[input]) != 9999.99:
+                    diff.append(float(entry.solarwind[input]))
                 else:
                     count99 += 1
             elif entry.label == LABELS[3]:
-                if entry.solarwind[input] != 9999.99:
-                    disc.append(entry.solarwind[input])
+                if float(entry.solarwind[input]) != 9999.99:
+                    disc.append(float(entry.solarwind[input]))
                 else:
                     count99 += 1
 
@@ -256,7 +184,7 @@ def omni_ting(container, year_='2014', year=False):
     max_min_mean(list=disc, label=LABELS[3])
     '''
 
-    neg_pos(a_less, LABELS[0])
+    #neg_pos(a_less, LABELS[0])
     neg_pos(arc, LABELS[1])
     neg_pos(diff, LABELS[2])
     neg_pos(disc, LABELS[3])
@@ -266,10 +194,10 @@ def omni_ting(container, year_='2014', year=False):
     print("Nr. of [{}] entries: {}".format(LABELS[1], len(arc)))
     print("Nr. of [{}] entries: {}".format(LABELS[2], len(diff)))
     print("Nr. of [{}] entries: {}".format(LABELS[3], len(disc)))
-
+    '''
     print("Nr of entries (aurora) with 9999.99 value:    ", count99)
     print("Nr of entries (no aurora) with 9999.99 value: ", count99_aless)
-    '''
+
 
     return a_less, arc, diff, disc
 
@@ -319,6 +247,7 @@ def Bz(date):
 
 #Bz(date='2014-12-21 07')
 #exit()
+
 '''
 #omni(container=container_D)
 #omni(container=container_N)
@@ -342,24 +271,59 @@ def Bz_plots(c, c_Night, title):
     plt.plot(b_bins[:-1], b_heights, '*-', label='night')
     plt.axvline(x=0, ls='--', color='lightgrey')
     plt.title(title)
-    plt.xlabel('Bz value')
+    plt.xlabel('Bz (GSE) value')
     plt.ylabel('%')
     plt.ylim(0, 0.25)
     plt.legend()
 
-a_less, arc, diff, disc = omni_ting(container_D)
-a_less_Night, arc_Night, diff_Night, disc_Night = omni_ting(container_N)
+#container_D = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_mean_predicted_efficientnet-b2_day.json')
+#container_N = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\Aurora_G_omni_mean_predicted_efficientnet-b2_night.json')
 
+#a_less, arc, diff, disc = omni_ting(container_D)
+#a_less_Night, arc_Night, diff_Night, disc_Night = omni_ting(container_N)
+
+#Bz_plots(a_less, a_less_Night, 'no aurora')
+#Bz_plots(arc, arc_Night, 'arc')
+#Bz_plots(diff, diff_Night, 'diffuse')
+#Bz_plots(disc, disc_Night, 'discrete')
+
+#plt.show()
+
+#omni_ting(container_D, '2014', True)
+#omni_ting(container_N, '2014', True)
+a_less, arc, diff, disc = omni_ting(container_Full) #, '2020', True
+
+fig, ax = plt.subplots()
+
+#bins = [-15, -10, -5, 0, 5, 10, 15, 20, 25]
+bins = np.linspace(-25, 25, 51)
+bins = np.linspace(-20, 20, 41)
+
+a_heights, a_bins = np.histogram(a_less, bins=bins, density=True)
+b_heights, b_bins = np.histogram(arc, bins=bins, density=True)
+c_heights, c_bins = np.histogram(diff, bins=bins, density=True)
+d_heights, d_bins = np.histogram(disc, bins=bins, density=True)
+
+plt.plot(a_bins[:-1], a_heights, '|-', label='no aurora/clouds')
+plt.plot(b_bins[:-1], b_heights, '*-', label='arc')
+plt.plot(c_bins[:-1], c_heights, '.-', label='diffuse')
+plt.plot(d_bins[:-1], d_heights, 'x-', label='discrete')
+plt.axvline(x=0, ls='--', color='lightgrey')
+plt.title('Jan, Nov and Dec for 2014, 2016, 2018 and 2020')
+plt.xlabel('Bz (GSE) value')
+plt.ylabel('%')
+plt.ylim(0, 0.2)
+plt.legend()
+plt.show()
+
+'''
 Bz_plots(a_less, a_less_Night, 'no aurora')
 Bz_plots(arc, arc_Night, 'arc')
 Bz_plots(diff, diff_Night, 'diffuse')
 Bz_plots(disc, disc_Night, 'discrete')
 
 plt.show()
-#omni_ting(container_D, '2014', True)
-#omni_ting(container_N, '2014', True)
-#omni_ting('2020', True)
-
+'''
 #Make plots when Bz <0 and Bz > 0.
 #For all classes.
 #Hour plot
