@@ -125,11 +125,15 @@ class BaseTrainer:
 
         print(best_conf_matrix)
 
+        # Normalized
+        N_cm = confusion_matrix.astype('float')/confusion_matrix.sum(axis=1)[:, np.newaxis]
+        print(N_cm)
         fig = tpl.figure()
-        ax = sns.heatmap(confusion_matrix, annot=True, vmax=20)
+        #ax = sns.heatmap(confusion_matrix, annot=True, vmax=20)
+        ax = sns.heatmap(N_cm, annot=True, fmt=".2f")
         ax.set_xlabel('Predicted');
         ax.set_ylabel('True');
-        fig.show()
+        fig.show(block=True)
 
         #plt.figure(figsize=(15,10))
         fig = tpl.figure()
@@ -141,7 +145,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        fig.show()
+        fig.show(block=True)
 
         if epoch == self.epochs:
             plt.figure()
