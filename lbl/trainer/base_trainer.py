@@ -133,7 +133,8 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.show(block=True)
+        #plt.show(block=True)
+        plt.savefig(str(self.checkpoint_dir) + "/CM.png")
 
         # Normalized
         N_cm = confusion_matrix.astype('float')/confusion_matrix.sum(axis=1)[:, np.newaxis]
@@ -146,7 +147,8 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.show(block=True)
+        #plt.show(block=True)
+        plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
 
 
         if epoch == self.epochs:

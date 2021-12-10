@@ -41,6 +41,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
             counter += 1
     print(counter)
 
+    '''
     new_length = len(container)
     clear = 0
     arc = 0
@@ -59,9 +60,33 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
     class_count = [clear, arc, diff, disc]
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    print(class_weights)
     #sample_weights = [0] * len(container)
+    '''
 
-    train, valid = container.split(seed=42, split=0.7)
+    train, valid = container.split(seed=42, split=0.8)
+
+    length = len(train)
+    print(length)
+
+    clear = 0
+    arc = 0
+    diff = 0
+    disc = 0
+
+    for i in range(length):
+        if train[i].label == LABELS[0]:
+            clear += 1
+        if train[i].label == LABELS[1]:
+            arc += 1
+        if train[i].label == LABELS[2]:
+            diff += 1
+        if train[i].label == LABELS[3]:
+            disc += 1
+
+    class_count = [clear, arc, diff, disc]
+    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    #print(class_weights)
 
     img_size = efficientnet_params(model_name)['resolution']
 
@@ -117,7 +142,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                batch_size   = 1,
                                                shuffle      = False,
                                                )
-    print(len(valid_loader))
+
     #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
     #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 
@@ -128,6 +153,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     print('The number of params in Million: ', params/1e6)
 
     loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    #loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -150,6 +176,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
 #json_file = 'datasets/Full_aurora_predicted.json'
 json_file = 'datasets/NEW_TEST_ml.json'
+#json_file = 'datasets/NEW_TEST.json'
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
@@ -161,9 +188,8 @@ model_name = ['efficientnet-b0',
 #train(json_file, model_name[0], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
 
-train(json_file, model_name[2], ep=10, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
-#train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
-exit()
+#train(json_file, model_name[2], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=2e-3, stepSize=75, g=0.1)
 
 #train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
