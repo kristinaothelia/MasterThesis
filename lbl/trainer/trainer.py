@@ -86,7 +86,7 @@ class Trainer(BaseTrainer):
         metrics = list()
         losses  = list()
 
-        #confusion_matrix = torch.zeros(4, 4)
+        confusion_matrix = torch.zeros(4, 4)
 
         with torch.no_grad():
             for data, target in self.valid_data_loader:
