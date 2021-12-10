@@ -108,16 +108,19 @@ class Trainer(BaseTrainer):
 
         #y_true = [0]*4
         #y_pred = [0]*4
+        n=4
+        class_correct = [0]*n
+        class_total   = [0]*n
 
-        class_correct = [0]*4
-        class_total   = [0]*4
-
-        confusion_matrix = torch.zeros(4, 4)
+        confusion_matrix = np.zeros((n,n)) #torch.zeros(4, 4)
 
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
                 data, target = data.to(self.device), target.to(self.device)
+
+                print(target.size())
+                print(target.size(0))
 
                 output = self.model(data)
 
@@ -128,16 +131,18 @@ class Trainer(BaseTrainer):
                 ground_truths = torch.argmax(target, dim=1) # true class
 
                 _,pred = torch.max(output, 1)
-                correct_tensor = pred.eq(target.data.view_as(pred))
+                correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
                 correct = np.squeeze(correct_tensor.numpy()) if device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
 
                 for i in range(target.size(0)):
                     label = target.data[i]
+                    print(label)
                     class_correct[label] += correct[i].item()
                     class_total[label] += 1
 
                     # Update confusion matrix
                     confusion_matrix[label][pred.data[i]] += 1
+                    #confusion_matrix[ground_truths][out] += 1
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
