@@ -1,5 +1,6 @@
 import time
 import sys
+import pandas as pd
 
 from typing import Union
 from pathlib import Path
@@ -71,7 +72,7 @@ class BaseTrainer:
             epoch_start_time = time.time()
 
             loss = self._train_epoch(epoch)
-            valid_acc, valid_loss = self._valid_epoch(epoch)
+            valid_acc, valid_loss, confusion_matrix = self._valid_epoch(epoch)
 
             epoch_end_time = time.time() - epoch_start_time
 
@@ -101,6 +102,7 @@ class BaseTrainer:
                 self.save_checkpoint(epoch, best=True)
                 best_ep = epoch
                 best_acc = valid_acc
+                best_conf_matrix = confusion_matrix
 
             print('-----------------------------------')
 
@@ -117,6 +119,17 @@ class BaseTrainer:
         log.write("Batch size (train): {}\n".format(self.model_info[0]))
         log.write("Other model info: lr:{}, step:{}, gamma:{}".format(self.model_info[1], self.model_info[2], self.model_info[3]))
         log.close()
+
+        plt.figure(figsize=(15,10))
+        class_names = ['no aurora', 'arc', 'diffuse', 'discrete']
+        df_cm = pd.DataFrame(best_conf_matrix, index=class_names, columns=class_names).astype(int)
+        heatmap = sns.heatmap(df_cm, annot=True, fmt="d")
+
+        heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
+        heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()
 
         if epoch == self.epochs:
             plt.figure()

@@ -108,7 +108,10 @@ class Trainer(BaseTrainer):
                 print(a)
                 metrics.append(a)
 
-        return np.mean(np.array(metrics)), np.mean(np.array(losses))
+                for t, p in zip(target.view(-1), out.view(-1)):
+                    confusion_matrix[t.long(), p_long()] += 1
+
+        return np.mean(np.array(metrics)), np.mean(np.array(losses)), confusion_matrix
 
 
     def _progress(self, batch_idx):
