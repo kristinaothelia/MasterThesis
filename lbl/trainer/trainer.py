@@ -102,8 +102,12 @@ class Trainer(BaseTrainer):
         :return: A log that contains information about validation
         """
         self.model.eval()
-        metrics = list()
+        accuracy = list()    # metrics
         losses  = list()
+        #preds = torch.tensor([])
+
+        y_true = []
+        y_pred = []
 
         confusion_matrix = torch.zeros(4, 4)
 
@@ -117,26 +121,33 @@ class Trainer(BaseTrainer):
                 loss = self.loss_function(output, target.argmax(dim=1)).item()
                 losses.append(loss)
 
-                out = torch.argmax(output, dim=1)
-                ground_truths = torch.argmax(target, dim=1)
+                out = torch.argmax(output, dim=1) # predicted
+                ground_truths = torch.argmax(target, dim=1) # true class
+
+                target = target.detach().cpu().numpy() # labels
+                output = output.detach().cpu().numpy() # y_hat
+                for i in range(self.batch_size):
+                    y_true.append(target[i])
+                    y_pred.append(output[i,:])
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
-
-                #print(out)
-                print(target)
-                print(ground_truths)
-
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
-
-                metrics.append(a)
-
-                print("Confusion Matrix : ")
-                confusion_matrix(output.round().reshape(-1).detach(),target)
+                accuracy.append(a)
 
                 for t, p in zip(target.view(-1), out.view(-1)):
                     confusion_matrix[t.long(), p.long()] += 1
 
-        return np.mean(np.array(metrics)), np.mean(np.array(losses)), confusion_matrix
+                print(confusion_matrix)
+
+                y_pred = np.asarray(y_pred)
+                if y_pred.shape[1] > 1: #We have a classification problem, convert to labels
+                    y_pred = np.argmax(y_pred, axis=1)
+
+                print('pred: ', y_pred, 'true: ', y_true)
+
+        print(accuracy)
+        # valid_acc, valid_loss
+        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix
 
 
     def _progress(self, batch_idx):

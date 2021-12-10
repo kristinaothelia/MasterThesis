@@ -74,7 +74,7 @@ class BaseTrainer:
             epoch_start_time = time.time()
 
             loss = self._train_epoch(epoch)
-            valid_acc, valid_loss, confusion_matrix = self._valid_epoch(epoch)
+            valid_acc, valid_loss, confusion_matrix= self._valid_epoch(epoch)
 
             epoch_end_time = time.time() - epoch_start_time
 
