@@ -58,9 +58,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
             disc += 1
 
     class_count = [clear, arc, diff, disc]
-    class_weights = [clear/clear, arc/clear, diff/clear, disc/clear]
+    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
     #sample_weights = [0] * len(container)
-    print(class_weights)
 
     train, valid = container.split(seed=42, split=0.8)
 
