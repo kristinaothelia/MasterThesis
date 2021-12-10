@@ -105,6 +105,7 @@ class BaseTrainer:
                 best_ep = epoch
                 best_acc = valid_acc
                 best_conf_matrix = confusion_matrix
+                print(best_conf_matrix)
 
             print('-----------------------------------')
 
