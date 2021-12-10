@@ -101,8 +101,8 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1)
                 ground_truths = torch.argmax(target, dim=1)
 
-                print(out)
-                print(ground_truths)
+                #print(out)
+                #print(ground_truths)
 
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
 

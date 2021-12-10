@@ -2,6 +2,7 @@ import time
 import sys
 import pandas as pd
 import seaborn as sns
+import termplotlib as tpl
 
 from typing import Union
 from pathlib import Path
@@ -123,16 +124,17 @@ class BaseTrainer:
 
         print(best_conf_matrix)
 
-        plt.figure(figsize=(15,10))
+        #plt.figure(figsize=(15,10))
+        fig = tpl.figure()
         class_names = ['no aurora', 'arc', 'diffuse', 'discrete']
         df_cm = pd.DataFrame(best_conf_matrix, index=class_names, columns=class_names).astype(int)
         heatmap = sns.heatmap(df_cm, annot=True, fmt="d")
 
         heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-        plt.show()
+        fig.ylabel('True label')
+        fig.xlabel('Predicted label')
+        fig.show()
 
         if epoch == self.epochs:
             plt.figure()
