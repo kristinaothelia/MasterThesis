@@ -121,6 +121,8 @@ class BaseTrainer:
         log.write("Other model info: lr:{}, step:{}, gamma:{}".format(self.model_info[1], self.model_info[2], self.model_info[3]))
         log.close()
 
+        print(best_conf_matrix)
+
         plt.figure(figsize=(15,10))
         class_names = ['no aurora', 'arc', 'diffuse', 'discrete']
         df_cm = pd.DataFrame(best_conf_matrix, index=class_names, columns=class_names).astype(int)
@@ -142,7 +144,7 @@ class BaseTrainer:
             plt.xlabel("Epochs")
             plt.ylabel("Loss/Accuracy")
             plt.legend()
-            plt.savefig(self.checkpoint_dir / "/acc_vs_loss.png")
+            plt.savefig(str(self.checkpoint_dir) + "/acc_vs_loss.png")
 
     def save_checkpoint(self, epoch, best: bool = False):
         """
