@@ -61,7 +61,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
     #sample_weights = [0] * len(container)
 
-    train, valid = container.split(seed=42, split=0.8)
+    train, valid = container.split(seed=42, split=0.6)
 
     img_size = efficientnet_params(model_name)['resolution']
 
@@ -161,7 +161,7 @@ model_name = ['efficientnet-b0',
 #train(json_file, model_name[0], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
 
-train(json_file, model_name[2], ep=50, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=10, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
 exit()
 train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=2e-3, stepSize=75, g=0.1)
