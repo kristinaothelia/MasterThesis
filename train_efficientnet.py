@@ -61,7 +61,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
     #sample_weights = [0] * len(container)
 
-    train, valid = container.split(seed=42, split=0.6)
+    train, valid = container.split(seed=42, split=0.7)
 
     img_size = efficientnet_params(model_name)['resolution']
 

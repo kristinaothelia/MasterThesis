@@ -138,9 +138,9 @@ class BaseTrainer:
         # Normalized
         N_cm = confusion_matrix.astype('float')/confusion_matrix.sum(axis=1)[:, np.newaxis]
         print(N_cm)
-        
+
         plt.figure() # figsize=(15,10)
-        df_cm = pd.DataFrame(N:cm, index=class_names, columns=class_names).astype(int)
+        df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(int)
         heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
         heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
