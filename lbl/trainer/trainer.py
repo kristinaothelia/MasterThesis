@@ -113,10 +113,7 @@ class Trainer(BaseTrainer):
         class_total   = [0]*n
 
         confusion_matrix = np.zeros((n,n)) #torch.zeros(4, 4)
-        confusion_matrix[2][1] += 1
-        confusion_matrix[2][1] += 1
-        confusion_matrix[3][2] += 1
-        print(confusion_matrix)
+
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
@@ -129,6 +126,9 @@ class Trainer(BaseTrainer):
 
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
+                print(ground_truths)
+                confusion_matrix[ground_truths][out] += 1
+                print(confusion_matrix)
 
                 _,pred = torch.max(output, 1)
                 correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
