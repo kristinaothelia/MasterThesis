@@ -86,6 +86,8 @@ class Trainer(BaseTrainer):
         metrics = list()
         losses  = list()
 
+        #confusion_matrix = torch.zeros(4, 4)
+
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
@@ -99,8 +101,11 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1)
                 ground_truths = torch.argmax(target, dim=1)
 
-                a = torch.mean((out == ground_truths).type(torch.float32)).item()
+                print(out)
+                print(ground_truths)
 
+                a = torch.mean((out == ground_truths).type(torch.float32)).item()
+                print(a)
                 metrics.append(a)
 
         return np.mean(np.array(metrics)), np.mean(np.array(losses))
