@@ -132,8 +132,8 @@ class BaseTrainer:
 
         heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
-        fig.ylabel('True label')
-        fig.xlabel('Predicted label')
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
         fig.show()
 
         if epoch == self.epochs:

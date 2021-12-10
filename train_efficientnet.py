@@ -117,7 +117,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                batch_size   = 1,
                                                shuffle      = False,
                                                )
-
+    print(len(valid_loader))
     #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
     #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 

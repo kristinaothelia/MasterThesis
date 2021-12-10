@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from sklearn.metrics import confusion_matrix
 
 from .base_trainer import BaseTrainer
 
@@ -39,6 +40,24 @@ class Trainer(BaseTrainer):
         self.batch_size         = data_loader.batch_size
         self.len_epoch          = len(data_loader)*self.batch_size
         self.log_step           = int(self.len_epoch/(4)) if not isinstance(log_step, int) else log_step
+
+    def F_score(logit, label, threshold=0.5, beta=2):
+        prob = torch.sigmoid(logit)
+        prob = prob > threshold
+        label = label > threshold
+
+        TP = (prob & label).sum().float()
+        TN = ((~prob) & (~label)).sum().float()
+        FP = (prob & (~label)).sum().float()
+        FN = ((~prob) & label).sum().float()
+
+        accuracy = (TP+TN)/(TP+TN+FP+FN)
+        precision = torch.mean(TP / (TP + FP + 1e-12))
+        recall = torch.mean(TP / (TP + FN + 1e-12))
+        F2 = (1 + beta**2) * precision * recall / (beta**2 * precision + recall + 1e-12)
+
+        return accuracy, precision, recall, F2.mean(0)
+
 
     def _train_epoch(self, epoch):
         """
@@ -101,12 +120,18 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1)
                 ground_truths = torch.argmax(target, dim=1)
 
+                #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
+
                 #print(out)
-                #print(ground_truths)
+                print(target)
+                print(ground_truths)
 
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
 
                 metrics.append(a)
+
+                print("Confusion Matrix : ")
+                confusion_matrix(output.round().reshape(-1).detach(),target)
 
                 for t, p in zip(target.view(-1), out.view(-1)):
                     confusion_matrix[t.long(), p.long()] += 1
