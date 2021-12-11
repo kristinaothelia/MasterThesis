@@ -1,5 +1,0 @@
-Training time [h]: 0.09384526093800863
-The number of params in Million: 7.706054e-06
-Best epoch 7 of 10. Validation acc: 0.6669970267591675
-Batch size (train): 8
-Other model info: lr:0.002, step:75, gamma:0.1

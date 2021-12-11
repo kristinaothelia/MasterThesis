@@ -134,10 +134,11 @@ class BaseTrainer:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         #plt.show(block=True)
+        plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM.png")
 
         # Normalized
-        N_cm = confusion_matrix.astype('float')/confusion_matrix.sum(axis=1)[:, np.newaxis]
+        N_cm = confusion_matrix/confusion_matrix.sum(axis=1)#[:, np.newaxis] #.astype('float')
         print(N_cm)
 
         plt.figure() # figsize=(15,10)
@@ -148,6 +149,7 @@ class BaseTrainer:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         #plt.show(block=True)
+        plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
 
 

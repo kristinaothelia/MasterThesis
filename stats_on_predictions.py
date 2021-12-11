@@ -627,12 +627,14 @@ def Bz_stats(year):
     plt.savefig("stats/Green/b2/yearly_Bz_plot_{}.png".format(year), bbox_inches="tight")
     #plt.show()
 
+'''
 Bz_stats(year='2014')
 Bz_stats(year='2016')
 Bz_stats(year='2018')
 Bz_stats(year='2020')
 Bz_stats(year='All years')
 exit()
+'''
 
 def Get_hours():
     # Make times
@@ -670,7 +672,7 @@ def subcategorybar(X, vals, leg, width=0.8):
     plt.legend(leg)
     plt.xticks(_X, X)
 
-def stats_aurora(container, label, year=False, weight=False):
+def stats_aurora(container, label, year=False, weight=False, Bz=False):
     """
     blabla
     """
@@ -1139,8 +1141,8 @@ Hour_subplot(container=container_Full, year="2016 w", N=5, month=False, weight=T
 Hour_subplot(container=container_Full, year="2018 w", N=5, month=False, weight=True)
 Hour_subplot(container=container_Full, year="2020 w", N=5, month=False, weight=True)
 
-plt.savefig("stats/Green/b2/yearly_hour_plot_weight.png", bbox_inches="tight")
-#plt.show()
+#plt.savefig("stats/Green/b2/yearly_hour_plot_weight.png", bbox_inches="tight")
+plt.show()
 
 exit()
 
