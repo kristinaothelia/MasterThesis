@@ -106,7 +106,7 @@ class BaseTrainer:
                 best_acc = valid_acc
                 best_conf_matrix = confusion_matrix
                 print(best_conf_matrix)
-                N_cm = confusion_matrix/confusion_matrix.sum(axis=1)#[:, np.newaxis] #.astype('float')
+                N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
                 print(N_cm)
 
             print('-----------------------------------')

@@ -11,7 +11,7 @@ y_actu = pd.Series([2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2], name='Actual')
 y_pred = pd.Series([0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2], name='Predicted')
 df_confusion = pd.crosstab(y_actu, y_pred)
 print(df_confusion)
-df_conf_norm = df_confusion / df_confusion.sum(axis=1)
+df_conf_norm = df_confusion / df_confusion.sum(axis=0)
 print(df_conf_norm)
 
 def plot_confusion_matrix(df_confusion, title='Confusion matrix', cmap=plt.cm.gray_r):
