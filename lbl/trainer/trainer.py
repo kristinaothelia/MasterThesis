@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from sklearn.metrics import cm
+#from sklearn.metrics import confusion_matrix
 
 from .base_trainer import BaseTrainer
 
