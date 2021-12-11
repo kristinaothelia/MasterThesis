@@ -105,9 +105,9 @@ class BaseTrainer:
                 best_ep = epoch
                 best_acc = valid_acc
                 best_conf_matrix = confusion_matrix
-                print(best_conf_matrix)
-                N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-                print(N_cm)
+                #print(best_conf_matrix)
+                #N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
+                #print(N_cm)
 
             print('-----------------------------------')
 
@@ -118,29 +118,35 @@ class BaseTrainer:
         print("Training time [h]: ", train_end_time/(60*60))
 
         log = open(self.checkpoint_dir / "log.txt", "w")
+        log.write("Model {}".format(self.model_info[-1]))
         log.write("Training time [h]: {}\n".format(train_end_time/(60*60)))
         log.write("The number of params in Million: {}\n".format(self.model_info[4]/1e6))
         log.write("Best epoch {} of {}. Validation acc: {}\n".format(best_ep, self.epochs, best_acc))
         log.write("Batch size (train): {}\n".format(self.model_info[0]))
         log.write("Other model info: lr:{}, step:{}, gamma:{}".format(self.model_info[1], self.model_info[2], self.model_info[3]))
+        log.write("Confusion matrix")
+        log.write(best_conf_matrix)
+        log.write("Confusion matrix, norm")
+        log.write(best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis])
         log.close()
 
         print(best_conf_matrix)
 
         plt.figure()
-        class_names = ['no aurora', 'arc', 'diffuse', 'discrete']
+        class_names = ['No aurora', 'Arc', 'Diffuse', 'Discrete']
         df_cm = pd.DataFrame(best_conf_matrix, index=class_names, columns=class_names).astype(int)
         heatmap = sns.heatmap(df_cm, annot=True, fmt="d")
         heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
+        plt.ylabel('Observed class') # True label
+        plt.xlabel('Predicted class')
+        plt.title('Confusion matrix, model {}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM.png")
 
         # Normalized
-        N_cm = confusion_matrix/confusion_matrix.sum(axis=1)#[:, np.newaxis] #.astype('float')
+        N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
         print(N_cm)
 
         plt.figure() # figsize=(15,10)
@@ -148,8 +154,9 @@ class BaseTrainer:
         heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
         heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=15)
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
+        plt.ylabel('Observed class') # True label
+        plt.xlabel('Predicted class')
+        plt.title('Norm. confusion matrix, model {}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
@@ -158,12 +165,13 @@ class BaseTrainer:
         if epoch == self.epochs:
             plt.figure()
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
-            plt.title("Loss vs Accuracy. (best v.acc: {:.4f})".format(best_acc))
+            plt.title("Model {}, loss vs accuracy (best v.acc: {:.2f})".format(self.model_info[-1], best_acc))
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="Validation loss")
             plt.plot(ep, v_acc, label="Validation accuracy")
+            plt.axhline(y=1, ls='--', color='lightgrey')
             plt.xlabel("Epochs")
-            plt.ylabel("Loss/Accuracy")
+            plt.ylabel("Loss, Accuracy")
             plt.legend()
             plt.savefig(str(self.checkpoint_dir) + "/acc_vs_loss.png")
 
