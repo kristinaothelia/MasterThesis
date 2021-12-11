@@ -140,7 +140,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
         plt.ylabel('Observed class') # True label
         plt.xlabel('Predicted class')
-        plt.title('Confusion matrix, model {}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
+        plt.title('Confusion matrix, model B{}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM.png")
@@ -156,7 +156,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=15)
         plt.ylabel('Observed class') # True label
         plt.xlabel('Predicted class')
-        plt.title('Norm. confusion matrix, model {}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
+        plt.title('Norm. confusion matrix, model B{}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc))
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
@@ -165,7 +165,7 @@ class BaseTrainer:
         if epoch == self.epochs:
             plt.figure()
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
-            plt.title("Model {}, loss vs accuracy (best v.acc: {:.2f})".format(self.model_info[-1], best_acc))
+            plt.title("Model B{}, loss vs accuracy (best v.acc: {:.2f})".format(self.model_info[-1], best_acc))
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="Validation loss")
             plt.plot(ep, v_acc, label="Validation accuracy")
