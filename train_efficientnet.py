@@ -124,6 +124,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     train_loader = DatasetLoader(container=train, transforms=train_transforms)
     valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
 
+    # Test with new image folders!
     #for idx, (data, label) in enumerate(train_loader):
     #    print(label)
     #    class_weight = class_weights[label]
