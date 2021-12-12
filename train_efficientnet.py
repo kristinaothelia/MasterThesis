@@ -167,7 +167,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
                       save_period       = 100,
-                      savedir           = './models/{}/batch_size_{}/lr_{}'.format(model_name[-2:], batch_size_train, learningRate),
+                      savedir           = './models/{}/batch_size_{}/lr_{}/st_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                       device            = 'cuda:3',
                       )
