@@ -515,7 +515,7 @@ def omni_ting(container, year_='2014', year=False):
 
 def sub_plots_Bz(year, a_less, arc, diff, disc, neg, pos, T_Aurora_N=None, month_name=None,  N=4):
 
-    bins = np.linspace(-25, 25, 51)
+    bins = np.linspace(-20, 20, 41)
 
     if year[:4] == '2020':
         shape = '*-'
@@ -526,79 +526,101 @@ def sub_plots_Bz(year, a_less, arc, diff, disc, neg, pos, T_Aurora_N=None, month
     else:
         shape = 'x-'
 
-    subplot(N,1,1)
     if month_name != None:
-        plt.title('Statistics ({}) for all classes'.format(month_name), fontsize=18)
+        plt.suptitle('Bz distribution for all classes {} {}'.format(month_name, year[:4]), fontsize=18)
     else:
-        if len(year) > 4:
-            plt.title('Yearly statistics for all classes (weighted)', fontsize=18)
-        else:
-            plt.title('Yearly statistics for all classes. {}'.format(year[:4]), fontsize=18)
+        plt.suptitle('Bz distribution for all classes. {}'.format(year[:4]), fontsize=18)
+
+    #subplot(N,1,1)
+    subplot(N/2,N/2,1)
+    plt.title('arc', fontsize = 15)
 
     a_heights, a_bins = np.histogram(arc[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(arc[1], bins=bins, density=True)
-    plt.plot(a_bins[:-1], a_heights, '.-', label='arc - day')
-    plt.plot(b_bins[:-1], b_heights, '*-', label='arc - night')
+    plt.plot(a_bins[:-1], a_heights, 'o-', label='dayside')
+    plt.plot(b_bins[:-1], b_heights, '*-', label='nightside')
     #adding text inside the plot
-    plt.text(-24, 0.20, 'Bz < 0: {:.2f}%'.format(neg[0][1]), fontsize = 13, color='C0')
-    plt.text(-24, 0.17, 'Bz > 0: {:.2f}%'.format(pos[0][1]), fontsize = 13, color='C0')
-    plt.text(-24, 0.14, 'Bz < 0: {:.2f}%'.format(neg[1][1]), fontsize = 13, color='C1')
-    plt.text(-24, 0.11, 'Bz > 0: {:.2f}%'.format(pos[1][1]), fontsize = 13, color='C1')
+    #plt.text(-20, 0.27, 'Bz < 0:  {:.2f}%'.format(neg[0][0]), fontsize = 13, color='C0')
+    #plt.text(-20, 0.24, 'Bz >= 0: {:.2f}%'.format(pos[0][0]), fontsize = 13, color='C0')
+    #plt.text(-20, 0.21, 'Bz < 0:  {:.2f}%'.format(neg[1][0]), fontsize = 13, color='C1')
+    #plt.text(-20, 0.18, 'Bz >= 0: {:.2f}%'.format(pos[1][0]), fontsize = 13, color='C1')
+    plt.text(-19, 0.27, 'Bz < 0:  {:.1f}%'.format(neg[0][1]), fontsize = 13, color='C0')
+    plt.text(4, 0.27, 'Bz >= 0: {:.1f}%'.format(pos[0][1]), fontsize = 13, color='C0')
+    plt.text(-19, 0.24, 'Bz < 0:  {:.1f}%'.format(neg[1][1]), fontsize = 13, color='C1')
+    plt.text(4, 0.24, 'Bz >= 0: {:.1f}%'.format(pos[1][1]), fontsize = 13, color='C1')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plt.plot(hours, T_arc_N, shape, label='arc - '+year)
     plt.ylabel("%", fontsize=15)
-    plt.ylim(0, 0.30)
-    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True) #, ncol=2
+    plt.ylim(-0.01, 0.30)
+    plt.xticks(fontsize=11)
+    plt.yticks(fontsize=11)
+    plt.legend(fontsize=13, loc='upper left', bbox_to_anchor=(0.675, 1.2),
+          fancybox=True, shadow=True, ncol=2)
+    #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
     #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
 
-    subplot(N,1,2)
+    #subplot(N,1,2)
+    subplot(N/2,N/2,2)
+    plt.title('diffuse', fontsize = 15)
     a_heights, a_bins = np.histogram(diff[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(diff[1], bins=bins, density=True)
-    plt.text(-24, 0.20, 'Bz < 0: {:.2f}%'.format(neg[0][2]), fontsize = 13, color='C0')
-    plt.text(-24, 0.17, 'Bz > 0: {:.2f}%'.format(pos[0][2]), fontsize = 13, color='C0')
-    plt.text(-24, 0.14, 'Bz < 0: {:.2f}%'.format(neg[1][2]), fontsize = 13, color='C1')
-    plt.text(-24, 0.11, 'Bz > 0: {:.2f}%'.format(pos[1][2]), fontsize = 13, color='C1')
-    plt.plot(a_bins[:-1], a_heights, '.-', label='diff - day')
-    plt.plot(b_bins[:-1], b_heights, '*-', label='diff - night')
+    plt.text(-19, 0.27, 'Bz < 0:  {:.1f}%'.format(neg[0][2]), fontsize = 13, color='C0')
+    plt.text(4, 0.27, 'Bz >= 0: {:.1f}%'.format(pos[0][2]), fontsize = 13, color='C0')
+    plt.text(-19, 0.24, 'Bz < 0:  {:.1f}%'.format(neg[1][2]), fontsize = 13, color='C1')
+    plt.text(4, 0.24, 'Bz >= 0: {:.1f}%'.format(pos[1][2]), fontsize = 13, color='C1')
+    plt.plot(a_bins[:-1], a_heights, 'o-', label='dayside')
+    plt.plot(b_bins[:-1], b_heights, '*-', label='nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_diff_N, 'diffuse', year, month=None, monthly=False)
     #plt.plot(hours, T_diff_N, shape, label='diffuse - '+year)
     plt.ylabel("%", fontsize=15)
-    plt.ylim(0, 0.30)
-    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
+    plt.ylim(-0.01, 0.30)
+    plt.xticks(fontsize=11)
+    plt.yticks(fontsize=11)
+    #plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
+    #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
 
-    subplot(N,1,3)
+    #subplot(N,1,3)
+    subplot(N/2,N/2,3)
+    plt.title('discrete', fontsize = 15)
     a_heights, a_bins = np.histogram(disc[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(disc[1], bins=bins, density=True)
-    plt.text(-24, 0.20, 'Bz < 0: {:.2f}%'.format(neg[0][3]), fontsize = 13, color='C0')
-    plt.text(-24, 0.17, 'Bz > 0: {:.2f}%'.format(pos[0][3]), fontsize = 13, color='C0')
-    plt.text(-24, 0.14, 'Bz < 0: {:.2f}%'.format(neg[1][3]), fontsize = 13, color='C1')
-    plt.text(-24, 0.11, 'Bz > 0: {:.2f}%'.format(pos[1][3]), fontsize = 13, color='C1')
-    plt.plot(a_bins[:-1], a_heights, '.-', label='disc - day')
-    plt.plot(b_bins[:-1], b_heights, '*-', label='disc - night')
+    plt.text(-19, 0.27, 'Bz < 0:  {:.1f}%'.format(neg[0][3]), fontsize = 13, color='C0')
+    plt.text(4, 0.27, 'Bz >= 0: {:.1f}%'.format(pos[0][3]), fontsize = 13, color='C0')
+    plt.text(-19, 0.24, 'Bz < 0:  {:.1f}%'.format(neg[1][3]), fontsize = 13, color='C1')
+    plt.text(4, 0.24, 'Bz >= 0: {:.1f}%'.format(pos[1][3]), fontsize = 13, color='C1')
+    plt.plot(a_bins[:-1], a_heights, 'o-', label='dayside')
+    plt.plot(b_bins[:-1], b_heights, '*-', label='nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_disc_N, 'discrete', year, month=None, monthly=False)
     #plt.plot(hours, T_disc_N, shape, label='discrete - '+year)
     plt.ylabel("%", fontsize=15)
-    plt.ylim(0, 0.30)
-    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
+    plt.ylim(-0.01, 0.30)
+    plt.xticks(fontsize=11)
+    plt.yticks(fontsize=11)
+    #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
+    plt.xlabel("Bz value [nT]", fontsize=15)
 
-    subplot(N,1,4)
+    #subplot(N,1,4)
+    subplot(N/2,N/2,4)
+    plt.title('no aurora', fontsize = 15)
     a_heights, a_bins = np.histogram(a_less[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(a_less[1], bins=bins, density=True)
-    plt.text(-24, 0.20, 'Bz < 0: {:.2f}%'.format(neg[0][0]), fontsize = 13, color='C0')
-    plt.text(-24, 0.17, 'Bz > 0: {:.2f}%'.format(pos[0][0]), fontsize = 13, color='C0')
-    plt.text(-24, 0.14, 'Bz < 0: {:.2f}%'.format(neg[1][0]), fontsize = 13, color='C1')
-    plt.text(-24, 0.11, 'Bz > 0: {:.2f}%'.format(pos[1][0]), fontsize = 13, color='C1')
-    plt.plot(a_bins[:-1], a_heights, '.-', label='no aurora - day')
-    plt.plot(b_bins[:-1], b_heights, '*-', label='no aurora - night')
+    plt.text(-19, 0.27, 'Bz < 0:  {:.1f}%'.format(neg[0][0]), fontsize = 13, color='C0')
+    plt.text(4, 0.27, 'Bz >= 0: {:.1f}%'.format(pos[0][0]), fontsize = 13, color='C0')
+    plt.text(-19, 0.24, 'Bz < 0:  {:.1f}%'.format(neg[1][0]), fontsize = 13, color='C1')
+    plt.text(4, 0.24, 'Bz >= 0: {:.1f}%'.format(pos[1][0]), fontsize = 13, color='C1')
+    plt.plot(a_bins[:-1], a_heights, 'o-', label='dayside')
+    plt.plot(b_bins[:-1], b_heights, '*-', label='nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_c_N, 'no aurora', year, month=None, monthly=False, axis=True)
     #plt.plot(hours, T_c_N, shape, label='no aurora - '+year)
     #plt.xlabel("Hour of the day", fontsize=13)
     plt.ylabel("%", fontsize=15)
-    plt.ylim(0, 0.30)
-    plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
+    plt.ylim(-0.01, 0.30)
+    plt.xticks(fontsize=11)
+    plt.yticks(fontsize=11)
+    #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
 
     plt.xlabel("Bz value [nT]", fontsize=15)
 
@@ -606,7 +628,9 @@ def sub_plots_Bz(year, a_less, arc, diff, disc, neg, pos, T_Aurora_N=None, month
 
 def Bz_stats(year):
     print('Bz stats')
-    plt.figure(figsize=(8, 11)) # bredde, hoyde
+    print(year)
+    #plt.figure(figsize=(8, 11)) # bredde, hoyde
+    plt.figure(figsize=(11, 8)) # bredde, hoyde
 
     if year == 'All years':
         a_less_Day, arc_Day, diff_Day, disc_Day, neg_Day, pos_Day = omni_ting(container_D)
@@ -627,14 +651,14 @@ def Bz_stats(year):
     plt.savefig("stats/Green/b2/yearly_Bz_plot_{}.png".format(year), bbox_inches="tight")
     #plt.show()
 
-'''
+
 Bz_stats(year='2014')
 Bz_stats(year='2016')
 Bz_stats(year='2018')
 Bz_stats(year='2020')
 Bz_stats(year='All years')
 exit()
-'''
+
 
 def Get_hours():
     # Make times
@@ -1136,10 +1160,10 @@ def Hour_subplot(container, year, month_name='Jan', N=4, month=False, weight=Fal
 #plt.show()
 
 plt.figure(figsize=(8, 11)) # bredde, hoyde
-Hour_subplot(container=container_Full, year="2014 w", N=5, month=False, weight=True)
-Hour_subplot(container=container_Full, year="2016 w", N=5, month=False, weight=True)
-Hour_subplot(container=container_Full, year="2018 w", N=5, month=False, weight=True)
-Hour_subplot(container=container_Full, year="2020 w", N=5, month=False, weight=True)
+Hour_subplot(container=container_Full, year="2014 w", N=5, month=False)
+Hour_subplot(container=container_Full, year="2016 w", N=5, month=False)
+Hour_subplot(container=container_Full, year="2018 w", N=5, month=False)
+Hour_subplot(container=container_Full, year="2020 w", N=5, month=False)
 
 #plt.savefig("stats/Green/b2/yearly_hour_plot_weight.png", bbox_inches="tight")
 plt.show()
