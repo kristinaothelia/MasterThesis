@@ -99,7 +99,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode='bicubic',
+                mode='bicubic', # 'nearest' | 'linear' | 'bilinear' | 'bicubic
                 align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
@@ -167,7 +167,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
                       save_period       = 100,
-                      savedir           = './models/{}/batch_size_{}/lr_{}/st_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize),
+                      savedir           = './models/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize, g),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                       device            = 'cuda:3',
                       )
@@ -186,30 +186,36 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
-#train(json_file, model_name[0], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
-#train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
-train(json_file, model_name[0], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
-#train(json_file, model_name[0], ep=200, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[0], ep=200, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=1e-3, stepSize=100, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.5)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.01)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.9)
+
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=1, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=100, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=64, learningRate=1e-3, stepSize=50, g=0.1)
 
 #train(json_file, model_name[2], ep=200, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=64, learningRate=1e-3, stepSize=75, g=0.1)
 
-train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=25, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-2, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 #train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=5e-4, stepSize=75, g=0.1)
 
 #train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
-train(json_file, model_name[3], ep=200, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
+
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[5], ep=100, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
-exit()
+
 train(json_file, model_name[4], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
-#train(json_file, model_name[4], ep=200, batch_size_train=16, learningRate=5e-4, stepSize=75, g=0.1)
 train(json_file, model_name[4], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
+
+train(json_file, model_name[3], ep=150, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[4], ep=150, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1)

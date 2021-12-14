@@ -144,7 +144,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
         plt.ylabel(r'Observed class',fontsize=13) # True label
         plt.xlabel(r'Predicted class',fontsize=13)
-        plt.title(r'Confusion matrix, model B{}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc),fontsize=14)
+        plt.title(r'Confusion matrix for EfficentNet model B{}'+ '\n'+ r'Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc),fontsize=14)
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM.png")
@@ -160,7 +160,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
         plt.ylabel(r'Observed class',fontsize=13) # True label
         plt.xlabel(r'Predicted class',fontsize=13)
-        plt.title(r'Norm. confusion matrix, model B{}. \n Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc),fontsize=14)
+        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'+'\n'+r'Validation accuracy: {:.2f}'.format(self.model_info[-1], best_acc),fontsize=14)
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")

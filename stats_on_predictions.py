@@ -17,7 +17,7 @@ predicted_G_Full = r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_m
 container_Full = DatasetContainer.from_json(predicted_G_Full)
 print("len container Full: ", len(container_Full))
 
-split_day = True
+split_day = False
 if split_day:
     container_D = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_mean_predicted_efficientnet-b2_daytime.json')
     container_N = DatasetContainer.from_json(r'C:\Users\Krist\Documents\ASI_json_files\AuroraFull_G_omni_mean_predicted_efficientnet-b2_nighttime.json')
@@ -197,6 +197,115 @@ def month_subpie(for_year, n_less, n_arc, n_diff, n_disc, labels, title='', a_le
 
     #plt.show()
 
+def bar_chart(container, labels, year, wl, a_less=True, month=False):
+
+    colors = ['dimgrey','dodgerblue','forestgreen', 'mediumslateblue']
+
+    if month:
+        for i in range(len(year)):
+
+            tot, n_less, n_arc, n_diff, n_disc, \
+            n_less_M, n_arc_M, n_diff_M, n_disc_M \
+            = distribution(container, labels, year[i], month)
+
+            for_year = [n_less, n_arc, n_diff, n_disc]
+
+            # month bar chart
+
+    else:
+        tot1, n_less1, n_arc1, n_diff1, n_disc1, \
+        n_less_M1, n_arc_M1, n_diff_M1, n_disc_M1 \
+        = distribution(container, labels, year[0], month)
+
+        tot2, n_less2, n_arc2, n_diff2, n_disc2, \
+        n_less_M2, n_arc_M2, n_diff_M2, n_disc_M2 \
+        = distribution(container, labels, year[1], month)
+
+        tot3, n_less3, n_arc3, n_diff3, n_disc3, \
+        n_less_M3, n_arc_M3, n_diff_M3, n_disc_M3 \
+        = distribution(container, labels, year[2], month)
+
+        tot4, n_less4, n_arc4, n_diff4, n_disc4, \
+        n_less_M4, n_arc_M4, n_diff_M4, n_disc_M4 \
+        = distribution(container, labels, year[3], month)
+
+        if a_less:
+            sizes1 = [n_less1/tot1, n_less2/tot2, n_less3/tot3, n_less4/tot4]
+            sizes2 = [n_arc1/tot1, n_arc2/tot2, n_arc3/tot3, n_arc4/tot4]
+            sizes3 = [n_diff1/tot1, n_diff2/tot2, n_diff3/tot3, n_diff4/tot4]
+            sizes4 = [n_disc1/tot1, n_disc2/tot2, n_disc3/tot3, n_disc4/tot4]
+        else:
+            tot1 = tot1 - n_less1
+            tot2 = tot2 - n_less2
+            tot3 = tot3 - n_less3
+            tot4 = tot4 - n_less4
+
+            sizes1 = []
+            sizes2 = [n_arc1/tot1, n_arc2/tot2, n_arc3/tot3, n_arc4/tot4]
+            sizes3 = [n_diff1/tot1, n_diff2/tot2, n_diff3/tot3, n_diff4/tot4]
+            sizes4 = [n_disc1/tot1, n_disc2/tot2, n_disc3/tot3, n_disc4/tot4]
+
+        sizes1 = [element * 100 for element in sizes1]
+        sizes2 = [element * 100 for element in sizes2]
+        sizes3 = [element * 100 for element in sizes3]
+        sizes4 = [element * 100 for element in sizes4]
+
+        N = 4
+        ind = np.arange(N)  # the x locations for the groups
+        width = 0.22       # the width of the bars
+
+        fig = plt.figure(figsize=(8, 4))
+        ax = fig.add_subplot(111)
+
+        if a_less:
+            yvals = sizes1
+            rects1 = ax.bar(ind, yvals, width*0.9, color=colors[0], edgecolor = 'black')
+
+            zvals = sizes2
+            rects2 = ax.bar(ind+width, zvals, width*0.9, color=colors[1], edgecolor = 'black')
+
+            kvals = sizes3
+            rects3 = ax.bar(ind+width*2, kvals, width*0.9, color=colors[2], edgecolor = 'black')
+
+            jvals = sizes4
+            rects4 = ax.bar(ind+width*3, jvals, width*0.9, color=colors[3], edgecolor = 'black')
+
+            plt.title(r"Distribution of predicted classes, {}".format(wl[0]), fontsize=16)
+            ax.set_xticks(ind+width*1.5)
+            ax.legend((rects1[0], rects2[0], rects3[0], rects4[0]), (r'no aurora', r'arc', r'diffuse', r'discrete'), fancybox=True, shadow=True, ncol=2, fontsize=11)
+        else:
+            zvals = sizes2
+            rects2 = ax.bar(ind, zvals, width*0.9, color=colors[1], edgecolor = 'black')
+
+            kvals = sizes3
+            rects3 = ax.bar(ind+width, kvals, width*0.9, color=colors[2], edgecolor = 'black')
+
+            jvals = sizes4
+            rects4 = ax.bar(ind+width*2, jvals, width*0.9, color=colors[3], edgecolor = 'black')
+
+            plt.title(r"Distribution of predicted aurora classes, {}".format(wl[0]), fontsize=16)
+            ax.set_xticks(ind+width)
+            ax.legend((rects2[0], rects3[0], rects4[0]), (r'arc', r'diffuse', r'discrete'), fancybox=True, shadow=True, ncol=1, fontsize=11)
+
+        ax.set_ylabel(r'Normalized class count', fontsize=13)
+        ax.set_xticklabels(year, fontsize=13)
+
+        def autolabel(rects):
+            for rect in rects:
+                h = rect.get_height()
+                ax.text(rect.get_x()+rect.get_width()/2., 1.5, '%.1f %%'%float(h),
+                        ha='center', va='bottom', rotation=90) #1.05*h
+        if a_less:
+            autolabel(rects1)
+        autolabel(rects2)
+        autolabel(rects3)
+        autolabel(rects4)
+
+        plt.ylim(0, 55)
+        plt.tight_layout()
+
+
+
 def dist_pie_chart(container, labels, year, wl, a_less=True, month=False):
 
     explode = (0.05, 0.05, 0.05, 0.05)
@@ -278,8 +387,8 @@ def dist_pie_chart(container, labels, year, wl, a_less=True, month=False):
         ax4.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         ax4.set_title("{} [{}]\n# of images: {}".format(year[3], wl[3], tot4), fontsize=13)
 
-year = ['2014', '2016', '2018', '2020']
-wl = ['5577 Å', '5577 Å', '5577 Å', '5577 Å']
+year = [r'2014', r'2016', r'2018', r'2020']
+wl = [r'5577 Å', r'5577 Å', r'5577 Å', r'5577 Å']
 
 # Pie chart for each year
 #dist_pie_chart(container_Full, LABELS, year, wl, month=False)
@@ -290,6 +399,14 @@ wl = ['5577 Å', '5577 Å', '5577 Å', '5577 Å']
 #dist_pie_chart(container_Full, LABELS, year, wl, month=True)
 #dist_pie_chart(container_Full, LABELS, year, wl, month=True, a_less=False)
 #plt.show()
+
+
+# Bar charts
+bar_chart(container_Full, LABELS, year, wl, a_less=True, month=False)
+bar_chart(container_Full, LABELS, year, wl, a_less=False, month=False)
+
+plt.show()
+exit()
 
 
 # See which class combinations the model had a hard time predicting
@@ -527,100 +644,100 @@ def sub_plots_Bz(year, a_less, arc, diff, disc, neg, pos, T_Aurora_N=None, month
         shape = 'x-'
 
     if month_name != None:
-        plt.suptitle(r'$B_z$ distribution for all classes {} {}'.format(month_name, year[:4]), fontsize=24) # 18
+        plt.suptitle(r'$B_z$ distribution for all classes {} {}'.format(month_name, year[:4]), fontsize=26) # 18
     else:
-        plt.suptitle(r'$B_z$ distribution for all classes. {}'.format(year[:4]), fontsize=24)
+        plt.suptitle(r'$B_z$ distribution for all classes. {}'.format(year[:4]), fontsize=26)
 
     #subplot(N,1,1)
     subplot(N/2,N/2,1)
-    plt.title(r'arc', fontsize = 20)
+    plt.title(r'arc', fontsize = 22)
     a_heights, a_bins = np.histogram(arc[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(arc[1], bins=bins, density=True)
     plt.plot(a_bins[:-1], a_heights, 'o-', label=r'dayside')
     plt.plot(b_bins[:-1], b_heights, '*-', label=r'nightside')
-    plt.text(-19, 0.27, r'$B_z < 0$:  {:.1f}%'.format(neg[0][1]), fontsize = 17, color='C0')
-    plt.text(4, 0.27, r'$B_z >= 0$: {:.1f}%'.format(pos[0][1]), fontsize = 17, color='C0')
-    plt.text(-19, 0.24, r'$B_z < 0$:  {:.1f}%'.format(neg[1][1]), fontsize = 17, color='C1')
-    plt.text(4, 0.24, r'$B_z >= 0$: {:.1f}%'.format(pos[1][1]), fontsize = 17, color='C1')
+    plt.text(-19, 0.26, r'$B_z < 0$:  {:.1f}%'.format(neg[0][1]), fontsize = 19, color='C0')
+    plt.text(4, 0.26, r'$B_z >= 0$: {:.1f}%'.format(pos[0][1]), fontsize = 19, color='C0')
+    plt.text(-19, 0.21, r'$B_z < 0$:  {:.1f}%'.format(neg[1][1]), fontsize = 19, color='C1')
+    plt.text(4, 0.21, r'$B_z >= 0$: {:.1f}%'.format(pos[1][1]), fontsize = 19, color='C1')
 
     #plt.text(-19, 0.1, 'Max: {:.1f}, Min: {:.1f}'.format(np.max(pos[0][1]), np.min(neg[0][1])), fontsize = 17, color='C0')
     #plt.text(-19, 0.13, 'Max: {:.1f}, Min: {:.1f}'.format(np.max(pos[1][1]), np.min(neg[1][1])), fontsize = 17, color='C1')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plt.plot(hours, T_arc_N, shape, label='arc - '+year)
-    plt.ylabel("%", fontsize=20, color='r')    # 15
+    plt.ylabel("%", fontsize=22, color='r')    # 15
     plt.ylim(-0.01, 0.30)
-    plt.xticks(fontsize=17)
-    plt.yticks(fontsize=17) # 11
-    plt.legend(fontsize=18, loc='upper left', bbox_to_anchor=(0.72, 1.3),
+    plt.xticks(fontsize=19)
+    plt.yticks(fontsize=19) # 11
+    plt.legend(fontsize=20, loc='upper left', bbox_to_anchor=(0.71, 1.29),
           fancybox=True, shadow=True, ncol=2)   # 13, bbox_to_anchor=(0.675, 1.2)
     #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
     #plot(hours, T_arc_N, 'arc', year, month=None, monthly=False)
 
     #subplot(N,1,2)
     subplot(N/2,N/2,2)
-    plt.title(r'diffuse', fontsize = 20)
+    plt.title(r'diffuse', fontsize = 22)
     a_heights, a_bins = np.histogram(diff[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(diff[1], bins=bins, density=True)
-    plt.text(-19, 0.27, r'$B_z < 0$:  {:.1f}%'.format(neg[0][2]), fontsize = 17, color='C0')
-    plt.text(4, 0.27, r'$B_z >= 0$: {:.1f}%'.format(pos[0][2]), fontsize = 17, color='C0')
-    plt.text(-19, 0.24, r'$B_z < 0$:  {:.1f}%'.format(neg[1][2]), fontsize = 17, color='C1')
-    plt.text(4, 0.24, r'$B_z >= 0$: {:.1f}%'.format(pos[1][2]), fontsize = 17, color='C1')
+    plt.text(-19, 0.26, r'$B_z < 0$:  {:.1f}%'.format(neg[0][2]), fontsize = 19, color='C0')
+    plt.text(4, 0.26, r'$B_z >= 0$: {:.1f}%'.format(pos[0][2]), fontsize = 19, color='C0')
+    plt.text(-19, 0.21, r'$B_z < 0$:  {:.1f}%'.format(neg[1][2]), fontsize = 19, color='C1')
+    plt.text(4, 0.21, r'$B_z >= 0$: {:.1f}%'.format(pos[1][2]), fontsize = 19, color='C1')
     plt.plot(a_bins[:-1], a_heights, 'o-', label=r'dayside')
     plt.plot(b_bins[:-1], b_heights, '*-', label=r'nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_diff_N, 'diffuse', year, month=None, monthly=False)
     #plt.plot(hours, T_diff_N, shape, label='diffuse - '+year)
-    plt.ylabel("%", fontsize=20, color='r')    # 15
+    plt.ylabel("%", fontsize=22, color='r')    # 15
     plt.ylim(-0.01, 0.30)
-    plt.xticks(fontsize=17)
-    plt.yticks(fontsize=17) # 11
+    plt.xticks(fontsize=19)
+    plt.yticks(fontsize=19) # 11
     #plt.legend(fontsize=13, bbox_to_anchor = (1.05, 0.95), shadow=True)
     #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
 
     #subplot(N,1,3)
     subplot(N/2,N/2,3)
-    plt.title(r'discrete', fontsize = 20)
+    plt.title(r'discrete', fontsize = 22)
     a_heights, a_bins = np.histogram(disc[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(disc[1], bins=bins, density=True)
-    plt.text(-19, 0.27, r'$B_z < 0$:  {:.1f}%'.format(neg[0][3]), fontsize = 17, color='C0')
-    plt.text(4, 0.27, r'$B_z >= 0$: {:.1f}%'.format(pos[0][3]), fontsize = 17, color='C0')
-    plt.text(-19, 0.24, r'$B_z < 0$:  {:.1f}%'.format(neg[1][3]), fontsize = 17, color='C1')
-    plt.text(4, 0.24, r'$B_z >= 0$: {:.1f}%'.format(pos[1][3]), fontsize = 17, color='C1')
+    plt.text(-19, 0.26, r'$B_z < 0$:  {:.1f}%'.format(neg[0][3]), fontsize = 19, color='C0')
+    plt.text(4, 0.26, r'$B_z >= 0$: {:.1f}%'.format(pos[0][3]), fontsize = 19, color='C0')
+    plt.text(-19, 0.21, r'$B_z < 0$:  {:.1f}%'.format(neg[1][3]), fontsize = 19, color='C1')
+    plt.text(4, 0.21, r'$B_z >= 0$: {:.1f}%'.format(pos[1][3]), fontsize = 19, color='C1')
     plt.plot(a_bins[:-1], a_heights, 'o-', label=r'dayside')
     plt.plot(b_bins[:-1], b_heights, '*-', label=r'nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_disc_N, 'discrete', year, month=None, monthly=False)
     #plt.plot(hours, T_disc_N, shape, label='discrete - '+year)
-    plt.ylabel(r"count (normalized)", fontsize=20, color='r')    # 15
+    plt.ylabel(r"count (normalized)", fontsize=22, color='r')    # 15
     plt.ylim(-0.01, 0.30)
-    plt.xticks(fontsize=17)
-    plt.yticks(fontsize=17) # 11
+    plt.xticks(fontsize=19)
+    plt.yticks(fontsize=19) # 11
     #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
-    plt.xlabel(r"$B_z$ [nT] (GSM)", fontsize=20)    # 15
+    plt.xlabel(r"$B_z$ [nT] (GSM)", fontsize=22)    # 15
     # r'W1 disk and central $\pm2^\circ$ subtracted'
 
     #subplot(N,1,4)
     subplot(N/2,N/2,4)
-    plt.title(r'no aurora', fontsize = 20)   # 15
+    plt.title(r'no aurora', fontsize = 22)   # 15
     a_heights, a_bins = np.histogram(a_less[0], bins=bins, density=True)
     b_heights, b_bins = np.histogram(a_less[1], bins=bins, density=True)
-    plt.text(-19, 0.27, r'$B_z < 0$:  {:.1f}%'.format(neg[0][0]), fontsize = 17, color='C0')    # 13
-    plt.text(4, 0.27, r'$B_z >= 0$: {:.1f}%'.format(pos[0][0]), fontsize = 17, color='C0')
-    plt.text(-19, 0.24, r'$B_z < 0$:  {:.1f}%'.format(neg[1][0]), fontsize = 17, color='C1')
-    plt.text(4, 0.24, r'$B_z >= 0$: {:.1f}%'.format(pos[1][0]), fontsize = 17, color='C1')
+    plt.text(-19, 0.26, r'$B_z < 0$:  {:.1f}%'.format(neg[0][0]), fontsize = 19, color='C0')    # 13
+    plt.text(4, 0.26, r'$B_z >= 0$: {:.1f}%'.format(pos[0][0]), fontsize = 19, color='C0')
+    plt.text(-19, 0.21, r'$B_z < 0$:  {:.1f}%'.format(neg[1][0]), fontsize = 19, color='C1')
+    plt.text(4, 0.21, r'$B_z >= 0$: {:.1f}%'.format(pos[1][0]), fontsize = 19, color='C1')
     plt.plot(a_bins[:-1], a_heights, 'o-', label='dayside')
     plt.plot(b_bins[:-1], b_heights, '*-', label='nightside')
     plt.axvline(x=0, ls='--', color='lightgrey')
     #plot(hours, T_c_N, 'no aurora', year, month=None, monthly=False, axis=True)
     #plt.plot(hours, T_c_N, shape, label='no aurora - '+year)
     #plt.xlabel("Hour of the day", fontsize=13)
-    plt.ylabel(r"percentage", fontsize=20, color='r')    # 15
+    plt.ylabel(r"percentage", fontsize=22, color='r')    # 15
     plt.ylim(-0.01, 0.30)
-    plt.xticks(fontsize=17)
-    plt.yticks(fontsize=17) # 11
+    plt.xticks(fontsize=19)
+    plt.yticks(fontsize=19) # 11
     #plt.legend(fontsize=13, shadow=True) #bbox_to_anchor = (1.05, 0.95),
 
-    plt.xlabel(r"$B_z$ [nT] (GSM)", fontsize=20)    # 15
+    plt.xlabel(r"$B_z$ [nT] (GSM)", fontsize=22)    # 15
 
     plt.subplots_adjust(top=0.84)
 
