@@ -186,16 +186,16 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=1, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=100, g=0.1)
+train(json_file, model_name[0], ep=100, batch_size_train=64, learningRate=1e-3, stepSize=50, g=0.1)
+
 train(json_file, model_name[0], ep=100, batch_size_train=16, learningRate=1e-3, stepSize=100, g=0.1)
 train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.5)
 train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.01)
 train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.9)
-
-train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=1, g=0.1)
-train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[0], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=100, g=0.1)
-train(json_file, model_name[0], ep=100, batch_size_train=64, learningRate=1e-3, stepSize=50, g=0.1)
 
 #train(json_file, model_name[2], ep=200, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
