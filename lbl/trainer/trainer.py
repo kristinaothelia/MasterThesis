@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import sklearn as sk
 from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
 
 from .base_trainer import BaseTrainer
@@ -113,9 +114,9 @@ class Trainer(BaseTrainer):
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
-        report = sklearn.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
+        report = sk.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
         print(report)
-        
+
         #print('ground truths (true)')
         print(torch.shape(target))
         print(torch.shape(ground_truths))
@@ -139,13 +140,13 @@ class Trainer(BaseTrainer):
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
         acc_sk_b = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
-        CM_sk = sklearn.metrics.confusion_matrix(ground_truths, out)
+        CM_sk = sk.confusion_matrix(ground_truths, out)
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
-        recall = sklearn.metrics.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+        recall = sk.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
-        precision = sklearn.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+        precision = sk.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
 
         return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision
 
