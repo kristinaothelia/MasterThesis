@@ -113,11 +113,13 @@ class Trainer(BaseTrainer):
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
-
+        report = sklearn.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
+        print(report)
+        
         #print('ground truths (true)')
-        print(torch.size(target))
-        print(torch.size(ground_truths))
-        print(torch.size(out))
+        print(torch.shape(target))
+        print(torch.shape(ground_truths))
+        print(torch.shape(out))
         print(len(target))
         print(len(ground_truths))
         #print('out (pred)')
@@ -144,9 +146,6 @@ class Trainer(BaseTrainer):
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
         precision = sklearn.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
-
-        report = sklearn.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
-        print(report)
 
         return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision
 
