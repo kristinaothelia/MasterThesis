@@ -115,9 +115,9 @@ class Trainer(BaseTrainer):
 
 
         #print('ground truths (true)')
-        print(np.shape(target))
-        print(np.shape(ground_truths))
-        print(np.shape(out))
+        print(tensor.size(target))
+        print(tensor.size(ground_truths))
+        print(tensor.size(out))
         print(len(target))
         print(len(ground_truths))
         #print('out (pred)')
