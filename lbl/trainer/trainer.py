@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-#from sklearn.metrics import confusion_matrix
+from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
 
 from .base_trainer import BaseTrainer
 
@@ -40,23 +40,6 @@ class Trainer(BaseTrainer):
         self.batch_size         = data_loader.batch_size
         self.len_epoch          = len(data_loader)*self.batch_size
         self.log_step           = int(self.len_epoch/(4)) if not isinstance(log_step, int) else log_step
-
-    def F_score(logit, label, threshold=0.5, beta=2):
-        prob = torch.sigmoid(logit)
-        prob = prob > threshold
-        label = label > threshold
-
-        TP = (prob & label).sum().float()
-        TN = ((~prob) & (~label)).sum().float()
-        FP = (prob & (~label)).sum().float()
-        FN = ((~prob) & label).sum().float()
-
-        accuracy = (TP+TN)/(TP+TN+FP+FN)
-        precision = torch.mean(TP / (TP + FP + 1e-12))
-        recall = torch.mean(TP / (TP + FN + 1e-12))
-        F2 = (1 + beta**2) * precision * recall / (beta**2 * precision + recall + 1e-12)
-
-        return accuracy, precision, recall, F2.mean(0)
 
 
     def _train_epoch(self, epoch):
@@ -102,17 +85,14 @@ class Trainer(BaseTrainer):
         :return: A log that contains information about validation
         """
         self.model.eval()
-        accuracy = list()    # metrics
+        accuracy = list()
         losses  = list()
-        #preds = torch.tensor([])
 
-        #y_true = [0]*4
-        #y_pred = [0]*4
         n=4
         class_correct = [0]*n
         class_total   = [0]*n
 
-        confusion_matrix = np.zeros((n,n)) #torch.zeros(4, 4)
+        confusion_matrix = np.zeros((n,n))
 
         with torch.no_grad():
             for data, target in self.valid_data_loader:
@@ -128,40 +108,47 @@ class Trainer(BaseTrainer):
                 ground_truths = torch.argmax(target, dim=1) # true class
 
                 confusion_matrix[ground_truths][out] += 1
-                #print(confusion_matrix)
-
-                #_,pred = torch.max(output, 1)
-                #correct_tensor = ground_truths #pred.eq(target.data.view_as(pred))
-                #correct = np.squeeze(correct_tensor.numpy()) if self.device == "cpu" else np.squeeze(correct_tensor.cpu().numpy())
-                #print(correct)
-                #for i in range(target.size(0)):
-                #    label = target.data[i]
-                #    print(label)
-                #    class_correct[label] += correct[i].item()
-                #    class_total[label] += 1
-
-                    # Update confusion matrix
-                #    confusion_matrix[label][pred.data[i]] += 1
-                    #confusion_matrix[ground_truths][out] += 1
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
-                #for t, p in zip(target.view(-1), out.view(-1)):
-                #    confusion_matrix[t.long(), p.long()] += 1
 
-                #print(confusion_matrix)
+        #print('ground truths (true)')
+        print(np.shape(target))
+        print(np.shape(ground_truths))
+        print(np.shape(out))
+        print(len(target))
+        print(len(ground_truths))
+        #print('out (pred)')
+        print(len(out))
 
-                #y_pred = np.asarray(y_pred)
-                #if y_pred.shape[1] > 1: #We have a classification problem, convert to labels
-                #    y_pred = np.argmax(y_pred, axis=1)
+        #print('f1, average=None: ',f1_score(ground_truths, out, average=None))
+        # The class F-1 scores are averaged by using the number of instances in a class as weights
+        #print('f1, a=weighted:   ', f1_score(ground_truths, out, average='weighted'))
+        #print('acc (calc):       ', valid_acc)
+        #print('acc (sklearn):    ', accuracy_score(ground_truths, out))
+        #print('acc (sklearn, b): ', balanced_accuracy_score(ground_truths, out))
 
-                #print('pred: ', y_pred, 'true: ', y_true)
+        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
+        f1 = f1_score(ground_truths, out, average=None) #The best value is 1 and the worst value is 0
+        f1_w = f1_score(ground_truths, out, average='weighted')
+        acc_sk =accuracy_score(ground_truths, out)
 
-        #print(confusion_matrix)
-        # valid_acc, valid_loss
-        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix
+        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
+        acc_sk_b = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
+        CM_sk = sklearn.metrics.confusion_matrix(ground_truths, out)
+
+        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
+        recall = sklearn.metrics.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+
+        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
+        precision = sklearn.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+
+        report = sklearn.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
+        print(report)
+
+        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision
 
 
     def _progress(self, batch_idx):

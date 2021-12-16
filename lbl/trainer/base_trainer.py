@@ -64,6 +64,8 @@ class BaseTrainer:
         t_loss = []
         v_loss = []
         v_acc  = []
+        v_acc_w = []
+        v_f1_w = []
 
         train_time = time.time()
         best_ep = 1
@@ -74,7 +76,7 @@ class BaseTrainer:
             epoch_start_time = time.time()
 
             loss = self._train_epoch(epoch)
-            valid_acc, valid_loss, confusion_matrix= self._valid_epoch(epoch)
+            valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision = self._valid_epoch(epoch)
 
             epoch_end_time = time.time() - epoch_start_time
 
@@ -94,6 +96,8 @@ class BaseTrainer:
             t_loss.append(np.mean(loss))
             v_loss.append(np.mean(valid_loss))
             v_acc.append(valid_acc)
+            v_acc_w.append(acc_sk_w)
+            v_f1_w.append(f1_w)
 
             if epoch % self.save_period == 0:
                 self.save_checkpoint(epoch, best=False)
@@ -107,6 +111,15 @@ class BaseTrainer:
                 best_conf_matrix = confusion_matrix
                 L_v = np.mean(valid_loss)
                 L_t = np.mean(loss)
+
+                best_acc_sk = acc_sk
+                best_acc_sk_w = acc_sk_w
+                best_f1 = f1
+                best_f1_w = f1_w
+                best_CM_sk = CM_sk
+                best_recall = recall
+                best_precission = precision
+
                 #print(best_conf_matrix)
                 #N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
                 #print(N_cm)
@@ -115,6 +128,15 @@ class BaseTrainer:
 
         self.save_checkpoint(epoch, best=False)
         print("ep: ", best_ep, " acc: ", best_acc)
+
+        print('acc, sk:    ', best_acc_sk)
+        print('acc, sk, w: ', best_acc_sk_w)
+        print('f1:         ', best_f1)
+        print('f1, w:      ', best_f1_w)
+
+        print('sk CM:')
+        cm_ = best_CM_sk
+        print(cm_.astype('float') / cm_.sum(axis=1)[:, np.newaxis])
 
         train_end_time = time.time() - train_time
         print("Training time [h]: ", train_end_time/(60*60))
@@ -127,7 +149,11 @@ class BaseTrainer:
         log.write("Training loss: {}. Validation loss: {}\n".format(L_t, L_v))
         log.write("Batch size (train): {}\n".format(self.model_info[0]))
         log.write("Other model info: lr:{}, step:{}, gamma:{}\n".format(self.model_info[1], self.model_info[2], self.model_info[3]))
-        log.write("V.acc all 200 epochs: {} pm {}".format(np.mean(v_acc), np.std(v_acc)))
+        log.write("V.acc all 200 epochs: {} pm {}\n".format(np.mean(v_acc), np.std(v_acc)))
+        log.write("recall: {}\n".format(best_recall))
+        log.write("precision: {}\n".format(best_precission))
+        log.write("f1 score: {}\n".format(best_f1))
+        log.write("f1 score (w): {}. acc (w)".format(best_f1_w, best_acc_sk_w))
         #log.write("Confusion matrix")
         #log.write(best_conf_matrix)
         #log.write("Confusion matrix, norm")
@@ -151,6 +177,7 @@ class BaseTrainer:
 
         # Normalized
         N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
+        print('my cm, norm:')
         print(N_cm)
 
         plt.figure() # figsize=(15,10)
@@ -165,10 +192,23 @@ class BaseTrainer:
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
 
+        plt.figure() # figsize=(15,10)
+        df_cm = pd.DataFrame(cm_, index=class_names, columns=class_names).astype(float)
+        heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
+        heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=12)
+        heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
+        plt.ylabel(r'Observed class',fontsize=13) # True label
+        plt.xlabel(r'Predicted class',fontsize=13)
+        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-1])+'\n'+r'Validation accuracy: {:.2f}'.format(best_acc_sk),fontsize=14)
+        #plt.show(block=True)
+        plt.tight_layout()
+        plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_sk.png")
+
 
         if epoch == self.epochs:
+            ep = np.linspace(self.start_epoch, self.epochs, self.epochs)
+
             plt.figure()
-            ep = np.linspace(self.start_epoch, self.epochs, self.epochs) # NB! change
             plt.title("Model B{}, loss vs accuracy (best v.acc: {:.2f})".format(self.model_info[-1], best_acc),fontsize=14)
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(ep, v_loss, label="Validation loss")
@@ -178,6 +218,16 @@ class BaseTrainer:
             plt.ylabel("Loss, Accuracy",fontsize=13)
             plt.legend()
             plt.savefig(str(self.checkpoint_dir) + "/acc_vs_loss.png")
+
+            plt.figure()
+            plt.title("Model B{}, w accuracy and f1 score".format(self.model_info[-1]),fontsize=14)
+            plt.plot(ep, v_acc_w, label="Weighted val. accuracy")
+            plt.plot(ep, v_f1_w, label="Weighted f1 score")
+            plt.axhline(y=1, ls='--', color='lightgrey')
+            plt.xlabel("Epochs",fontsize=13)
+            plt.ylabel("Accuracy, f1 score",fontsize=13)
+            plt.legend()
+            plt.savefig(str(self.checkpoint_dir) + "/f1_acc.png")
 
     def save_checkpoint(self, epoch, best: bool = False):
         """

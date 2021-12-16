@@ -188,7 +188,18 @@ model_name = ['efficientnet-b0',
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
+# Test with more metrics
+train(json_file, model_name[2], ep=75, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
+
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.01)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=1.0)
+
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=60, g=0.1)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.1)
+
 # Test:
+'''
 train(json_file, model_name[2], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
 train(json_file, model_name[2], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 train(json_file, model_name[2], ep=100, batch_size_train=24, learningRate=1e-4, stepSize=100, g=0.1)
@@ -201,7 +212,7 @@ train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, 
 
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-2, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-4, stepSize=75, g=0.1)
-
+'''
 
 '''
 train(json_file, model_name[0], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=1, g=0.1)
@@ -228,7 +239,7 @@ train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, 
 '''
 #train(json_file, model_name[4], ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=2e-3, stepSize=75, g=0.1)
-
+'''
 train(json_file, model_name[3], ep=150, batch_size_train=8, learningRate=1e-4, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=150, batch_size_train=8, learningRate=1e-3, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=150, batch_size_train=8, learningRate=1e-2, stepSize=75, g=0.1)
@@ -236,7 +247,10 @@ train(json_file, model_name[3], ep=150, batch_size_train=8, learningRate=1e-3, s
 train(json_file, model_name[3], ep=150, batch_size_train=8, learningRate=1e-3, stepSize=25, g=0.1)
 #train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
 #train(json_file, model_name[3], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
-train(json_file, model_name[3], ep=150, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=32, learningRate=1e-3, stepSize=75, g=0.1) # Failed, cuda memory
+'''
+
+
 
 '''
 train(json_file, model_name[4], ep=150, batch_size_train=16, learningRate=1e-3, stepSize=75, g=0.1)
