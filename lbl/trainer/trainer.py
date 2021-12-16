@@ -115,9 +115,9 @@ class Trainer(BaseTrainer):
 
 
         #print('ground truths (true)')
-        print(tensor.size(target))
-        print(tensor.size(ground_truths))
-        print(tensor.size(out))
+        print(torch.size(target))
+        print(torch.size(ground_truths))
+        print(torch.size(out))
         print(len(target))
         print(len(ground_truths))
         #print('out (pred)')
