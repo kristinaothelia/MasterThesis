@@ -90,6 +90,12 @@ class Trainer(BaseTrainer):
         losses  = list()
 
         n=4
+        #y_pred = [[] for _ in xrange(n)]
+        #y_true = [[] for _ in xrange(n)]
+
+        y_pred = []
+        y_true = []
+
         class_correct = [0]*n
         class_total   = [0]*n
 
@@ -114,6 +120,14 @@ class Trainer(BaseTrainer):
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
+                # Update y_pred and y_true
+                # [[no], [arc], [diff], [disc]]
+                y_pred.extend(prediction.item() for prediction in out)
+                y_true.extend(true.item() for true in ground_truths)
+
+        print(y_pred)
+        print(y_true)
+
         out = out.cpu().data.numpy()
         target = target.cpu().data.numpy()
         ground_truths = ground_truths.cpu().data.numpy()
@@ -121,17 +135,11 @@ class Trainer(BaseTrainer):
         print(ground_truths)
         print(target)
 
-        report = sk.metrics.classification_report(targets, out, target_names=['no a','arc','diff','disc'])
+        report = sk.metrics.classification_report(target, out, target_names=['no a','arc','diff','disc'])
         print(report)
 
-        report = sk.metrics.classification_report(ground_truths, out, target_names=['test', 'test'])
-        print(report)
-
-        #print('ground truths (true)')
-        print(len(target))
-        print(len(ground_truths))
-        #print('out (pred)')
-        print(len(out))
+        #report = sk.metrics.classification_report(ground_truths, out, target_names=['test', 'test'])
+        #print(report)
 
         #print('f1, average=None: ',f1_score(ground_truths, out, average=None))
         # The class F-1 scores are averaged by using the number of instances in a class as weights
