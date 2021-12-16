@@ -114,13 +114,18 @@ class Trainer(BaseTrainer):
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
+        print(torch.shape(target))
+        print(torch.shape(ground_truths))
+        print(torch.shape(out))
+
+        out = out.cpu()
+        target = tagert.cpu()
+        ground_truths = ground_truths.cpu()
+
         report = sk.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
         print(report)
 
         #print('ground truths (true)')
-        print(torch.shape(target))
-        print(torch.shape(ground_truths))
-        print(torch.shape(out))
         print(len(target))
         print(len(ground_truths))
         #print('out (pred)')
