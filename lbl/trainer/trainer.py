@@ -114,7 +114,7 @@ class Trainer(BaseTrainer):
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
-        report = sk.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
+        report = sk.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
         print(report)
 
         #print('ground truths (true)')
@@ -140,13 +140,13 @@ class Trainer(BaseTrainer):
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
         acc_sk_b = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
-        CM_sk = sk.confusion_matrix(ground_truths, out)
+        CM_sk = sk.metrics.confusion_matrix(ground_truths, out)
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
-        recall = sk.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+        recall = sk.metrics.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
-        precision = sk.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+        precision = sk.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
 
         return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision
 
