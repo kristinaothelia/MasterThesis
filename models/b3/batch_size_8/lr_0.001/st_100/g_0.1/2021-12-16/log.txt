@@ -1,0 +1,8 @@
+Model 3
+Training time [h]: 1.953307142853737
+The number of params in Million: 10.70166
+Best epoch 94 of 150. Validation acc: 0.8484398216939079
+Training loss: 0.47395777069474365. Validation loss: 0.39947755125891937
+Batch size (train): 8
+Other model info: lr:0.001, step:100, gamma:0.1
+V.acc all 200 epochs: 0.7977414561664189 pm 0.07107454858247934
