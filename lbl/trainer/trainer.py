@@ -86,18 +86,15 @@ class Trainer(BaseTrainer):
         :return: A log that contains information about validation
         """
         self.model.eval()
+
         accuracy = list()
         losses  = list()
+        y_pred = list()
+        y_true = list()
 
         n=4
-        #y_pred = [[] for _ in xrange(n)]
-        #y_true = [[] for _ in xrange(n)]
-
-        y_pred = []
-        y_true = []
-
-        class_correct = [0]*n
-        class_total   = [0]*n
+        #class_correct = [0]*n
+        #class_total   = [0]*n
 
         confusion_matrix = np.zeros((n,n))
 
@@ -121,25 +118,14 @@ class Trainer(BaseTrainer):
                 accuracy.append(a)
 
                 # Update y_pred and y_true
-                # [[no], [arc], [diff], [disc]]
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
-
-        print(y_pred)
-        print(y_true)
 
         out = out.cpu().data.numpy()
         target = target.cpu().data.numpy()
         ground_truths = ground_truths.cpu().data.numpy()
 
         report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
-        print(report)
-
-        #print(out)
-        #print(ground_truths)
-        #print(target)
-
-
         #report = sk.metrics.classification_report(ground_truths, out, target_names=['test', 'test'])
         #print(report)
 
@@ -156,7 +142,7 @@ class Trainer(BaseTrainer):
         acc_sk =accuracy_score(ground_truths, out)
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
-        acc_sk_b = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
+        acc_sk_w = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
         CM_sk = sk.metrics.confusion_matrix(ground_truths, out)
 
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
@@ -165,7 +151,7 @@ class Trainer(BaseTrainer):
         #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
         precision = sk.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
 
-        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision
+        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
 
 
     def _progress(self, batch_idx):

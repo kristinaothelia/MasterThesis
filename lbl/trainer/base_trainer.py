@@ -76,7 +76,7 @@ class BaseTrainer:
             epoch_start_time = time.time()
 
             loss = self._train_epoch(epoch)
-            valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision = self._valid_epoch(epoch)
+            valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
 
             epoch_end_time = time.time() - epoch_start_time
 
@@ -119,6 +119,7 @@ class BaseTrainer:
                 best_CM_sk = CM_sk
                 best_recall = recall
                 best_precission = precision
+                best_report = report
 
                 #print(best_conf_matrix)
                 #N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
@@ -127,6 +128,9 @@ class BaseTrainer:
             print('-----------------------------------')
 
         self.save_checkpoint(epoch, best=False)
+
+        print(best_report)
+
         print("ep: ", best_ep, " acc: ", best_acc)
 
         print('acc, sk:    ', best_acc_sk)
@@ -153,11 +157,9 @@ class BaseTrainer:
         log.write("recall: {}\n".format(best_recall))
         log.write("precision: {}\n".format(best_precission))
         log.write("f1 score: {}\n".format(best_f1))
-        log.write("f1 score (w): {}. acc (w)".format(best_f1_w, best_acc_sk_w))
-        #log.write("Confusion matrix")
-        #log.write(best_conf_matrix)
-        #log.write("Confusion matrix, norm")
-        #log.write(best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis])
+        log.write("f1 score (w): {}. acc (w)\n\n".format(best_f1_w, best_acc_sk_w))
+        log.write(best_report)
+        
         log.close()
 
         #print(best_conf_matrix)
