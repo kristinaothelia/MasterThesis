@@ -118,11 +118,10 @@ class Trainer(BaseTrainer):
         target = target.cpu().data.numpy()
         ground_truths = ground_truths.cpu().data.numpy()
 
-        print(np.shape(out))
-        print(np.shape(target))
-        print(np.shape(ground_truths))
+        report = sk.metrics.classification_report(ground_truths, out, target_names=['test'])
+        print(report)
 
-        report = sk.metrics.classification_report(ground_truths, out, target_names=['no a','arc','diff','disc'])
+        report = sk.metrics.classification_report(targets, out, target_names=['no a','arc','diff','disc'])
         print(report)
 
         #print('ground truths (true)')
