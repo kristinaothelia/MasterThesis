@@ -115,7 +115,7 @@ class Trainer(BaseTrainer):
                 accuracy.append(a)
 
         out = out.cpu().data.numpy()
-        target = tagert.cpu().data.numpy()
+        target = target.cpu().data.numpy()
         ground_truths = ground_truths.cpu().data.numpy()
 
         print(np.shape(out))
