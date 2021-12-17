@@ -41,29 +41,6 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
             counter += 1
     print(counter)
 
-    '''
-    new_length = len(container)
-    clear = 0
-    arc = 0
-    diff = 0
-    disc = 0
-
-    for i in range(new_length):
-        if container[i].label == LABELS[0]:
-            clear += 1
-        if container[i].label == LABELS[1]:
-            arc += 1
-        if container[i].label == LABELS[2]:
-            diff += 1
-        if container[i].label == LABELS[3]:
-            disc += 1
-
-    class_count = [clear, arc, diff, disc]
-    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    print(class_weights)
-    #sample_weights = [0] * len(container)
-    '''
-
     train, valid = container.split(seed=42, split=0.8)
 
     clear = 0
@@ -84,7 +61,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     class_count = [clear, arc, diff, disc]
     print(class_count)
     # OR: [1/clear, 1/arc, 1/diff, 1/disc] ??
-    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    #class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
     print(class_weights)
 
     img_size = efficientnet_params(model_name)['resolution']
@@ -123,7 +101,6 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
 
     sample_weights = [0] * len(train_loader)
-
     key_list = list(LABELS.keys())
     val_list = list(LABELS.values())
 
@@ -149,8 +126,6 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                batch_size   = 1,
                                                shuffle      = False,
                                                )
-
-    print(valid_loader)
 
     #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
     #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
@@ -184,8 +159,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
 
 #json_file = 'datasets/Full_aurora_predicted.json'
-json_file = 'datasets/NEW_TEST_ml.json'
-#json_file = 'datasets/NEW_TEST.json'   # local laptop paths
+#json_file = 'datasets/NEW_TEST_ml.json'
+json_file = 'datasets/NEW_TEST.json'   # local laptop paths
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
