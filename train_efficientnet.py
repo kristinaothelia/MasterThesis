@@ -66,15 +66,12 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
     train, valid = container.split(seed=42, split=0.8)
 
-    length = len(train)
-    print(length)
-
     clear = 0
     arc = 0
     diff = 0
     disc = 0
 
-    for i in range(length):
+    for i in range(len(train)):
         if train[i].label == LABELS[0]:
             clear += 1
         if train[i].label == LABELS[1]:
@@ -85,11 +82,12 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
             disc += 1
 
     class_count = [clear, arc, diff, disc]
+    print(class_count)
+    # OR: [1/clear, 1/arc, 1/diff, 1/disc] ??
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    #print(class_weights)
+    print(class_weights)
 
     img_size = efficientnet_params(model_name)['resolution']
-
     # rotation class: numpy arrays. Padding class: pytorch tensors
     train_transforms = torchvision.transforms.Compose([
         lambda x: np.float32(x),
@@ -124,26 +122,36 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     train_loader = DatasetLoader(container=train, transforms=train_transforms)
     valid_loader = DatasetLoader(container=valid, transforms=valid_transforms)
 
-    # Test with new image folders!
-    #for idx, (data, label) in enumerate(train_loader):
-    #    print(label)
-    #    class_weight = class_weights[label]
-    #    sample_weights[idx] = class_weight
+    sample_weights = [0] * len(train_loader)
 
+    key_list = list(LABELS.keys())
+    val_list = list(LABELS.values())
 
-    #sampler = torch.utils.data.WeightedRandomSampler(sample_weights, num_samples=len(sample_weights), replacement=True)
+    for idx, entry in enumerate(train):
+        entry_ = val_list.index(entry.label)
+        class_weight = class_weights[entry_]
+        sample_weights[idx] = class_weight
+
+    sampler = torch.utils.data.WeightedRandomSampler(sample_weights,
+                                                     num_samples=len(sample_weights),
+                                                     replacement=True,
+                                                     )
 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               shuffle      = True,
+                                               sampler      = sampler,
+                                               shuffle      = False, #True
                                                )
+
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                                num_workers  = 4,
                                                batch_size   = 1,
                                                shuffle      = False,
                                                )
 
+    print(valid_loader)
+    exit()
     #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
     #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 
@@ -153,8 +161,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    #loss         = torch.nn.CrossEntropyLoss()
+    #loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -177,7 +185,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
 #json_file = 'datasets/Full_aurora_predicted.json'
 json_file = 'datasets/NEW_TEST_ml.json'
-#json_file = 'datasets/NEW_TEST.json'
+json_file = 'datasets/NEW_TEST.json'
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
@@ -189,10 +197,10 @@ model_name = ['efficientnet-b0',
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.5)
-train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=80, g=0.1)
-train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
+#train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=80, g=0.1)
+#train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 
-train(json_file, model_name[3], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=90, g=0.1)
+#train(json_file, model_name[3], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=90, g=0.1)
 
 '''
 # Test with more metrics

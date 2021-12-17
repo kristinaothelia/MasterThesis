@@ -138,7 +138,6 @@ class BaseTrainer:
         print('f1:         ', best_f1)
         print('f1, w:      ', best_f1_w)
 
-        print('sk CM:')
         cm_ = best_CM_sk
         print(cm_.astype('float') / cm_.sum(axis=1)[:, np.newaxis])
 
@@ -179,8 +178,6 @@ class BaseTrainer:
 
         # Normalized
         N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-        print('my cm, norm:')
-        print(N_cm)
 
         plt.figure() # figsize=(15,10)
         df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(float)
@@ -193,20 +190,6 @@ class BaseTrainer:
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
-
-        '''
-        plt.figure() # figsize=(15,10)
-        df_cm = pd.DataFrame(cm_, index=class_names, columns=class_names).astype(float)
-        heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
-        heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=12)
-        heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
-        plt.ylabel(r'Observed class',fontsize=13) # True label
-        plt.xlabel(r'Predicted class',fontsize=13)
-        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-1])+'\n'+r'Validation accuracy: {:.2f}'.format(best_acc_sk),fontsize=14)
-        #plt.show(block=True)
-        plt.tight_layout()
-        plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_sk.png")
-        '''
 
 
         if epoch == self.epochs:
