@@ -159,7 +159,7 @@ class BaseTrainer:
         log.write("f1 score: {}\n".format(best_f1))
         log.write("f1 score (w): {}. acc (w)\n\n".format(best_f1_w, best_acc_sk_w))
         log.write(best_report)
-        
+
         log.close()
 
         #print(best_conf_matrix)
@@ -194,6 +194,7 @@ class BaseTrainer:
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
 
+        '''
         plt.figure() # figsize=(15,10)
         df_cm = pd.DataFrame(cm_, index=class_names, columns=class_names).astype(float)
         heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
@@ -205,6 +206,7 @@ class BaseTrainer:
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_sk.png")
+        '''
 
 
         if epoch == self.epochs:

@@ -189,8 +189,6 @@ model_name = ['efficientnet-b0',
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
 # Test with more metrics
-train(json_file, model_name[2], ep=75, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
-
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.01)
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=1.0)

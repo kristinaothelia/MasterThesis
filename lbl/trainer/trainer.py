@@ -121,37 +121,37 @@ class Trainer(BaseTrainer):
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
 
-        out = out.cpu().data.numpy()
-        target = target.cpu().data.numpy()
-        ground_truths = ground_truths.cpu().data.numpy()
 
-        report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
-        #report = sk.metrics.classification_report(ground_truths, out, target_names=['test', 'test'])
-        #print(report)
+        def metrics(y_true, y_pred):
+            report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
+            #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
+            f1 = f1_score(y_true, y_pred, average=None) #The best value is 1 and the worst value is 0
+            f1_w = f1_score(y_true, y_pred, average='weighted')
+            accuracy =accuracy_score(y_true, y_pred, out)
 
-        #print('f1, average=None: ',f1_score(ground_truths, out, average=None))
-        # The class F-1 scores are averaged by using the number of instances in a class as weights
-        #print('f1, a=weighted:   ', f1_score(ground_truths, out, average='weighted'))
-        #print('acc (calc):       ', valid_acc)
-        #print('acc (sklearn):    ', accuracy_score(ground_truths, out))
-        #print('acc (sklearn, b): ', balanced_accuracy_score(ground_truths, out))
+            #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
+            accuracy_w = balanced_accuracy_score(y_true, y_pred) #The best value is 1 and the worst value is 0 when adjusted=False
+            CM_sk = sk.metrics.confusion_matrix(y_true, y_pred)
 
-        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
-        f1 = f1_score(ground_truths, out, average=None) #The best value is 1 and the worst value is 0
-        f1_w = f1_score(ground_truths, out, average='weighted')
-        acc_sk =accuracy_score(ground_truths, out)
+            #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
+            recall = sk.metrics.recall_score(y_true, y_pred, average='weighted') #The best value is 1 and the worst value is 0
 
-        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
-        acc_sk_w = balanced_accuracy_score(ground_truths, out) #The best value is 1 and the worst value is 0 when adjusted=False
-        CM_sk = sk.metrics.confusion_matrix(ground_truths, out)
+            #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
+            precision = sk.metrics.precision_score(y_true, y_pred, average='weighted') #The best value is 1 and the worst value is 0
 
-        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
-        recall = sk.metrics.recall_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+            return CM_sk, accuracy, accuracy_w, f1, f1_w, recall, precision, report
 
-        #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html#sklearn.metrics.precision_score
-        precision = sk.metrics.precision_score(ground_truths, out, average='weighted') #The best value is 1 and the worst value is 0
+        # Metrics made with sklearn
+        CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = metrics(y_true, y_pred)
 
-        return np.mean(np.array(accuracy)), np.mean(np.array(losses)), confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
+        #out = out.cpu().data.numpy()
+        #target = target.cpu().data.numpy()
+        #ground_truths = ground_truths.cpu().data.numpy()
+
+        valid_acc = np.mean(np.array(accuracy))
+        valid_loss = np.mean(np.array(losses))
+
+        return valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
 
 
     def _progress(self, batch_idx):
