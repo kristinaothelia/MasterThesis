@@ -122,16 +122,16 @@ class Trainer(BaseTrainer):
                 y_true.extend(true.item() for true in ground_truths)
 
 
-        def metrics(y_true, y_pred):
+        def metrics(y_true, y_pred): # warning: Pass normalize=tensor([2], device='cuda:3')
             report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
             #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
             f1 = f1_score(y_true, y_pred, average=None) #The best value is 1 and the worst value is 0
             f1_w = f1_score(y_true, y_pred, average='weighted')
-            accuracy =accuracy_score(y_true, y_pred, out)
+            accuracy =accuracy_score(y_true, y_pred, out) # sample_weightarray-like of shape (n_samples,) (same n as y_pred/true)
 
             #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
             accuracy_w = balanced_accuracy_score(y_true, y_pred) #The best value is 1 and the worst value is 0 when adjusted=False
-            CM_sk = sk.metrics.confusion_matrix(y_true, y_pred)
+            CM_sk = sk.metrics.confusion_matrix(y_true, y_pred, normalize='true')
 
             #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html#sklearn.metrics.recall_score
             recall = sk.metrics.recall_score(y_true, y_pred, average='weighted') #The best value is 1 and the worst value is 0

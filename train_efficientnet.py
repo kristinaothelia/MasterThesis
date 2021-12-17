@@ -188,6 +188,13 @@ model_name = ['efficientnet-b0',
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.5)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=80, g=0.1)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
+
+train(json_file, model_name[3], ep=100, batch_size_train=32, learningRate=1e-3, stepSize=90, g=0.1)
+
+'''
 # Test with more metrics
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.01)
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
@@ -195,6 +202,7 @@ train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, 
 
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=60, g=0.1)
 train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.1)
+'''
 
 # Test:
 '''
