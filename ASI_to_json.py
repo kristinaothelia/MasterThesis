@@ -60,7 +60,7 @@ else:
 def files(original=True, green=True, train=False, mean=False):
 
     if train:
-        folder = '/itf-fi-ml/home/koolsen/Aurora/Data/All_data'
+        folder = '/itf-fi-ml/home/koolsen/Aurora/Data/Aurora_train'
         json_file = '/itf-fi-ml/home/koolsen/Master/Full_aurora_NEW.json' # To large fil for GitHub
         csv_file = '/itf-fi-ml/home/koolsen/Master/MasterThesis/datasets/Full_aurora_NEW.csv'
         wl = '5577 and 6300'

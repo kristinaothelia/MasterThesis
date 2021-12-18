@@ -158,9 +158,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     trainer.train()
 
 
-#json_file = 'datasets/Full_aurora_predicted.json'
-json_file = 'datasets/NEW_TEST_ml.json'
-#json_file = 'datasets/NEW_TEST.json'   # local laptop paths
+json_file = 'datasets/Full_aurora_new_rt_ml.json'
+#json_file = 'datasets/Full_aurora_new_rt.json'   # local laptop path
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
@@ -171,7 +170,7 @@ model_name = ['efficientnet-b0',
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
-train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.5)
+train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.25)
 #train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=80, g=0.1)
 #train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 

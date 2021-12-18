@@ -45,16 +45,14 @@ def class_correction(pred_level, json_from='', json_to='', arc=False, diff=False
 #class_correction(pred_level=0, json_from=predicted_file, json_to=corrected_file, arc=True, diff=False, disc=False, noa=False)
 '''
 
-# Correct 'Full_aurora_predicted' used with b0
-#predicted_file = 'datasets/Full_aurora_predicted.json'  # json_from
-#predicted_file = 'datasets/Full_aurora_predicted_local.json'  # json_from
 #predicted_file = 'datasets/Full_aurora_predicted_b3.json'
-predicted_file = 'datasets/Full_aurora_new_runthrough.json'
+predicted_file = 'datasets/Full_aurora_new_rt.json'
+
 #corrected_file = 'datasets/Full_aurora_predicted_b0_correct_arc.json' # json_to
-corrected_file = 'datasets/Full_aurora_new_runthrough.json' # json_to
+corrected_file = 'datasets/Full_aurora_new_rt.json' # json_to
 
 container = DatasetContainer.from_json(predicted_file)
-
+print(len(container))
 ''' eks:
 "timepoint": "2015-11-17 18:18:37",
 "label": null,
@@ -66,7 +64,7 @@ n_less = 0; n_arc = 0; n_diff = 0; n_disc = 0; tot = 0
 
 for entry in container:
 
-    if entry.human_prediction == True:  # False
+    if entry.human_prediction == True:  # None
         tot += 1
         if entry.label == LABELS[1]:
             n_arc += 1
@@ -74,8 +72,10 @@ for entry in container:
             n_diff += 1
         elif entry.label == LABELS[3]:
             n_disc += 1
-        else:
+        elif entry.label == LABELS[0]:
             n_less += 1
+        #else:
+        #    n_less += 1
 
 print("%23s: %g" %('Total classified images', tot))
 print("%23s: %4g (%3.1f%%)" %(LABELS[0], n_less, (n_less/tot)*100))
@@ -83,26 +83,9 @@ print("%23s: %4g (%3.1f%%)" %(LABELS[1], n_arc, (n_arc/tot)*100))
 print("%23s: %4g (%3.1f%%)" %(LABELS[2], n_diff, (n_diff/tot)*100))
 print("%23s: %4g (%3.1f%%)" %(LABELS[3], n_disc, (n_disc/tot)*100))
 
+exit()
+
 corrector = ClassCorrector(container=container)
 
-#corrector.correct_class('arc', prediction_level=0, save_path=corrected_file)
-corrector.correct_class('discrete', prediction_level=2, save_path=corrected_file)
-
-
-''' Result for (b3 acc: 88%): datasets/Full_aurora_predicted_b3.json
-entry.human_prediction == True (manual label)
-tot:         3362
-Aurora-less  1548 (46%)
-Arc          307  (9%)
-Diffuse      500  (15%)
-Discrete     1007 (30%)
-
-entry.human_prediction == False (predicted with b3)
-tot:         4618
-Aurora-less  2260 (49%)
-Arc          533  (12%)
-Diffuse      759  (16%)
-Discrete     1066 (23%)
-
-4618+3362=7980 (len(container))
-'''
+label = LABELS[0]
+corrector.correct_class(label, prediction_level=2, save_path=corrected_file)

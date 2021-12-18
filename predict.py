@@ -99,10 +99,18 @@ def predict(model_name, model_path, container, LABELS, save_file):
 # make predictions with chosen model and data set
 
 mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
-model_name = model_names[2]
-# Load a saved model
+
+# Load a saved model. UPDATE
+model_name = model_names[3]
 model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
 
+json_file = 'Full_aurora_new_rt_ml.json'
+container = DatasetContainer.from_json(mlnodes_path+json_file)
+save_file = mlnodes_path+json_file[:-5]+'_predicted_'+model_name+'.json'
+
+predict(model_name, model_path, container, LABELS, save_file)
+
+"""
 # Load json file to add predictions
 json_file = 'Aurora_G_omni_mean.json'
 container = DatasetContainer.from_json(mlnodes_path+json_file)
@@ -118,3 +126,4 @@ container = DatasetContainer.from_json(mlnodes_path+json_file)
 save_file = mlnodes_path+json_file[:-5]+'_predicted_'+model_name+'.json'
 
 predict(model_name, model_path, container, LABELS, save_file)
+"""
