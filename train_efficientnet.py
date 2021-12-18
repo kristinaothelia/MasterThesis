@@ -43,27 +43,30 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
     train, valid = container.split(seed=42, split=0.8)
 
-    clear = 0
-    arc = 0
-    diff = 0
-    disc = 0
+    def count(container):
 
-    for i in range(len(train)):
-        if train[i].label == LABELS[0]:
-            clear += 1
-        if train[i].label == LABELS[1]:
-            arc += 1
-        if train[i].label == LABELS[2]:
-            diff += 1
-        if train[i].label == LABELS[3]:
-            disc += 1
+        clear = 0; arc = 0; diff = 0; disc = 0
 
-    class_count = [clear, arc, diff, disc]
-    print(class_count)
-    # OR: [1/clear, 1/arc, 1/diff, 1/disc] ??
+        for i in range(len(container)):
+            if train[i].label == LABELS[0]:
+                clear += 1
+            if train[i].label == LABELS[1]:
+                arc += 1
+            if train[i].label == LABELS[2]:
+                diff += 1
+            if train[i].label == LABELS[3]:
+                disc += 1
+
+        return clear, arc, diff, disc
+
+    clear, arc, diff, disc = count(train)
+    print("class count, train: ", [clear, arc, diff, disc])
+
+    #print([len(train)/clear, len(train)/arc, len(train)/diff, len(train)/disc])
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    #class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
-    print(class_weights)
+    class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
+    print("weights:     ", class_weights)
+    print([clear*class_weights[0], arc*class_weights[1], diff*class_weights[2], disc*class_weights[3]])
 
     img_size = efficientnet_params(model_name)['resolution']
     # rotation class: numpy arrays. Padding class: pytorch tensors
@@ -113,6 +116,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                      num_samples=len(sample_weights),
                                                      replacement=True,
                                                      )
+    #sampler = torch.utils.data.WeightedRandomSampler(torch.DoubleTensor(weights), int(len(train)))
 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
@@ -159,6 +163,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
 
 json_file = 'datasets/Full_aurora_new_rt_ml.json'
+json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3.json'
 #json_file = 'datasets/Full_aurora_new_rt.json'   # local laptop path
 
 model_name = ['efficientnet-b0',
@@ -170,8 +175,10 @@ model_name = ['efficientnet-b0',
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
-train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=90, g=0.5)
+train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.05)
 train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-2, stepSize=75, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-4, stepSize=75, g=0.1)
 #train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=80, g=0.1)
 #train(json_file, model_name[3], ep=100, batch_size_train=24, learningRate=1e-3, stepSize=100, g=0.1)
 
