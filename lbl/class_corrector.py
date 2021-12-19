@@ -38,6 +38,7 @@ class ClassCorrector(object):
                 and it will flip human_prediction = True
         """
         pred_level = [False, None, True][prediction_level]
+        print(pred_level)
         plt.ion()
         plt.show(block=False)
         #plt.show() # If Linux
