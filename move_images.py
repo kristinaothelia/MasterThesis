@@ -13,8 +13,8 @@ arc = []
 diff = []
 disc = []
 
-container_file = 'datasets/NEW_TEST.json'
-#container_file = 'datasets/NEW_TEST_ml.json' # NB! remember to make folders!
+container_file = 'datasets/Full_aurora_new_rt_predicted_efficientnet-b3_corr.json'
+#container_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_corr.json' # NB! remember to make folders!
 
 container = DatasetContainer.from_json(container_file)
 print("len container: ", len(container))
@@ -36,12 +36,13 @@ print(len(disc))
 print(len(aurora_less)+len(arc)+len(diff)+len(disc))
 
 
-for imageName in aurora_less:
-    shutil.copy(imageName, r'C:\Users\Krist\Documents\dataset_subfolders\aurora_less')
+#for imageName in aurora_less:
+#    shutil.copy(imageName, r'C:\Users\Krist\Documents\dataset_subfolders\aurora_less')
     #shutil.copy(imageName, '/itf-fi-ml/home/koolsen/Aurora/Data_subfolders/aurora_less/')
-for imageName in arc:
-    shutil.copy(imageName, r'C:\Users\Krist\Documents\dataset_subfolders\arc')
+#for imageName in arc:
+#    shutil.copy(imageName, r'C:\Users\Krist\Documents\dataset_subfolders\arc')
     #shutil.copy(imageName, '/itf-fi-ml/home/koolsen/Aurora/Data_subfolders/arc/')
+
 for imageName in diff:
     shutil.copy(imageName, r'C:\Users\Krist\Documents\dataset_subfolders\diffuse')
     #shutil.copy(imageName, '/itf-fi-ml/home/koolsen/Aurora/Data_subfolders/diffuse/')

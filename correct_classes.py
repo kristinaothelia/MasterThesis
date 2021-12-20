@@ -55,8 +55,8 @@ def stats(container, pred_level=False):
 stats(container, pred_level=False)
 stats(container, pred_level=True)
 
-exit()
+
 corrector = ClassCorrector(container=container)
-# Run 1 and 3 one more time! 
-label = LABELS[2]
+# Run 1 and 3 one more time!
+label = LABELS[1]
 corrector.correct_class(label, prediction_level=0, save_path=corrected_file)
