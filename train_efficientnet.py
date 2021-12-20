@@ -162,9 +162,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     trainer.train()
 
 
-json_file = 'datasets/Full_aurora_new_rt_ml.json'
-json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_corr.json'
-#json_file = 'datasets/Full_aurora_new_rt.json'   # local laptop path
+json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
+json_file = 'datasets/Full_aurora_ml_corr.json'
 
 model_name = ['efficientnet-b0',
               'efficientnet-b1',
@@ -175,11 +174,11 @@ model_name = ['efficientnet-b0',
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
-train(json_file, model_name[2], ep=200, batch_size_train=8, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=200, batch_size_train=32, learningRate=1e-3, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=150, batch_size_train=64, learningRate=1e-3, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=150, batch_size_train=8, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[2], ep=150, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[2], ep=150, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[2], ep=150, batch_size_train=32, learningRate=1e-2, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=150, batch_size_train=64, learningRate=1e-3, stepSize=75, g=0.1)
 
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.05)
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
