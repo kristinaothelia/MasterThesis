@@ -26,20 +26,32 @@ LABELS = {
     3: "discrete",
 }
 
+model_name = ['efficientnet-b0',
+              'efficientnet-b1',
+              'efficientnet-b2',
+              'efficientnet-b3',
+              'efficientnet-b4',
+              'efficientnet-b6']
+
 def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     container = DatasetContainer.from_json(json_file)
 
-    # Remove images with no label
-    length = len(container)
-    print(length)
-    counter = 0
-    for i in range(length):
-        i -= counter
-        if container[i].label == None:
-            del container[i]
-            counter += 1
-    print(counter)
+    def remove_noLabel_img(container):
+        """ Remove images with no label """
+
+        length = len(container)
+        print('original container length:   ', length)
+        counter = 0
+        for i in range(length):
+            i -= counter
+            if container[i].label == None:
+                del container[i]
+                counter += 1
+        print('removed images with no label: ', counter)
+        return container
+
+    container = remove_noLabel_img(container)
 
     train, valid = container.split(seed=42, split=0.8)
 
@@ -121,8 +133,9 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               sampler      = sampler,
-                                               shuffle      = False, #True
+                                               #sampler      = sampler,
+                                               #shuffle      = False,
+                                               shuffle      = True,
                                                )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -140,8 +153,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    #loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    loss         = torch.nn.CrossEntropyLoss()
+    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    #loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -165,19 +178,15 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 json_file = 'datasets/Full_aurora_ml_corr.json'
 
-model_name = ['efficientnet-b0',
-              'efficientnet-b1',
-              'efficientnet-b2',
-              'efficientnet-b3',
-              'efficientnet-b4',
-              'efficientnet-b6']
-
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
-train(json_file, model_name[2], ep=150, batch_size_train=8, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[4], ep=150, batch_size_train=8, learningRate=1e-2, stepSize=50, g=0.1)
 train(json_file, model_name[2], ep=150, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.1)
 train(json_file, model_name[2], ep=150, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.1)
-train(json_file, model_name[2], ep=150, batch_size_train=32, learningRate=1e-2, stepSize=75, g=0.1)
+train(json_file, model_name[2], ep=150, batch_size_train=32, learningRate=1e-2, stepSize=50S, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.1)
+train(json_file, model_name[3], ep=150, batch_size_train=32, learningRate=1e-2, stepSize=50S, g=0.1)
 #train(json_file, model_name[2], ep=150, batch_size_train=64, learningRate=1e-3, stepSize=75, g=0.1)
 
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.05)

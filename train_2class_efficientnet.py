@@ -16,18 +16,23 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 # -----------------------------------------------------------------------------
-container = DatasetContainer.from_json('datasets/Full_aurora_2class_ml.json')
+container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr.json')
 
-# Remove images with no label
-length = len(container)
-print(length)
-counter = 0
-for i in range(length):
-    i -= counter
-    if container[i].label == None:
-        del container[i]
-        counter += 1
-print(counter)
+def remove_noLabel_img(container):
+    """ Remove images with no label """
+
+    length = len(container)
+    print('original container length:   ', length)
+    counter = 0
+    for i in range(length):
+        i -= counter
+        if container[i].label == None:
+            del container[i]
+            counter += 1
+    print('removed images with no label: ', counter)
+    return container
+
+container = remove_noLabel_img(container)
 
 train, valid = container.split(seed=42, split=0.8)
 

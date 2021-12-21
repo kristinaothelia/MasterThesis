@@ -81,7 +81,6 @@ class BaseTrainer:
             epoch_end_time = time.time() - epoch_start_time
 
             if self.lr_scheduler is not None:
-                print('test scheduler')
                 self.lr_scheduler.step()
 
             print('Epoch/iteration {} with validation completed in {}, '\
