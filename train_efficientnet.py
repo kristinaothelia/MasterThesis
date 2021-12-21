@@ -180,6 +180,7 @@ json_file = 'datasets/Full_aurora_ml_corr.json'
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
+train(json_file, model_name[0], ep=150, batch_size_train=32, learningRate=1e-2, stepSize=50, g=0.1)
 train(json_file, model_name[4], ep=150, batch_size_train=8, learningRate=1e-2, stepSize=50, g=0.1)
 train(json_file, model_name[2], ep=150, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.1)
 train(json_file, model_name[2], ep=150, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.1)
