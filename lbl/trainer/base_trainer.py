@@ -161,21 +161,6 @@ class BaseTrainer:
 
         log.close()
 
-        #print(best_conf_matrix)
-
-        plt.figure()
-        class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
-        df_cm = pd.DataFrame(best_conf_matrix, index=class_names, columns=class_names).astype(int)
-        heatmap = sns.heatmap(df_cm, annot=True, fmt="d")
-        heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=12)
-        heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
-        plt.ylabel(r'Observed class',fontsize=13) # True label
-        plt.xlabel(r'Predicted class',fontsize=13)
-        plt.title(r'Confusion matrix for EfficentNet model B{}'.format(self.model_info[-1])+ '\n'+ r'Validation accuracy: {:.2f}'.format(best_acc),fontsize=14)
-        #plt.show(block=True)
-        plt.tight_layout()
-        plt.savefig(str(self.checkpoint_dir) + "/CM.png")
-
         # Normalized
         N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
 
