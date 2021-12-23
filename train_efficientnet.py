@@ -76,6 +76,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 
     #print([len(train)/clear, len(train)/arc, len(train)/diff, len(train)/disc])
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    print("weights:     ", class_weights)
     class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
     print("weights:     ", class_weights)
     print([clear*class_weights[0], arc*class_weights[1], diff*class_weights[2], disc*class_weights[3]])
@@ -133,9 +134,9 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               #sampler      = sampler,
-                                               #shuffle      = False,
-                                               shuffle      = True,
+                                               sampler      = sampler,
+                                               shuffle      = False,
+                                               #shuffle      = True,
                                                )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -153,8 +154,8 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    #loss         = torch.nn.CrossEntropyLoss()
+    #loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -179,6 +180,8 @@ json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 json_file = 'datasets/Full_aurora_ml_corr.json'
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
+
+# Run same? Change loss/weight !!
 
 train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
 train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)

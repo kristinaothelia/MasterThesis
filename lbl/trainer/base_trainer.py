@@ -161,9 +161,13 @@ class BaseTrainer:
 
         log.close()
 
+        #print(best_conf_matrix)
+
+
         # Normalized
         N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-
+        class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
+        
         plt.figure() # figsize=(15,10)
         df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(float)
         heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
