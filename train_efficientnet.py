@@ -74,12 +74,11 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     clear, arc, diff, disc = count(train)
     print("class count, train: ", [clear, arc, diff, disc])
 
-    #print([len(train)/clear, len(train)/arc, len(train)/diff, len(train)/disc])
+    print([len(train)/clear, len(train)/arc, len(train)/diff, len(train)/disc])
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    print("weights:     ", class_weights)
-    class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
-    print("weights:     ", class_weights)
-    print([clear*class_weights[0], arc*class_weights[1], diff*class_weights[2], disc*class_weights[3]])
+    # [1.0, 3.86, 2.06, 1.45]
+    #class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
+    # [0.00038, 0.00147, 0.00078, 0.00055]
 
     img_size = efficientnet_params(model_name)['resolution']
     # rotation class: numpy arrays. Padding class: pytorch tensors
@@ -183,15 +182,15 @@ json_file = 'datasets/Full_aurora_ml_corr.json'
 
 # Run same? Change loss/weight !!
 
-train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
-train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
-train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
+#train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
+#train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=175, batch_size_train=24, learningRate=1e-2, stepSize=75, g=0.1)
-train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
+#train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
 train(json_file, model_name[3], ep=175, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.05)
 
-train(json_file, model_name[4], ep=175, batch_size_train=8, learningRate=1e-2, stepSize=75, g=0.1)
-train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
+train(json_file, model_name[4], ep=150, batch_size_train=8, learningRate=1e-3, stepSize=50, g=0.0.5)
+#train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
 
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.05)
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.1)
