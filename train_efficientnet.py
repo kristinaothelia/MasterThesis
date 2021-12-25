@@ -166,7 +166,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                       lr_scheduler      = lr_scheduler,
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
-                      save_period       = 100,
+                      save_period       = 200,
                       savedir           = './models/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize, g),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                       device            = 'cuda:2',
@@ -185,11 +185,15 @@ json_file = 'datasets/Full_aurora_ml_corr.json'
 #train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
 #train(json_file, model_name[2], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
 #train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
-train(json_file, model_name[3], ep=175, batch_size_train=24, learningRate=1e-2, stepSize=75, g=0.1)
+train(json_file, model_name[3], ep=200, batch_size_train=8, learningRate=0.01, stepSize=50, g=0.05)
+train(json_file, model_name[3], ep=180, batch_size_train=8, learningRate=0.01, stepSize=60, g=0.05)
+train(json_file, model_name[3], ep=180, batch_size_train=16, learningRate=0.05, stepSize=60, g=0.05)
+train(json_file, model_name[3], ep=180, batch_size_train=16, learningRate=0.01, stepSize=60, g=0.05)
+train(json_file, model_name[3], ep=180, batch_size_train=16, learningRate=0.05, stepSize=60, g=0.05)
 #train(json_file, model_name[3], ep=175, batch_size_train=16, learningRate=1e-2, stepSize=50, g=0.05)
-train(json_file, model_name[3], ep=175, batch_size_train=24, learningRate=1e-2, stepSize=50, g=0.05)
+train(json_file, model_name[3], ep=200, batch_size_train=24, learningRate=0.05, stepSize=75, g=0.05)
 
-train(json_file, model_name[4], ep=150, batch_size_train=8, learningRate=1e-3, stepSize=50, g=0.05)
+train(json_file, model_name[4], ep=180, batch_size_train=8, learningRate=0.05, stepSize=60, g=0.05)
 #train(json_file, model_name[4], ep=100, batch_size_train=16, learningRate=1e-2, stepSize=75, g=0.1)
 
 #train(json_file, model_name[3], ep=150, batch_size_train=24, learningRate=1e-3, stepSize=75, g=0.05)
