@@ -1,4 +1,0 @@
-image_path,datasetname,dataset_type,wavelength,timepoint,shape,label,human_prediction,score,"Bz, nT (GSE)","Bz, nT (GSM)"
-/itf-fi-ml/home/koolsen/Master/T_DATA/nya6_20141123_080000_6300_cal.png,New data to be classified,png,6300,2014-11-23 08:08:00,"[471, 471]",,,{},-4.6,-6.1
-/itf-fi-ml/home/koolsen/Master/T_DATA/nya6_20141223_054430_6300_cal.png,New data to be classified,png,6300,2014-12-23 05:05:30,"[471, 471]",,,{},12.16,12.18
-/itf-fi-ml/home/koolsen/Master/T_DATA/nya6_20141219_120830_6300_cal.png,New data to be classified,png,6300,2014-12-19 12:12:30,"[471, 471]",,,{},3.62,2.61
