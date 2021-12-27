@@ -92,6 +92,8 @@ class Trainer(BaseTrainer):
         y_pred = list()
         y_true = list()
 
+        wrong = list()
+
         n=4
         #class_correct = [0]*n
         #class_total   = [0]*n
