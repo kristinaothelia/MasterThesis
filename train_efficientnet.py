@@ -182,6 +182,7 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 # Run same? Change loss/weight !!
 
 train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=0.01, stepSize=90, g=0.1)
+train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.01, stepSize=90, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=32, learningRate=0.01, stepSize=90, g=0.1)
 train(json_file, model_name[2], ep=150, batch_size_train=64, learningRate=0.01, stepSize=75, g=0.1)
 train(json_file, model_name[3], ep=200, batch_size_train=32, learningRate=0.01, stepSize=90, g=0.1)
