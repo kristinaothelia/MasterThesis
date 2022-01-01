@@ -1,0 +1,24 @@
+Model 3
+Training time [h]: 5.26021762198872
+The number of params in Million: 10.70166
+Best epoch 191 of 200. Validation acc: 0.8358395989974937
+Training loss: 0.2810277086040729. Validation loss: 0.4630851584923953
+Batch size (train): 16
+Other model info: lr:0.1, step:150, gamma:0.1
+V.acc all 200 epochs: 0.7662969924812032 pm 0.08381629767619629
+
+recall: 0.8358395989974937
+precision: 0.8438274760855089
+f1 score (all classes): [0.91673152 0.6984127  0.74154263 0.85822785]
+f1 score (w): 0.8387681657173361. acc (w): 0.8148329984099029
+
+              precision    recall  f1-score   support
+
+        no a       0.94      0.89      0.92       659
+         arc       0.64      0.77      0.70       172
+        diff       0.72      0.76      0.74       361
+        disc       0.88      0.84      0.86       404
+
+    accuracy                           0.84      1596
+   macro avg       0.80      0.81      0.80      1596
+weighted avg       0.84      0.84      0.84      1596
