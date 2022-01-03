@@ -94,11 +94,8 @@ class Trainer(BaseTrainer):
 
         wrong = list()
 
-        n=4
-        #class_correct = [0]*n
-        #class_total   = [0]*n
-
-        confusion_matrix = np.zeros((n,n))
+        #n=4
+        #confusion_matrix = np.zeros((n,n))
 
         with torch.no_grad():
             for data, target in self.valid_data_loader:
@@ -113,7 +110,7 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
 
-                confusion_matrix[ground_truths][out] += 1
+                #confusion_matrix[ground_truths][out] += 1
 
                 #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
@@ -125,7 +122,8 @@ class Trainer(BaseTrainer):
 
 
         def metrics(y_true, y_pred):
-            report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
+            #report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
+            report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','aurora'])
             #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
             f1 = f1_score(y_true, y_pred, average=None) #The best value is 1 and the worst value is 0
             f1_w = f1_score(y_true, y_pred, average='weighted')

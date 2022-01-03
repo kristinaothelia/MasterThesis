@@ -76,7 +76,8 @@ class BaseTrainer:
             epoch_start_time = time.time()
 
             loss = self._train_epoch(epoch)
-            valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
+            #valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
+            valid_acc, valid_loss, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
 
             epoch_end_time = time.time() - epoch_start_time
 
@@ -108,7 +109,7 @@ class BaseTrainer:
                 self.save_checkpoint(epoch, best=True)
                 best_ep = epoch
                 best_acc = valid_acc
-                best_conf_matrix = confusion_matrix
+                #best_conf_matrix = confusion_matrix
                 L_v = np.mean(valid_loss)
                 L_t = np.mean(loss)
 
@@ -165,8 +166,10 @@ class BaseTrainer:
 
 
         # Normalized
-        N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-        class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
+        N_cm = best_CM_sk/best_CM_sk.sum(axis=1)[:, np.newaxis] #.astype('float')
+        #N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
+        #class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
+        class_names = [r'no aurora', r'aurora']
 
         plt.figure() # figsize=(15,10)
         df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(float)
