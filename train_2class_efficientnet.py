@@ -136,7 +136,7 @@ def train(container, batch_s):
 
     trainer.train()
 
-container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr_NEW.json')
+container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr_NEW_2class.json')
 
 train(container=container, batch_s=8)
 train(container=container, batch_s=16)
