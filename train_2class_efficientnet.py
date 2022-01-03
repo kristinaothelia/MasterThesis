@@ -20,6 +20,8 @@ from lbl.preprocessing import (
 
 def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
+    container = DatasetContainer.from_json(json_file)
+
     def remove_noLabel_img(container):
         """ Remove images with no label """
 
@@ -137,7 +139,7 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
-container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr_NEW_2class.json')
+json_file = 'datasets/Full_aurora_ml_corr_NEW_2class.json'
 train(json_file, model_name[2], ep=200, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)
 train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=0.01, stepSize=150, g=0.1)
