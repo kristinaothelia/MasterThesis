@@ -152,7 +152,8 @@ class Trainer(BaseTrainer):
         valid_acc = np.mean(np.array(accuracy))
         valid_loss = np.mean(np.array(losses))
 
-        return valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
+        #return valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
+        return valid_acc, valid_loss, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
 
 
     def _progress(self, batch_idx):
