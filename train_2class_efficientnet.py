@@ -18,7 +18,7 @@ from lbl.preprocessing import (
 # -----------------------------------------------------------------------------
 #container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr.json')
 
-def train(container, batch_s):
+def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     def remove_noLabel_img(container):
         """ Remove images with no label """
@@ -37,13 +37,6 @@ def train(container, batch_s):
     container = remove_noLabel_img(container)
 
     train, valid = container.split(seed=42, split=0.8)
-
-    model_name = 'efficientnet-b0'
-    #model_name = 'efficientnet-b1'
-    #model_name = 'efficientnet-b2'
-    #model_name = 'efficientnet-b3'
-    #model_name = 'efficientnet-b4'
-
     img_size = efficientnet_params(model_name)['resolution']
 
     def count(container):
@@ -100,7 +93,7 @@ def train(container, batch_s):
 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
-                                               batch_size   = batch_s,
+                                               batch_size   = batch_size_train,
                                                shuffle      = True,
                                                )
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -117,8 +110,8 @@ def train(container, batch_s):
 
     loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
     #loss         = torch.nn.CrossEntropyLoss()
-    optimizer    = torch.optim.Adam(params=model.parameters(), lr=1e-3, amsgrad=True)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=150, gamma=0.1)
+    optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
 
     trainer = Trainer(model             = model,
@@ -128,7 +121,8 @@ def train(container, batch_s):
                       valid_data_loader = valid_loader,
                       lr_scheduler      = lr_scheduler,
                       epochs            = 200,
-                      save_period       = 50,
+                      model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
+                      save_period       = 100,
                       savedir           = './models/2class/{}/{}'.format(model_name[-2:], batch_s),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                       device            = 'cuda:2',
@@ -136,8 +130,14 @@ def train(container, batch_s):
 
     trainer.train()
 
-container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr_NEW_2class.json')
+model_name = ['efficientnet-b0',
+              'efficientnet-b1',
+              'efficientnet-b2',
+              'efficientnet-b3',
+              'efficientnet-b4',
+              'efficientnet-b6']
 
-train(container=container, batch_s=8)
-train(container=container, batch_s=16)
-train(container=container, batch_s=24)
+container = DatasetContainer.from_json('datasets/Full_aurora_ml_corr_NEW_2class.json')
+train(json_file, model_name[2], ep=200, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)
+train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=0.01, stepSize=150, g=0.1)
