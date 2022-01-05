@@ -175,7 +175,7 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
 #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 
-model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 model2 = models.efficientnet_b2(pretrained=False)
 model4 = models.efficientnet_b4(pretrained=False)
 #model = models.resnet152()
