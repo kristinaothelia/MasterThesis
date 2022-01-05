@@ -185,9 +185,9 @@ model4 = models.efficientnet_b4(pretrained=False)
 # Run same? Change loss/weight !!
 
 #train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=300, g=0.1)
+train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
 #train(model2, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model2, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=300, g=0.1)
+train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
 train(model4, json_file, model_name[4], ep=200, batch_size_train=8, learningRate=0.01, stepSize=190, g=0.1)
 '''
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.1)
