@@ -4,7 +4,8 @@ import torchvision.transforms.functional as F
 import numpy as np
 import sys
 
-import torchvision.models as models
+#from efficientnet_pytorch import EfficientNet
+import efficientnet_pytorch.EfficientNet as EffNet
 
 from lbl.dataset import DatasetContainer
 from lbl.dataset import DatasetLoader
@@ -18,6 +19,8 @@ from lbl.preprocessing import (
     StandardizeNonZero,
     )
 # -----------------------------------------------------------------------------
+
+# I chose B3 because it provides a nice balance between accuracy and training time.
 
 LABELS = {
     0: "aurora-less",
@@ -96,6 +99,8 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
         StandardizeNonZero(),
         # PadImage(size=480),
         ])
+
+    # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
     # No need to rotate validation images
     valid_transforms = torchvision.transforms.Compose([
@@ -176,8 +181,9 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 
 model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
-model2 = models.efficientnet_b2(pretrained=False)
-model4 = models.efficientnet_b4(pretrained=False)
+model2 = EffNet.from_name('efficientnet-b2', num_classes=4)
+model3 = EffNet.from_name('efficientnet-b3', num_classes=4)
+model4 = EffNet.from_name('efficientnet-b4', num_classes=4)
 #model = models.resnet152()
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
@@ -185,9 +191,10 @@ model4 = models.efficientnet_b4(pretrained=False)
 # Run same? Change loss/weight !!
 
 #train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
+train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
 #train(model2, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
+train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
+train(model3, json_file, model_name[3], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
 train(model4, json_file, model_name[4], ep=200, batch_size_train=8, learningRate=0.01, stepSize=190, g=0.1)
 '''
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.1)
