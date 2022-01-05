@@ -168,8 +168,8 @@ class BaseTrainer:
         # Normalized
         N_cm = best_CM_sk/best_CM_sk.sum(axis=1)[:, np.newaxis] #.astype('float')
         #N_cm = best_conf_matrix/best_conf_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-        #class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
-        class_names = [r'no aurora', r'aurora']
+        class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
+        #class_names = [r'no aurora', r'aurora']
 
         plt.figure() # figsize=(15,10)
         df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(float)

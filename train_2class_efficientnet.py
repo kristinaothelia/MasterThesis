@@ -105,6 +105,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                )
 
     model = EfficientNet.from_name(model_name=model_name, num_classes=2, in_channels=1)
+    #model = models.efficientnet_b3(pretrained=False)
 
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     params = sum([np.prod(p.size()) for p in model_parameters])

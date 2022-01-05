@@ -33,7 +33,7 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
-def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
+def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     container = DatasetContainer.from_json(json_file)
 
@@ -133,9 +133,9 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               sampler      = sampler,
-                                               shuffle      = False,
-                                               #shuffle      = True,
+                                               #sampler      = sampler,
+                                               #shuffle      = False,
+                                               shuffle      = True,
                                                )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -143,11 +143,6 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                                                batch_size   = 1,
                                                shuffle      = False,
                                                )
-
-    #model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
-    #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
-
-    model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
 
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     params = sum([np.prod(p.size()) for p in model_parameters])
@@ -177,16 +172,23 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
 #json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 
+#model = models.resnet50().to(device)         # Resnet network with 50 hidden layers.
+#model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
+
+model = EfficientNet.from_name(model_name=model_name, num_classes=4, in_channels=1)
+model2 = models.efficientnet_b2(pretrained=False)
+model4 = models.efficientnet_b4(pretrained=False)
+#model = models.resnet152()
+
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
 # Run same? Change loss/weight !!
 
-train(json_file, model_name[2], ep=300, batch_size_train=8, learningRate=0.01, stepSize=200, g=0.5)
-train(json_file, model_name[2], ep=300, batch_size_train=16, learningRate=0.01, stepSize=200, g=0.5)
-train(json_file, model_name[2], ep=300, batch_size_train=24, learningRate=0.01, stepSize=200, g=0.5)
-#train(json_file, model_name[2], ep=200, batch_size_train=24, learningRate=0.01, stepSize=150, g=0.1)
-#train(json_file, model_name[2], ep=200, batch_size_train=32, learningRate=0.01, stepSize=150, g=0.1)
-
+#train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
+train(model, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=300, g=0.1)
+#train(model2, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
+train(model2, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=300, g=0.1)
+train(model4, json_file, model_name[4], ep=200, batch_size_train=8, learningRate=0.01, stepSize=190, g=0.1)
 '''
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.1)
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)

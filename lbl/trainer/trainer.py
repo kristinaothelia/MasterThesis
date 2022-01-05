@@ -122,8 +122,8 @@ class Trainer(BaseTrainer):
 
 
         def metrics(y_true, y_pred):
-            #report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
-            report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','aurora'])
+            report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])
+            #report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','aurora'])
             #https://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html#sklearn.metrics.f1_score
             f1 = f1_score(y_true, y_pred, average=None) #The best value is 1 and the worst value is 0
             f1_w = f1_score(y_true, y_pred, average='weighted')
