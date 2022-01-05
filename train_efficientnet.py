@@ -179,7 +179,7 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 
 model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
+train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
 
 from efficientnet_pytorch import EfficientNet
 
@@ -191,8 +191,8 @@ model4 = EfficientNet.from_name('efficientnet-b4', num_classes=4)
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
 #train(model2, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
-train(model3, json_file, model_name[3], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
+train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
+train(model3, json_file, model_name[3], ep=500, batch_size_train=16, learningRate=0.01, stepSize=400, g=0.1)
 train(model4, json_file, model_name[4], ep=200, batch_size_train=8, learningRate=0.01, stepSize=190, g=0.1)
 '''
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.1)
