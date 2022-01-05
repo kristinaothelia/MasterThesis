@@ -4,9 +4,6 @@ import torchvision.transforms.functional as F
 import numpy as np
 import sys
 
-#from efficientnet_pytorch import EfficientNet
-import efficientnet_pytorch.EfficientNet as EffNet
-
 from lbl.dataset import DatasetContainer
 from lbl.dataset import DatasetLoader
 
@@ -181,17 +178,18 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #model.fc = nn.Linear(512, 4).to(device)      # Alter output layer for current dataset.
 
 model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
-model2 = EffNet.from_name('efficientnet-b2', num_classes=4)
-model3 = EffNet.from_name('efficientnet-b3', num_classes=4)
-model4 = EffNet.from_name('efficientnet-b4', num_classes=4)
+#train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
+train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
+
+from efficientnet_pytorch import EfficientNet
+
+model2 = EfficientNet.from_name('efficientnet-b2', num_classes=4)
+model3 = EEfficientNet.from_name('efficientnet-b3', num_classes=4)
+model4 = EfficientNet.from_name('efficientnet-b4', num_classes=4)
 #model = models.resnet152()
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
-# Run same? Change loss/weight !!
-
-#train(model, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
-train(model, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
 #train(model2, json_file, model_name[2], ep=400, batch_size_train=8, learningRate=0.01, stepSize=300, g=0.1)
 train(model2, json_file, model_name[2], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
 train(model3, json_file, model_name[3], ep=500, batch_size_train=16, learningRate=0.001, stepSize=400, g=0.1)
