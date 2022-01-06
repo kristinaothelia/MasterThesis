@@ -40,9 +40,6 @@ class DoubleConv(nn.Module):
 
 
 class Model(nn.Module):
-    """
-    Model description...
-    """
 
     def __init__(self,
                  n_channels: int = 1,
