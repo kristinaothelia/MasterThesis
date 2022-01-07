@@ -103,7 +103,7 @@ mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
 # Load a saved model. UPDATE
 model_name = model_names[3]
 #model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
-model_path = "models/report/b3-16/best_validation/checkpoint-best.pth"
+model_path = "models/report/b3_16/best_validation/checkpoint-best.pth"
 
 json_file = 'datasets/Full_aurora_new_rt_ml.json'
 #container = DatasetContainer.from_json(mlnodes_path+json_file)
