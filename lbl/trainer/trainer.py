@@ -98,7 +98,7 @@ class Trainer(BaseTrainer):
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
-                print(data)
+                print(target)
 
                 data, target = data.to(self.device), target.to(self.device)
 
@@ -116,6 +116,9 @@ class Trainer(BaseTrainer):
                 # Update y_pred and y_true
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
+
+                if y_pred != y_true:
+                    print('pred {}, true {}'.format(y_pred, y_true))
 
                 def wrong_pred():
 
