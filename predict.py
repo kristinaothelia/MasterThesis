@@ -74,9 +74,8 @@ def predict(model_name, model_path, container, LABELS, save_file):
     with torch.no_grad():
         for entry in tqdm(container):
 
-            if entry.label is not None:
-            #if entry.label is None:
-                print(entry.label)
+            if entry.label is None:
+
                 score = dict()
                 img = entry.open()
                 x = transforms(img)
@@ -90,10 +89,25 @@ def predict(model_name, model_path, container, LABELS, save_file):
                 for i, label_pred in enumerate(pred[0]):
                     score[LABELS[i]] = float(label_pred)
 
-                print(score)
+                entry.label = LABELS[int(prediction[0])]
+                entry.human_prediction = False
+                entry.add_score(score)
 
-                #entry.label = LABELS[int(prediction[0])]
-                #entry.human_prediction = False
+            else:
+                score = dict()
+                img = entry.open()
+                x = transforms(img)
+                x = x.unsqueeze(0)
+                x = x.to('cuda:3')
+
+                pred = model(x).to('cpu')
+                pred = torch.softmax(pred, dim=-1)
+                prediction = torch.argmax(pred, dim=-1)
+
+                for i, label_pred in enumerate(pred[0]):
+                    score[LABELS[i]] = float(label_pred)
+
+                entry.human_prediction = False
                 entry.add_score(score)
 
     #container.to_json(path='./datasets/Full_aurora_predicted.json')
