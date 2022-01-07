@@ -74,7 +74,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
     with torch.no_grad():
         for entry in tqdm(container):
 
-            if entry.label is None:
+            if entry.label is True: # None
                 score = dict()
                 img = entry.open()
                 x = transforms(img)
@@ -88,8 +88,8 @@ def predict(model_name, model_path, container, LABELS, save_file):
                 for i, label_pred in enumerate(pred[0]):
                     score[LABELS[i]] = float(label_pred)
 
-                entry.label = LABELS[int(prediction[0])]
-                entry.human_prediction = False
+                #entry.label = LABELS[int(prediction[0])]
+                #entry.human_prediction = False
                 entry.add_score(score)
 
     #container.to_json(path='./datasets/Full_aurora_predicted.json')
@@ -109,7 +109,7 @@ json_file = 'datasets/Full_aurora_new_rt_ml.json'
 #container = DatasetContainer.from_json(mlnodes_path+json_file)
 container = DatasetContainer.from_json(json_file)
 #save_file = mlnodes_path+json_file[:-5]+'_predicted_'+model_name+'.json'
-save_file = json_file[:-5]+'_predicted_'+model_name+'_TESTNEW.json'
+save_file = json_file[:-5]+'_predicted_'+model_name+'_TESTNEW_.json'
 
 predict(model_name, model_path, container, LABELS, save_file)
 

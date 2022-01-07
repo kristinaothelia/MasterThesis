@@ -48,9 +48,6 @@ class ClassCorrector(object):
         correct = 0
         correct_from = []
         correct_to = []
-        #df1 = pd.DataFrame([['a', 'b'], ['c', 'd']],
-        #           index=['row 1', 'row 2'],
-        #           columns=['Predicted', 'Corrected'])
 
         for entry in self.container:
             if entry.label == label:
