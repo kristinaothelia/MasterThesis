@@ -72,14 +72,11 @@ class Trainer(BaseTrainer):
 
             if batch_idx % self.log_step == 0:
                 print('Train {}: {} {} Loss: {:.6f}'.format(
-                    'Epoch',
-                    epoch,
-                    self._progress(batch_idx),
-                    loss))
+                    'Epoch', epoch, self._progress(batch_idx), loss))
 
         return np.mean(np.array(losses))
 
-    def _valid_epoch(self, epoch):
+    def _valid_epoch(self, epoch, save=False):
         """
         Validate after training an epoch
 
@@ -98,6 +95,8 @@ class Trainer(BaseTrainer):
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
+                print(self.valid_data_loader)
+
                 data, target = data.to(self.device), target.to(self.device)
 
                 output = self.model(data)
@@ -109,18 +108,13 @@ class Trainer(BaseTrainer):
                 ground_truths = torch.argmax(target, dim=1) # true class
 
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
-                print(a)
                 accuracy.append(a)
 
                 # Update y_pred and y_true
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
 
-                if out != ground_truths:
-                    print('pred {}, true {}'.format(out, ground_truths))
-
-                def wrong_pred():
-
+                if save:
                     # Wrongly pred images
                     wrong_idx = (out != target.view_as(out)).nonzero()[:, 0]
                     wrong_samples = data[wrong_idx]
@@ -139,7 +133,6 @@ class Trainer(BaseTrainer):
                         img = TF.to_pil_image(sample)
                         img.save('wrong/wrong_idx{}_pred{}_actual{}.png'.format(
                             wrong_idx[i], wrong_pred.item(), actual_pred.item()))
-
 
 
         def metrics(y_true, y_pred):
@@ -165,10 +158,6 @@ class Trainer(BaseTrainer):
 
         # Metrics made with sklearn
         CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = metrics(y_true, y_pred)
-
-        #out = out.cpu().data.numpy()
-        #target = target.cpu().data.numpy()
-        #ground_truths = ground_truths.cpu().data.numpy()
 
         valid_acc = np.mean(np.array(accuracy))
         valid_loss = np.mean(np.array(losses))

@@ -175,11 +175,13 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
 #json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 
-model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
-train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
+#model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
+#train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
 
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
-train(model, json_file, model_name[3], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
+train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.01, stepSize=185, g=0.5)
+
+train(model, json_file, model_name[3], ep=300, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.5)
 
 
 #model = models.resnet152()
