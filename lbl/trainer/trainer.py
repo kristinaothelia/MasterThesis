@@ -76,7 +76,7 @@ class Trainer(BaseTrainer):
 
         return np.mean(np.array(losses))
 
-    def _valid_epoch(self, epoch, save=False):
+    def _valid_epoch(self, epoch):
         """
         Validate after training an epoch
 
@@ -111,27 +111,6 @@ class Trainer(BaseTrainer):
                 # Update y_pred and y_true
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
-
-                if save:
-                    # Wrongly pred images
-                    wrong_idx = (out != target.view_as(out)).nonzero()[:, 0]
-                    wrong_samples = data[wrong_idx]
-                    wrong_preds = out[wrong_idx]
-                    actual_preds = target.view_as(out)[wrong_idx]
-
-                    for i in range(len(wrong_idx)):
-                        sample = wrong_samples[i]
-                        wrong_pred = wrong_preds[i]
-                        actual_pred = actual_preds[i]
-                        # Undo normalization
-                        sample = sample * 0.3081
-                        sample = sample + 0.1307
-                        sample = sample * 255.
-                        sample = sample.byte()
-                        img = TF.to_pil_image(sample)
-                        img.save('wrong/wrong_idx{}_pred{}_actual{}.png'.format(
-                            wrong_idx[i], wrong_pred.item(), actual_pred.item()))
-
 
         def metrics(y_true, y_pred):
             report = sk.metrics.classification_report(y_true, y_pred, target_names=['no a','arc','diff','disc'])

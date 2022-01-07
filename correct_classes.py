@@ -58,4 +58,4 @@ stats(container, pred_level=True)
 corrector = ClassCorrector(container=container)
 
 # Run 1 and 3 one more time!
-corrector.correct_class(LABELS[1], prediction_level=2, save_path=corrected_file)
+corrector.correct_class(LABELS[1], prediction_level=0, save_path=corrected_file)

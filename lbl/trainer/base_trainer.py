@@ -79,9 +79,6 @@ class BaseTrainer:
             #valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
             valid_acc, valid_loss, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch)
 
-            if epoch == 157:
-                valid_acc, valid_loss, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report = self._valid_epoch(epoch, save=True)
-
             epoch_end_time = time.time() - epoch_start_time
 
             if self.lr_scheduler is not None:
