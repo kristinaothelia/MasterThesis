@@ -95,8 +95,6 @@ class Trainer(BaseTrainer):
         with torch.no_grad():
             for data, target in self.valid_data_loader:
 
-                print(self.valid_data_loader)
-
                 data, target = data.to(self.device), target.to(self.device)
 
                 output = self.model(data)
