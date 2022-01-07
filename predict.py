@@ -75,6 +75,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
         for entry in tqdm(container):
 
             if entry.label is True: # None
+                print(entry.label)
                 score = dict()
                 img = entry.open()
                 x = transforms(img)
@@ -87,6 +88,8 @@ def predict(model_name, model_path, container, LABELS, save_file):
 
                 for i, label_pred in enumerate(pred[0]):
                     score[LABELS[i]] = float(label_pred)
+
+                print(score)
 
                 #entry.label = LABELS[int(prediction[0])]
                 #entry.human_prediction = False
