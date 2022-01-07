@@ -74,7 +74,7 @@ def predict(model_name, model_path, container, LABELS, save_file):
     with torch.no_grad():
         for entry in tqdm(container):
 
-            if entry.human_prediction = False:
+            if entry.human_prediction == False:
             #if entry.label is None:
                 print(entry.label)
                 score = dict()
