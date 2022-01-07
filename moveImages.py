@@ -38,5 +38,5 @@ def move(container, label, toFolder):
 
 #move(container=aurora_less, label=LABELS[0], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\aurora_less')
 move(container=arc, label=LABELS[1], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\arc')
-#move(container=diff, label=LABELS[2], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\diffuse')
-#move(container=disc, label=LABELS[3], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\discrete')
+move(container=diff, label=LABELS[2], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\diffuse')
+move(container=disc, label=LABELS[3], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\discrete')
