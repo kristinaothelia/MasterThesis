@@ -122,10 +122,6 @@ class BaseTrainer:
                 best_precission = precision
                 best_report = report
 
-                #print(best_conf_matrix)
-                #N_cm = confusion_matrix/confusion_matrix.sum(axis=1)[:, np.newaxis] #.astype('float')
-                #print(N_cm)
-
             print('-----------------------------------')
 
         self.save_checkpoint(epoch, best=False)

@@ -18,8 +18,8 @@ Use True if image has label that is labeled by a human, for check
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 
 #predicted_file = 'datasets/Full_aurora_new_rt_predicted_efficientnet-b3.json'
-predicted_file = 'datasets/Full_aurora_corr.json'
-corrected_file = 'datasets/Full_aurora_corr.json'
+predicted_file = 'datasets/Full_aurora_corr_NEW.json'
+corrected_file = 'datasets/Full_aurora_corr_NEW.json'
 
 container = DatasetContainer.from_json(predicted_file)
 length_container = len(container)
@@ -55,9 +55,7 @@ def stats(container, pred_level=False):
 stats(container, pred_level=False)
 stats(container, pred_level=True)
 
-exit()
-
 corrector = ClassCorrector(container=container)
+
 # Run 1 and 3 one more time!
-label = LABELS[1]
-corrector.correct_class(label, prediction_level=0, save_path=corrected_file)
+corrector.correct_class(LABELS[1], prediction_level=2, save_path=corrected_file)

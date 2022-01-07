@@ -4,17 +4,7 @@ import torch, sys
 
 import torch.nn.functional as F
 
-# https://numpy.org/doc/stable/reference/generated/numpy.pad.html
-# Padding class: pytorch tensors
-
-# eeeeehh..
-
 class PadImage(object):
-    """
-    Pad an aurora image to 480x480 px.
-    Designed for 469x469 and 471x471 px images
-    """
-
 
     def __init__(self, size: Union[Tuple[int], int]):
         self.size = size if isinstance(size, tuple) else (size, size)

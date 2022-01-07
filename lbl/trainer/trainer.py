@@ -1,8 +1,9 @@
 import numpy as np
 import torch
 import sklearn as sk
-from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
+import torchvision.transforms.functional as TF
 
+from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
 from .base_trainer import BaseTrainer
 
 
@@ -94,11 +95,10 @@ class Trainer(BaseTrainer):
 
         wrong = list()
 
-        #n=4
-        #confusion_matrix = np.zeros((n,n))
-
         with torch.no_grad():
             for data, target in self.valid_data_loader:
+
+                print(data)
 
                 data, target = data.to(self.device), target.to(self.device)
 
@@ -110,15 +110,34 @@ class Trainer(BaseTrainer):
                 out = torch.argmax(output, dim=1) # predicted
                 ground_truths = torch.argmax(target, dim=1) # true class
 
-                #confusion_matrix[ground_truths][out] += 1
-
-                #accuracy, precision, recall, F1_score = F_score(output.squeeze(), labels.float())
                 a = torch.mean((out == ground_truths).type(torch.float32)).item()
                 accuracy.append(a)
 
                 # Update y_pred and y_true
                 y_pred.extend(prediction.item() for prediction in out)
                 y_true.extend(true.item() for true in ground_truths)
+
+                def wrong_pred():
+
+                    # Wrongly pred images
+                    wrong_idx = (out != target.view_as(out)).nonzero()[:, 0]
+                    wrong_samples = data[wrong_idx]
+                    wrong_preds = out[wrong_idx]
+                    actual_preds = target.view_as(out)[wrong_idx]
+
+                    for i in range(len(wrong_idx)):
+                        sample = wrong_samples[i]
+                        wrong_pred = wrong_preds[i]
+                        actual_pred = actual_preds[i]
+                        # Undo normalization
+                        sample = sample * 0.3081
+                        sample = sample + 0.1307
+                        sample = sample * 255.
+                        sample = sample.byte()
+                        img = TF.to_pil_image(sample)
+                        img.save('wrong/wrong_idx{}_pred{}_actual{}.png'.format(
+                            wrong_idx[i], wrong_pred.item(), actual_pred.item()))
+
 
 
         def metrics(y_true, y_pred):
@@ -152,7 +171,6 @@ class Trainer(BaseTrainer):
         valid_acc = np.mean(np.array(accuracy))
         valid_loss = np.mean(np.array(losses))
 
-        #return valid_acc, valid_loss, confusion_matrix, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
         return valid_acc, valid_loss, CM_sk, acc_sk, acc_sk_w, f1, f1_w, recall, precision, report
 
 
