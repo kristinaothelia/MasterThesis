@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import sklearn as sk
-import torchvision.transforms.functional as TF
+#import torchvision.transforms.functional as TF
 
 from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
 from .base_trainer import BaseTrainer

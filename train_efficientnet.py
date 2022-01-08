@@ -33,7 +33,7 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
-def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
+def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     container = DatasetContainer.from_json(json_file)
 
@@ -88,7 +88,10 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode='bicubic', # 'nearest' | 'linear' | 'bilinear' | 'bicubic
+                mode=mode,
+                #mode='bicubic', # 'nearest' | 'linear' | 'bilinear' | 'bicubic
+                #mode='bilinear',
+                #mode='nearest',
                 align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
@@ -163,7 +166,7 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
                       save_period       = 250,
-                      savedir           = './models/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize, g),
+                      savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g),
                       device            = 'cuda:3',
                       )
 
@@ -180,15 +183,16 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
 #train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
-#Res:
-
+#Res: 0.1: run longer. 0.01: overfitting
 
 # With weights in sampler
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
-train(model, json_file, model_name[3], ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
-train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
-train(model, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
-train(model, json_file, model_name[4], ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
+train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
+train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+train(model, json_file, model_name[3], mode='nearest', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+#train(model, json_file, model_name[2], mode='bicubic', ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
+#train(model, json_file, model_name[4], mode='bicubic', ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
 # Res:
 
 # Without weights
