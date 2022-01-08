@@ -53,6 +53,7 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
 
     container = remove_noLabel_img(container)
 
+    # Change seed?
     train, valid = container.split(seed=42, split=0.8)
 
     def count(container):
@@ -72,13 +73,9 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
         return clear, arc, diff, disc
 
     clear, arc, diff, disc = count(train)
-    print("class count, train: ", [clear, arc, diff, disc])
-
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    print(class_weights)
-    # [1.0, 3.86, 2.06, 1.45]
-    #class_weights = [1/clear, 1/arc, 1/diff, 1/disc]
-    # [0.00038, 0.00147, 0.00078, 0.00055]
+    print("class count, train: ", [clear, arc, diff, disc])
+    print("weights, train:     ", class_weights)
 
     img_size = efficientnet_params(model_name)['resolution']
     # rotation class: numpy arrays. Padding class: pytorch tensors
@@ -136,9 +133,9 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               #sampler      = sampler,
-                                               #shuffle      = False,
-                                               shuffle      = True,
+                                               sampler      = sampler,
+                                               shuffle      = False,
+                                               #shuffle      = True,
                                                )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -151,8 +148,8 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    #loss         = torch.nn.CrossEntropyLoss()
+    #loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -178,9 +175,26 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
 
+# With weights in loss
+#model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
+#train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
+#train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
+#Res:
+
+
+# With weights in sampler
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
-train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
+train(model, json_file, model_name[3], ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
+train(model, json_file, model_name[2], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
+train(model, json_file, model_name[4], ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
+# Res:
+
+# Without weights
+#model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
+#train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
+#train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
+# Res:
 
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
