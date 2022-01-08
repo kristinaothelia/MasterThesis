@@ -74,6 +74,7 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
 
     clear, arc, diff, disc = count(train)
     class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    class_weights = [0.9, clear/arc, clear/diff, clear/disc]
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
 
