@@ -164,7 +164,7 @@ def train(model, json_file, model_name, ep=100, batch_size_train=8, learningRate
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
                       save_period       = 250,
                       savedir           = './models/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], batch_size_train, learningRate, stepSize, g),
-                      device            = 'cuda:2',
+                      device            = 'cuda:3',
                       )
 
     trainer.train()
