@@ -188,7 +188,6 @@ model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_chann
 #train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 #train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
 #train(model, json_file, model_name[3], mode='nearest', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-train(model, json_file, model_name[3], mode='linear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
 
 #train(model, json_file, model_name[2], mode='bicubic', ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
