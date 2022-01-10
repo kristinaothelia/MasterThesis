@@ -90,9 +90,7 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
                 size=img_size,
                 mode=mode,
                 #mode='bicubic', # 'nearest' | 'linear' | 'bilinear' | 'bicubic
-                #mode='bilinear',
-                #mode='nearest',
-                align_corners=True,
+                #align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
         #normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -110,7 +108,7 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode='bicubic',
+                mode=mode,
                 #align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
