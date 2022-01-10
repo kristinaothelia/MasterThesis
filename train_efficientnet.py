@@ -111,7 +111,7 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
                 input=x.unsqueeze(0),
                 size=img_size,
                 mode='bicubic',
-                align_corners=True,
+                #align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
         # PadImage(size=480),
@@ -187,10 +187,14 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 
 # With weights in sampler
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
-train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
-train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+#train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
+#train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
 train(model, json_file, model_name[3], mode='nearest', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+
+# Try
+#train(model, json_file, model_name[3], mode='linear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+#train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
+
 #train(model, json_file, model_name[2], mode='bicubic', ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
 #train(model, json_file, model_name[4], mode='bicubic', ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
 # Res:
