@@ -52,8 +52,6 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
         return container
 
     container = remove_noLabel_img(container)
-
-    # Change seed?
     train, valid = container.split(seed=42, split=0.8)
 
     def count(container):
@@ -88,8 +86,7 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode=mode,
-                #mode='bicubic', # 'nearest' | 'linear' | 'bilinear' | 'bicubic
+                mode=mode, # 'nearest' | 'linear' | 'bilinear' | 'bicubic
                 align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
@@ -135,9 +132,9 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
     train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                num_workers  = 4,
                                                batch_size   = batch_size_train,
-                                               sampler      = sampler,
-                                               shuffle      = False,
-                                               #shuffle      = True,
+                                               #sampler      = sampler,
+                                               #shuffle      = False,
+                                               shuffle      = True,
                                                )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
@@ -150,8 +147,8 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    #loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    loss         = torch.nn.CrossEntropyLoss()
+    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+    #loss         = torch.nn.CrossEntropyLoss()
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -185,11 +182,14 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 
 # With weights in sampler
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
+#train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=250, g=0.1)
+#train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=32, learningRate=0.01, stepSize=250, g=0.1)
+train(model, json_file, model_name[4], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
+
 #train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 #train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
 #train(model, json_file, model_name[3], mode='nearest', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-
 #train(model, json_file, model_name[2], mode='bicubic', ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
 #train(model, json_file, model_name[4], mode='bicubic', ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
 # Res:

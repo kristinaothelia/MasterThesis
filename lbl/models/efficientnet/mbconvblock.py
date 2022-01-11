@@ -93,6 +93,7 @@ class MBConvBlock(nn.Module):
                                    )
         self.norm2 = self._norm(norm=norm, output=out_channels, bias=True)
         self.silu = torch.nn.SiLU()
+        #self.relu = torch.nn.ReLU()
 
     def forward(self, inputs, drop_connect_rate=None):
         """MBConvBlock's forward function.
@@ -109,10 +110,12 @@ class MBConvBlock(nn.Module):
             x = self.expand_conv(inputs)
             x = self.norm0(x)
             x = self.silu(x)
+            #x = self.relu(x)
 
         x = self.depthwise_conv(x)
         x = self.norm1(x)
         x = self.silu(x)
+        #x = self.relu(x)
 
         # Squeeze and Excitation
         if self.has_se:

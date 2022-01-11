@@ -127,6 +127,7 @@ class EfficientNet(nn.Module):
         self._fc = nn.Linear(out_channels, num_classes)
 
         self.silu = nn.SiLU()
+        #x = self.relu(x)
 
     def forward(self, inputs):
         """EfficientNet's forward function.
@@ -138,6 +139,7 @@ class EfficientNet(nn.Module):
         """
         # Stem
         x = self.silu(self.norm0(self.conv_stem(inputs)))
+        #x = self.relu(self.norm0(self.conv_stem(inputs)))
 
         # Blocks
         for idx, block in enumerate(self.blocks):
@@ -148,6 +150,7 @@ class EfficientNet(nn.Module):
 
         # Head
         x = self.silu(self.norm1(self.conv_head(x)))
+        #x = self.relu(self.norm1(self.conv_head(x)))
 
         x = self._avg_pooling(x)
         x = x.flatten(start_dim=1)

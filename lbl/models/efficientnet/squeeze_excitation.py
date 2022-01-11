@@ -29,6 +29,7 @@ class SqueezeExcitation(nn.Module):
                                  kernel_size=1,
                                  bias=True)
         self.silu = torch.nn.SiLU()
+        #self.relu = torch.nn.ReLU()
         # Could do this using linear layer aswell, but than we need to .view in forward
         # self.linear_1 = nn.Linear(in_features=channels, out_features=squeezed_channels, bias=True)
         # self.linear_2 = nn.Linear(in_features=squeezed_channels, out_features=channels, bias=True)
@@ -37,6 +38,7 @@ class SqueezeExcitation(nn.Module):
         x = self.avg_pool(inputs)
         x = self.layer_1(x)
         x = self.silu(x)
+        #x = self.relu(x)
         x = self.layer_2(x)
         x = torch.sigmoid(x) * inputs
         return x

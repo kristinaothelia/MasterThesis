@@ -29,19 +29,6 @@ class Conv2dDynamicSamePadding(nn.Conv2d):
     """2D Convolutions like TensorFlow, for a dynamic image size.
        The padding is operated in forward function by calculating dynamically.
     """
-
-    # Tips for 'SAME' mode padding.
-    #     Given the following:
-    #         i: width or height
-    #         s: stride
-    #         k: kernel size
-    #         d: dilation
-    #         p: padding
-    #     Output after Conv2d:
-    #         o = floor((i+p-((k-1)*d+1))/s+1)
-    # If o equals i, i = floor((i+p-((k-1)*d+1))/s+1),
-    # => p = (i-1)*s+((k-1)*d+1)-i
-
     def __init__(self,
                  in_channels: int,
                  out_channels: int,
