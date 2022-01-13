@@ -127,12 +127,9 @@ class BaseTrainer:
         self.save_checkpoint(epoch, best=False)
 
         print(best_report)
-
         print("ep: ", best_ep, " acc: ", best_acc)
-
         print('acc, sk:    ', best_acc_sk)
         print('acc, sk, w: ', best_acc_sk_w)
-        print('f1:         ', best_f1)
         print('f1, w:      ', best_f1_w)
 
         cm_ = best_CM_sk
@@ -142,7 +139,8 @@ class BaseTrainer:
         print("Training time [h]: ", train_end_time/(60*60))
 
         log = open(self.checkpoint_dir / "log.txt", "w")
-        log.write("Model {}\n".format(self.model_info[-1]))
+        log.write("Model {}\n".format(self.model_info[-2]))
+        log.write("Class weights {}\n".format(self.model_info[-1]))
         log.write("Training time [h]: {}\n".format(train_end_time/(60*60)))
         log.write("The number of params in Million: {}\n".format(self.model_info[4]))
         log.write("Best epoch {} of {}. Validation acc: {}\n".format(best_ep, self.epochs, best_acc))
@@ -174,7 +172,7 @@ class BaseTrainer:
         heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
         plt.ylabel(r'Observed class',fontsize=13) # True label
         plt.xlabel(r'Predicted class',fontsize=13)
-        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-1])+'\n'+r'Validation accuracy: {:.2f}'.format(best_acc),fontsize=14)
+        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-2])+'\n'+r'Validation accuracy: {:.2f}'.format(best_acc),fontsize=14)
         #plt.show(block=True)
         plt.tight_layout()
         plt.savefig(str(self.checkpoint_dir) + "/CM_normalized.png")
@@ -184,7 +182,7 @@ class BaseTrainer:
             ep = np.linspace(self.start_epoch, self.epochs, self.epochs)
 
             plt.figure()
-            plt.title("Model B{}, loss vs accuracy (best v.acc: {:.2f})".format(self.model_info[-1], best_acc),fontsize=14)
+            plt.title("Loss and accuracy for EfficientNet model B{}".format(self.model_info[-2])+'\n'+r'Save point validation accuracy: {:.2f}'.format(best_acc),fontsize=14)
             plt.plot(ep, t_loss, label="Training loss")
             plt.plot(best_ep, best_acc, 'r*', label="save point")
             plt.plot(ep, v_loss, label="Validation loss")
@@ -197,7 +195,7 @@ class BaseTrainer:
             plt.savefig(str(self.checkpoint_dir) + "/acc_vs_loss.png")
 
             plt.figure()
-            plt.title("Model B{}, w accuracy and f1 score".format(self.model_info[-1]),fontsize=14)
+            plt.title("Model B{}, w accuracy and f1 score".format(self.model_info[-2]),fontsize=14)
             plt.plot(ep, v_acc, label="val. accuracy")
             plt.plot(best_ep, best_acc, 'r*', label="save point")
             plt.plot(ep, v_f1_w, label="Weighted f1 score")

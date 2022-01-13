@@ -1,5 +1,8 @@
 import torch
 import torchvision
+#from torchsummary import summary
+#summary(model, (3, 224, 224))
+#print(model)
 import torchvision.transforms.functional as F
 import numpy as np
 import sys
@@ -33,7 +36,7 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
-def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
+def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False, ep=100, batch_size_train=8, learningRate=2e-3, stepSize=75, g=0.1):
 
     container = DatasetContainer.from_json(json_file)
 
@@ -71,8 +74,9 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
         return clear, arc, diff, disc
 
     clear, arc, diff, disc = count(train)
-    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    class_weights = [0.9, clear/arc, clear/diff, clear/disc]
+    #class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    #class_weights = [0.9, clear/arc, clear/diff, clear/disc]
+    class_weights = [1.0, (clear/arc)*1.2, (clear/diff)*1.2, (clear/disc)*1.2]    # Add 20% weight on arc, diff and disc
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
 
@@ -129,13 +133,20 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
                                                      replacement=True,
                                                      )
 
-    train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
-                                               num_workers  = 4,
-                                               batch_size   = batch_size_train,
-                                               sampler      = sampler,
-                                               shuffle      = False,
-                                               #shuffle      = True,
-                                               )
+    if w_sampler:
+        train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
+                                                   num_workers  = 4,
+                                                   batch_size   = batch_size_train,
+                                                   sampler      = sampler,
+                                                   shuffle      = False,
+                                                   )
+
+    else:
+        train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
+                                                   num_workers  = 4,
+                                                   batch_size   = batch_size_train,
+                                                   shuffle      = True,
+                                                   )
 
     valid_loader = torch.utils.data.DataLoader(dataset      = valid_loader,
                                                num_workers  = 4,
@@ -147,8 +158,21 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-    #loss         = torch.nn.CrossEntropyLoss()
+    print(model)
+
+    if w_sampler:
+        loss         = torch.nn.CrossEntropyLoss()
+    else:
+        loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+
+    if no_weights:
+        train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
+                                                   num_workers  = 4,
+                                                   batch_size   = batch_size_train,
+                                                   shuffle      = True,
+                                                   )
+        loss         = torch.nn.CrossEntropyLoss()
+
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
@@ -159,8 +183,8 @@ def train(model, json_file, model_name, mode, ep=100, batch_size_train=8, learni
                       valid_data_loader = valid_loader,
                       lr_scheduler      = lr_scheduler,
                       epochs            = ep,
-                      model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
-                      save_period       = 250,
+                      model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:], class_weights],
+                      save_period       = 500,
                       savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g),
                       device            = 'cuda:3',
                       )
@@ -183,16 +207,18 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 # With weights in sampler
 model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.1)
-train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=16, learningRate=0.01, stepSize=250, g=0.5)
-#train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=32, learningRate=0.01, stepSize=250, g=0.1)
-#train(model, json_file, model_name[4], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
+train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
-#train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
-#train(model, json_file, model_name[3], mode='bicubic', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-#train(model, json_file, model_name[3], mode='nearest', ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.5)
-#train(model, json_file, model_name[2], mode='bicubic', ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
-#train(model, json_file, model_name[4], mode='bicubic', ep=400, batch_size_train=8, learningRate=0.01, stepSize=350, g=0.5)
-# Res:
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
+
+train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
+train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
+
+
+#train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
+
 
 # Without weights
 #model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
