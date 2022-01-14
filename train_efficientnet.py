@@ -210,11 +210,11 @@ model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_chann
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
-
-train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
+
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
+train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 
 # Try [3] and 8? ReLU?
 # Tru 0.001, 0.005?
