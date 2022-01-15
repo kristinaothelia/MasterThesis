@@ -140,7 +140,12 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
                                                    sampler      = sampler,
                                                    shuffle      = False,
                                                    )
-
+    elif no_weights:
+        train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
+                                                   num_workers  = 4,
+                                                   batch_size   = batch_size_train,
+                                                   shuffle      = True,
+                                                   )
     else:
         train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                    num_workers  = 4,
@@ -165,11 +170,6 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
         loss         = torch.nn.CrossEntropyLoss()
     elif no_weights:
         loss         = torch.nn.CrossEntropyLoss()
-        train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
-                                                   num_workers  = 4,
-                                                   batch_size   = batch_size_train,
-                                                   shuffle      = True,
-                                                   )
     else:
         loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
 
