@@ -160,18 +160,19 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
     print(model)
 
+
     if w_sampler:
         loss         = torch.nn.CrossEntropyLoss()
-    else:
-        loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
-
-    if no_weights:
+    elif no_weights:
+        loss         = torch.nn.CrossEntropyLoss()
         train_loader = torch.utils.data.DataLoader(dataset      = train_loader,
                                                    num_workers  = 4,
                                                    batch_size   = batch_size_train,
                                                    shuffle      = True,
                                                    )
-        loss         = torch.nn.CrossEntropyLoss()
+    else:
+        loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+
 
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
@@ -210,14 +211,15 @@ model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_chann
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
 train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 
 # Try [3] and 8? ReLU?
-# Tru 0.001, 0.005?
+# Try 0.001, 0.005?
+# Try not adding rotate?
 
 #train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 
