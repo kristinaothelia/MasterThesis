@@ -206,17 +206,23 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #Res: 0.1: run longer. 0.01: overfitting
 
 # With weights in sampler
-model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.1)
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
+# Try B0 with 64?
+train(model, json_file, model_name[0], mode='bilinear', w_sampler=False, ep=400, batch_size_train=32, learningRate=0.01, stepSize=250, g=0.1)
+train(model, json_file, model_name[0], mode='bilinear', w_sampler=False, ep=400, batch_size_train=64, learningRate=0.01, stepSize=250, g=0.1)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.5)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=250, batch_size_train=8, learningRate=0.01, stepSize=230, g=0.5)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=16, learningRate=0.01, stepSize=250, g=0.5)
+train(model, json_file, model_name[0], mode='bilinear', w_sampler=True, ep=300, batch_size_train=32, learningRate=0.01, stepSize=200, g=0.1)
+train(model, json_file, model_name[0], mode='bilinear', w_sampler=True, ep=300, batch_size_train=64, learningRate=0.01, stepSize=200, g=0.1)
+
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.5)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=250, batch_size_train=8, learningRate=0.01, stepSize=230, g=0.5)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=16, learningRate=0.01, stepSize=250, g=0.5)
 '''
 train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
@@ -227,14 +233,10 @@ train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350,
 # Try not adding rotate?
 
 #train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
-
-
-# Without weights
-#model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
-#train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
-#train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
-# Res:
-
+'''
+from efficientnet_pytorch import EfficientNet
+model = EfficientNet.from_name('efficientnet-b3', num_classes=4)
+'''
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
 
 '''
