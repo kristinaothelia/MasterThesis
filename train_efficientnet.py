@@ -211,16 +211,9 @@ model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_chann
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
-#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
-
-# Try B0 with 64?
-#train(model, json_file, model_name[0], mode='bilinear', w_sampler=False, ep=400, batch_size_train=32, learningRate=0.01, stepSize=250, g=0.1)
-train(model, json_file, model_name[0], mode='bilinear', w_sampler=False, ep=400, batch_size_train=64, learningRate=0.01, stepSize=250, g=0.1)
-#train(model, json_file, model_name[0], mode='bilinear', w_sampler=True, ep=300, batch_size_train=32, learningRate=0.01, stepSize=200, g=0.1)
-train(model, json_file, model_name[0], mode='bilinear', w_sampler=True, ep=401, batch_size_train=64, learningRate=0.01, stepSize=250, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.005, stepSize=250, g=0.05)
 
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.5)
-#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=250, batch_size_train=8, learningRate=0.01, stepSize=230, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=16, learningRate=0.01, stepSize=250, g=0.5)
 '''
 train(model, json_file, model_name[3], mode='bilinear', no_weights=True, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
