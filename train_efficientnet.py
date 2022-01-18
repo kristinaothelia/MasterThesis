@@ -73,10 +73,13 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
         return clear, arc, diff, disc
 
+    clear, arc, diff, disc = count(container)
+    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    print("weights, container:     ", class_weights)
+
     clear, arc, diff, disc = count(train)
-    #class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    #class_weights = [0.9, clear/arc, clear/diff, clear/disc]
-    class_weights = [1.0, (clear/arc)*1.2, (clear/diff)*1.2, (clear/disc)*1.2]    # Add 20% weight on arc, diff and disc
+    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
+    #class_weights = [clear/clear, (clear/arc)*1.2, (clear/diff)*1.2, (clear/disc)*1.2]    # Add 20% weight on arc, diff and disc
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
 
@@ -163,7 +166,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
     params = sum([np.prod(p.size()) for p in model_parameters])
     print('The number of params in Million: ', params/1e6)
 
-    print(model)
+    #print(model)
 
 
     if w_sampler:
@@ -175,6 +178,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
 
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
+    # Try SGD?
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=stepSize, gamma=g)
 
     trainer = Trainer(model             = model,
@@ -186,7 +190,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:], class_weights],
                       save_period       = 500,
-                      savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g),
+                      savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}_wFalse'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g),
                       device            = 'cuda:3',
                       )
 
@@ -211,12 +215,16 @@ model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_chann
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.001, stepSize=250, g=0.05)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=350, batch_size_train=16, learningRate=0.001, stepSize=250, g=0.05)
 
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.5)
 
-# Try [3] and 8? ReLU?
-# Try 0.001, 0.005?
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.01, stepSize=230, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.005, stepSize=230, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
+# Try [3] and 8?
+# Try ReLU? SGD in stead of Adam?
 
 #train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 '''
