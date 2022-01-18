@@ -67,11 +67,10 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode='bicubic',
+                mode='bilinear', # 'bicubic'
                 align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
-        # PadImage(size=480),
         ])
 
     # No need to rotate validation images
@@ -82,11 +81,10 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
         lambda x: torch.nn.functional.interpolate(
                 input=x.unsqueeze(0),
                 size=img_size,
-                mode='bicubic',
+                mode='bilinear',
                 align_corners=True,
                 ).squeeze(0),
         StandardizeNonZero(),
-        # PadImage(size=480),
         ])
 
 
@@ -125,7 +123,7 @@ def train(json_file, model_name, ep=100, batch_size_train=8, learningRate=2e-3, 
                       lr_scheduler      = lr_scheduler,
                       epochs            = 200,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:]],
-                      save_period       = 100,
+                      save_period       = 200,
                       savedir           = './models/2class/{}/{}'.format(model_name[-2:], batch_size_train),
                       #savedir           = '/itf-fi-ml/home/koolsen/Master/',
                       device            = 'cuda:2',
@@ -140,9 +138,6 @@ model_name = ['efficientnet-b0',
               'efficientnet-b4',
               'efficientnet-b6']
 
+# NB! Right file?
 json_file = 'datasets/Full_aurora_ml_corr_NEW_2class.json'
-train(json_file, model_name[3], ep=200, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
-train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)
-train(json_file, model_name[3], ep=200, batch_size_train=24, learningRate=0.01, stepSize=150, g=0.1)
-train(json_file, model_name[4], ep=200, batch_size_train=8, learningRate=0.01, stepSize=150, g=0.1)
-train(json_file, model_name[4], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)
+train(json_file, model_name[3], ep=300, batch_size_train=16, learningRate=0.01, stepSize=280, g=0.1)
