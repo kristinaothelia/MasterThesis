@@ -55,7 +55,8 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
         return container
 
     container = remove_noLabel_img(container)
-    train, valid = container.split(seed=42, split=0.8)
+    #train, valid = container.split(seed=42, split=0.8)
+    train, valid = container.split(seed=13, split=0.8)
 
     def count(container):
 
@@ -78,8 +79,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
     print("weights, container:     ", class_weights)
 
     clear, arc, diff, disc = count(train)
-    class_weights = [clear/clear, clear/arc, clear/diff, clear/disc]
-    #class_weights = [clear/clear, (clear/arc)*1.2, (clear/diff)*1.2, (clear/disc)*1.2]    # Add 20% weight on arc, diff and disc
+    class_weights = [clear/clear, (clear/arc)*1.5, (clear/diff)*1.5, (clear/disc)*1.5]
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
 
@@ -170,11 +170,14 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
 
     if w_sampler:
-        loss         = torch.nn.CrossEntropyLoss()
+        loss = torch.nn.CrossEntropyLoss()
+        w_name = 'wTrue'
     elif no_weights:
-        loss         = torch.nn.CrossEntropyLoss()
+        loss = torch.nn.CrossEntropyLoss()
+        w_name = 'no_w'
     else:
-        loss         = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+        loss = torch.nn.CrossEntropyLoss(weight=torch.tensor(class_weights))
+        w_name = 'wFalse'
 
 
     optimizer    = torch.optim.Adam(params=model.parameters(), lr=learningRate, amsgrad=True)
@@ -190,7 +193,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
                       epochs            = ep,
                       model_info        = [batch_size_train, learningRate, stepSize, g, params/1e6, model_name[-1:], class_weights],
                       save_period       = 500,
-                      savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}_wFalse'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g),
+                      savedir           = './models/{}/{}/batch_size_{}/lr_{}/st_{}/g_{}_{}'.format(model_name[-2:], mode, batch_size_train, learningRate, stepSize, g, w_name),
                       device            = 'cuda:3',
                       )
 
@@ -219,10 +222,14 @@ model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_chann
 
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.01, stepSize=230, g=0.1)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.005, stepSize=230, g=0.1)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.01, stepSize=230, g=0.1)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.005, stepSize=230, g=0.1)
+# Not tested:
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
+
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
 # Try [3] and 8?
 # Try ReLU? SGD in stead of Adam?
 
