@@ -62,13 +62,13 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
         clear = 0; arc = 0; diff = 0; disc = 0
 
         for i in range(len(container)):
-            if train[i].label == LABELS[0]:
+            if container[i].label == LABELS[0]:
                 clear += 1
-            if train[i].label == LABELS[1]:
+            if container[i].label == LABELS[1]:
                 arc += 1
-            if train[i].label == LABELS[2]:
+            if container[i].label == LABELS[2]:
                 diff += 1
-            if train[i].label == LABELS[3]:
+            if container[i].label == LABELS[3]:
                 disc += 1
 
         return clear, arc, diff, disc
