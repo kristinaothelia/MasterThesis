@@ -224,11 +224,14 @@ model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_chann
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
 
+train(model, json_file, model_name[4], mode='bilinear', w_sampler=False, ep=300, batch_size_train=16, learningRate=0.08, stepSize=50, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=35, g=0.5)
 train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=35, g=0.5)
 train(model, json_file, model_name[3], mode='bicubic', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=35, g=0.5)
 # Try [3] and 8?
 # Try ReLU? SGD in stead of Adam?
+#Try diff batch size and model?:
+#train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=35, g=0.5)
 
 #train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 '''
