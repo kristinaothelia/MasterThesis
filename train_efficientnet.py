@@ -206,7 +206,7 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #Res: 0.1: run longer. 0.01: overfitting
 
 # With weights in sampler
-model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.1)
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
@@ -221,9 +221,12 @@ model = EfficientNet.from_name(model_name=model_name[0], num_classes=4, in_chann
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.4)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.4)
-
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=40, g=0.4)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=40, g=0.4)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
+train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
+#model = EfficientNet.from_name(model_name=model_name[4], num_classes=4, in_channels=1)
+#train(model, json_file, model_name[4], mode='bilinear', w_sampler=False, ep=200, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.4)
 # Try [3] and 8?
 # Try ReLU? SGD in stead of Adam?
 #Try diff batch size and model?:
