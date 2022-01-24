@@ -58,6 +58,19 @@ class ClassCorrector(object):
             if entry.label == label:
                 if entry.human_prediction == pred_level:
 
+                    '''
+                    def keywithmaxval(d):
+                        v=list(d.values())
+                        k=list(d.keys())
+                        #return k[v.index(max(v))]
+                        return max(v), k[v.index(max(v))]
+                    pred, pred_label = keywithmaxval(entry.score)
+                    #if pred > 0.87:
+                    if pred_label == entry.label:
+                        pass
+                    else:
+                    '''
+
                     counter += 1
                     img = entry.open()
                     plt.title('Label: {0}, image: {1}/{2}'.format(str(entry.label), counter, tot))

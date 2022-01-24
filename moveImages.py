@@ -9,7 +9,7 @@ import os
 LABELS = ['aurora-less', 'arc', 'diffuse', 'discrete']
 aurora_less = []; arc = []; diff = []; disc = []
 
-container_file = 'datasets/Full_aurora_corr.json'
+container_file = 'datasets/Full_aurora_new_rt_predicted_efficientnet-b3_TESTNEW_.json'
 container = DatasetContainer.from_json(container_file)
 print("len container: ", len(container))
 
@@ -36,7 +36,7 @@ def move(container, label, toFolder):
         shutil.copy(imageName, toFolder)
         #shutil.copy(imageName, '/itf-fi-ml/home/koolsen/Aurora/Data_subfolders/arc/')
 
-#move(container=aurora_less, label=LABELS[0], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\aurora_less')
-move(container=arc, label=LABELS[1], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\arc')
-move(container=diff, label=LABELS[2], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\diffuse')
-move(container=disc, label=LABELS[3], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\discrete')
+move(container=aurora_less, label=LABELS[0], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\aurora_less')
+#move(container=arc, label=LABELS[1], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\arc')
+#move(container=diff, label=LABELS[2], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\diffuse')
+#move(container=disc, label=LABELS[3], toFolder=r'C:\Users\Krist\Documents\dataset_subfolders\discrete')

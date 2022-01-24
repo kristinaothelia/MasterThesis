@@ -203,7 +203,7 @@ class BaseTrainer:
             plt.xlabel("Epochs",fontsize=13)
             plt.ylabel("Accuracy, f1 score",fontsize=13)
             plt.legend()
-            plt.savefig(str(self.checkpoint_dir) + "/f1_acc.png")
+            #plt.savefig(str(self.checkpoint_dir) + "/f1_acc.png")
 
     def save_checkpoint(self, epoch, best: bool = False):
         """

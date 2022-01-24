@@ -53,7 +53,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
     container = remove_noLabel_img(container)
     #train, valid = container.split(seed=42, split=0.8)
-    train, valid = container.split(seed=13, split=0.8)
+    train, valid = container.split(seed=42, split=0.8)
 
     def count(container):
 
@@ -195,6 +195,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
 #json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
+json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_TESTNEW_.json'
 
 #model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
@@ -204,9 +205,9 @@ json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
 #train(model, json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=200, g=0.5)
 #train(model, json_file, model_name[3], ep=400, batch_size_train=16, learningRate=0.01, stepSize=350, g=0.5)
 #Res: 0.1: run longer. 0.01: overfitting
-
+MN = model_name[3]
 # With weights in sampler
-model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_channels=1)
+model = EfficientNet.from_name(model_name=MN, num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], mode='bilinear', ep=300, batch_size_train=8, learningRate=0.01, stepSize=250, g=0.1)
 #train(model, json_file, model_name[2], mode='bilinear', w_sampler=False, ep=350, batch_size_train=32, learningRate=0.02, stepSize=150, g=0.5)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=350, batch_size_train=16, learningRate=0.02, stepSize=150, g=0.5)
@@ -221,10 +222,8 @@ model = EfficientNet.from_name(model_name=model_name[3], num_classes=4, in_chann
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
 
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=40, g=0.4)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=40, g=0.4)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
-train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.1)
+train(model, json_file, MN, mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
+train(model, json_file, MN, mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
 #model = EfficientNet.from_name(model_name=model_name[4], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[4], mode='bilinear', w_sampler=False, ep=200, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.4)
 # Try [3] and 8?
@@ -235,10 +234,10 @@ train(model, json_file, model_name[3], mode='bilinear', w_sampler=True, ep=300, 
 #train(model, json_file, model_name[4], mode='bilinear', no_weights=True, ep=300, batch_size_train=16, learningRate=0.1, stepSize=250, g=0.5)
 '''
 from efficientnet_pytorch import EfficientNet
-model = EfficientNet.from_name('efficientnet-b3', num_classes=4)
-'''
+modelb3 = EfficientNet.from_name('efficientnet-b3', num_classes=4)
+train(modelb3, json_file, MN, mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
 # B2, ep:32, lr:0.001, st:75, g:0.1 - acc: 0.85
-
+'''
 '''
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.1, stepSize=150, g=0.1)
 train(json_file, model_name[3], ep=200, batch_size_train=16, learningRate=0.01, stepSize=150, g=0.1)
