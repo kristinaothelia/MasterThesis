@@ -186,7 +186,7 @@ predict(model_name, model_path, container, LABELS, save_file, test=True)
 
 def Test(model_name, model_path, LABELS):
 
-    json_file = 'datasets/Full_aurora_test_set_ml.json'
+    json_file = 'Full_aurora_test_set.json'
     container = DatasetContainer.from_json(json_file)
     save_file = json_file[:-5]+'_predicted_'+model_name+'.json'
 
