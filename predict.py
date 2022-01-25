@@ -135,7 +135,29 @@ def predict(model_name, model_path, container, LABELS, save_file, test=False):
 
             return CM_sk, accuracy, accuracy_w, f1, f1_w, recall, precision, report
 
-        CM_sk, acc_sk, acc_sk_w, f1, report = metrics(y_true, y_pred)
+        CM, acc, acc_w, f1, report = metrics(y_true, y_pred)
+
+        log = open(self.checkpoint_dir / "log_test.txt", "w")
+        log.write("f1 score (all classes): {}\n".format(f1))
+        log.write("acc (w): {}. acc:{}\n\n".format(acc_w, acc))
+        log.write(best_report)
+        log.close()
+
+        # Normalized
+        N_cm = CM/CM.sum(axis=1)[:, np.newaxis]
+        class_names = [r'no aurora', r'arc', r'diffuse', r'discrete']
+
+        plt.figure() # figsize=(15,10)
+        df_cm = pd.DataFrame(N_cm, index=class_names, columns=class_names).astype(float)
+        heatmap = sns.heatmap(df_cm, annot=True, fmt=".2f")
+        heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right',fontsize=12)
+        heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=45, ha='right',fontsize=12)
+        plt.ylabel(r'Observed class',fontsize=13) # True label
+        plt.xlabel(r'Predicted class',fontsize=13)
+        plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-2])+'\n'+r'Test accuracy: {:.2f}'.format(acc),fontsize=14)
+        #plt.show(block=True)
+        plt.tight_layout()
+        plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_test.png")
 
     #container.to_json(path='./datasets/Full_aurora_predicted.json')
     container.to_json(path=save_file)
@@ -147,6 +169,7 @@ mlnodes_path = '/itf-fi-ml/home/koolsen/Master/'
 model_name = model_names[3]
 #model_path = "models/b2/2021-10-02/best_validation/checkpoint-best.pth"
 model_path = "models/report/b3_16/best_validation/checkpoint-best.pth"
+model_path = "models/report/best_validation/checkpoint-best.pth"
 
 """
 json_file = 'datasets/Full_aurora_new_rt_ml.json'
@@ -175,7 +198,7 @@ def Predict_on_unlabeld_data(model_name, model_path, LABELS):
     json_file = 'datasets/Full_aurora_new_rt_ml.json'
     container = DatasetContainer.from_json(json_file)
     save_file = json_file[:-5]+'_predicted_'+model_name+'_TESTNEW_.json'
-    
+
     predict(model_name, model_path, container, LABELS, save_file)
 
 Test(model_name, model_path, LABELS)
