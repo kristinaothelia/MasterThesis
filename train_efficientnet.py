@@ -76,6 +76,9 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
 
+    # Try diffuse x 3?
+    #exit()
+
     img_size = efficientnet_params(model_name)['resolution']
     # rotation class: numpy arrays. Padding class: pytorch tensors
     train_transforms = torchvision.transforms.Compose([
@@ -194,8 +197,9 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
 
 #json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
-json_file = 'datasets/Full_aurora_ml_corr_NEW.json'
-json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_TESTNEW_.json'
+#json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_TESTNEW_.json'
+json_file = 'datasets/Full_aurora_train_valid_set.json' # Train/validation file
+test_file = 'datasets/Full_aurora_test_set.json'
 
 #model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
@@ -222,8 +226,11 @@ model = EfficientNet.from_name(model_name=MN, num_classes=4, in_channels=1)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=230, g=0.1)
 #train(model, json_file, model_name[3], mode='bilinear', w_sampler=False, ep=250, batch_size_train=24, learningRate=0.001, stepSize=125, g=0.5)
 
-train(model, json_file, MN, mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
-train(model, json_file, MN, mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
+#train(model, json_file, MN, mode='bilinear', w_sampler=False, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
+#train(model, json_file, MN, mode='bilinear', w_sampler=True, ep=300, batch_size_train=24, learningRate=0.1, stepSize=50, g=0.5)
+
+train(model, json_file, MN, mode='bilinear', w_sampler=True, ep=200, batch_size_train=24, learningRate=0.01, stepSize=75, g=0.1)
+
 #model = EfficientNet.from_name(model_name=model_name[4], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[4], mode='bilinear', w_sampler=False, ep=200, batch_size_train=24, learningRate=0.1, stepSize=75, g=0.4)
 # Try [3] and 8?

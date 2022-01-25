@@ -3,6 +3,8 @@ from lbl.dataset import DatasetEntry, DatasetInfo, DatasetContainer
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
+import datetime
+from tqdm import tqdm
 import torch
 # -----------------------------------------------------------------------------
 """
@@ -26,6 +28,128 @@ corrected_file = 'datasets/Full_aurora_new_rt_predicted_efficientnet-b3_TESTNEW_
 container = DatasetContainer.from_json(predicted_file)
 length_container = len(container)
 print("length of dataset/container: ", length_container)
+
+def makeTest_json():
+
+    folder = r'C:\Users\Krist\Documents\dataset_subfolders\arc_test'
+    folder = r'C:\Users\Krist\Documents\dataset_subfolders\Test'
+    wl = '5577 and 6300'
+    container = DatasetContainer()
+    container.from_folder(path=folder,
+                          datasetname='green',
+                          dataset_type='png',
+                          wavelength=wl,
+                          source='UiO',
+                          location='Svaalbard',
+                          dataset_description='ASI')
+
+    for entry in container:
+        # Add wavelength to json file
+        entry.wavelength = container[0]['image_path'][-12:-8]
+
+        path = Path(entry.image_path).stem
+        date = path.split('_')[1]
+        timestamp = path.split('_')[2]
+        date = datetime.date(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:]))
+        timestamp = datetime.time(hour=int(timestamp[:2]), minute=int(timestamp[2:4]), second=int(timestamp[4:]))
+
+        tiime = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=timestamp.hour, minute=timestamp.minute, second=timestamp.second)
+
+        entry.timepoint = str(tiime)
+
+    # Labled data
+    arcs        = Path(r'C:\Users\Krist\Documents\dataset_subfolders\arc_test')
+    noaurora    = Path(r'C:\Users\Krist\Documents\dataset_subfolders\no_aurora_test')
+    diffuse     = Path(r'C:\Users\Krist\Documents\dataset_subfolders\diffuse_test')
+    discrete    = Path(r'C:\Users\Krist\Documents\dataset_subfolders\discrete_test')
+
+    arcs = arcs.absolute()
+    arc_files = list(arcs.glob('*'))
+
+    diffuse = diffuse.absolute()
+    diffuse_files = list(diffuse.glob('*'))
+
+    discrete = discrete.absolute()
+    discrete_files = list(discrete.glob('*'))
+
+    noaurora = noaurora.absolute()
+    noaurora_files = list(noaurora.glob('*'))
+
+    for entry in tqdm(container):
+
+        for file in arc_files:
+            file = file.stem
+            if Path(entry.image_path).stem == file:
+                entry.label = 'arc'
+                break
+
+        for file in diffuse_files:
+            file = file.stem
+            if Path(entry.image_path).stem == file:
+                entry.label = 'diffuse'
+                break
+
+        for file in discrete_files:
+            file = file.stem
+            if Path(entry.image_path).stem == file:
+                entry.label = 'discrete'
+                break
+
+        for file in noaurora_files:
+            file = file.stem
+            if Path(entry.image_path).stem == file:
+                entry.label = 'aurora-less'
+                break
+
+    container.to_json('datasets/Full_aurora_test_set.json')
+    #container.to_json('datasets/Full_aurora_test_set.json')
+    container = DatasetContainer.from_json('datasets/Full_aurora_test_set.json')
+    print(len(container))
+
+#makeTest_json()
+
+def New_dataset(container, containerTest):
+    counter = 0
+    '''
+    length = len(container)
+    print('original container length:   ', length)
+    counter = 0
+
+    for i in range(length):
+        i -= counter
+        if container[i].label == None:
+            del container[i]
+            counter += 1
+    '''
+
+    length = len(container)
+    print('original container length:   ', length)
+    for i in range(length):
+        i -= counter
+
+        for entryT in containerTest:
+            if Path(container[i].image_path).stem == Path(entryT.image_path).stem:
+                counter += 1
+                del container[i]
+
+    print('removed images: ', counter)
+    return container
+
+json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_TESTNEW_.json'
+container = DatasetContainer.from_json(json_file)
+containerTest = DatasetContainer.from_json('datasets/Full_aurora_test_set.json')
+
+#new_container = New_dataset(container, containerTest)
+#new_container.to_json('datasets/Full_aurora_train_valid_set.json')
+
+train_container = DatasetContainer.from_json('datasets/Full_aurora_train_valid_set.json')
+test_container = DatasetContainer.from_json('datasets/Full_aurora_test_set.json')
+print(len(train_container))
+print(len(test_container))
+print(len(test_container)+len(train_container))
+exit()
+
+
 
 def test(container):
     counter = 0
@@ -54,6 +178,7 @@ def test(container):
 
 test(container)
 print("total number of entries: ", len(container))
+exit()
 
 def stats(container, pred_level=False):
 
