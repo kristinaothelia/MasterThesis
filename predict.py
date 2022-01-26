@@ -4,6 +4,7 @@ import torchvision.transforms.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+from datetime import date
 
 import sklearn as sk
 from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
@@ -48,6 +49,13 @@ LABELS = {
 model_names = ['efficientnet-b0', 'efficientnet-b1', 'efficientnet-b2', 'efficientnet-b3', 'efficientnet-b4']
 
 def predict(model_name, model_path, container, LABELS, save_file, test=False):
+
+    today = date.today()
+    if test:
+        save_path = 'datasets/predicted/test/'+model_name[-2:]+'/'+str(today)+'/'
+    else:
+        save_path = 'datasets/predicted/'+model_name[-2:]+'/'+str(today)+'/'
+    save = save_path+save_file
 
     img_size = efficientnet_params(model_name)['resolution']
 
@@ -137,7 +145,8 @@ def predict(model_name, model_path, container, LABELS, save_file, test=False):
 
         CM, acc, acc_w, f1, report = metrics(y_true, y_pred)
 
-        log = open(self.checkpoint_dir / "log_test.txt", "w")
+        #log = open(self.checkpoint_dir / "log_test.txt", "w")
+        log = open(save_path+"log_test.txt", "w")
         log.write("f1 score (all classes): {}\n".format(f1))
         log.write("acc (w): {}. acc:{}\n\n".format(acc_w, acc))
         log.write(best_report)
@@ -157,7 +166,8 @@ def predict(model_name, model_path, container, LABELS, save_file, test=False):
         plt.title(r'Norm. confusion matrix for EfficientNet model B{}'.format(self.model_info[-2])+'\n'+r'Test accuracy: {:.2f}'.format(acc),fontsize=14)
         #plt.show(block=True)
         plt.tight_layout()
-        plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_test.png")
+        plt.savefig(save_path+"CM_normalized_test.png")
+        #plt.savefig(str(self.checkpoint_dir) + "/CM_normalized_test.png")
 
     #container.to_json(path='./datasets/Full_aurora_predicted.json')
     container.to_json(path=save_file)
@@ -186,8 +196,8 @@ predict(model_name, model_path, container, LABELS, save_file, test=True)
 
 def Test(model_name, model_path, LABELS):
 
-    json_file = 'datasets/Full_aurora_test_set.json'
-    container = DatasetContainer.from_json(json_file)
+    json_file = 'Full_aurora_ml_test_set.json'
+    container = DatasetContainer.from_json('datasets/'+json_file)
     save_file = json_file[:-5]+'_predicted_'+model_name+'.json'
 
     predict(model_name, model_path, container, LABELS, save_file, test=True)
@@ -195,8 +205,8 @@ def Test(model_name, model_path, LABELS):
 
 def Predict_on_unlabeld_data(model_name, model_path, mlnodes_path, LABELS):
 
-    json_file = 'datasets/Full_aurora_new_rt_ml.json'
-    container = DatasetContainer.from_json(json_file)
+    json_file = 'Full_aurora_new_rt_ml.json'
+    container = DatasetContainer.from_json('datasets/'+json_file)
 
     #save_file = mlnodes_path+json_file[:-5]+'_predicted_'+model_name+'.json'
     save_file = json_file[:-5]+'_predicted_'+model_name+'_TESTNEW_.json'
@@ -204,7 +214,7 @@ def Predict_on_unlabeld_data(model_name, model_path, mlnodes_path, LABELS):
     predict(model_name, model_path, container, LABELS, save_file)
 
 Test(model_name, model_path, LABELS)
-#Predict_on_unlabeld_data(model_name, model_path, mlnodes_path, LABELS)
+Predict_on_unlabeld_data(model_name, model_path, mlnodes_path, LABELS)
 
 """
 # Load json file to add predictions

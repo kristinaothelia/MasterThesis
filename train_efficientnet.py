@@ -72,6 +72,7 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
         return clear, arc, diff, disc
 
     clear, arc, diff, disc = count(train)
+    class_weights = [clear/clear, (clear/arc)*1, (clear/diff)*1, (clear/disc)*1]
     class_weights = [clear/clear, (clear/arc)*1.5, (clear/diff)*1.5, (clear/disc)*1.5]
     print("class count, train: ", [clear, arc, diff, disc])
     print("weights, train:     ", class_weights)
@@ -198,8 +199,8 @@ def train(model, json_file, model_name, mode, w_sampler=False, no_weights=False,
 
 #json_file = 'datasets/Full_aurora_corr.json'    # local laptop path
 #json_file = 'datasets/Full_aurora_new_rt_ml_predicted_efficientnet-b3_TESTNEW_.json'
-json_file = 'datasets/Full_aurora_train_valid_set.json' # Train/validation file
-test_file = 'datasets/Full_aurora_test_set.json'
+json_file = 'datasets/Full_aurora_ml_train_valid_set.json' # Train/validation file
+#test_file = 'datasets/Full_aurora_ml_test_set.json'
 
 #model = EfficientNet.from_name(model_name=model_name[2], num_classes=4, in_channels=1)
 #train(model, json_file, model_name[2], ep=350, batch_size_train=16, learningRate=0.01, stepSize=300, g=1.1)
